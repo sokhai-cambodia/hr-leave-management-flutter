@@ -46,7 +46,7 @@ class PoliciesView extends StatelessWidget {
     return AdminCrudView<PolicyModel>(
       title: 'Policies',
       controller: controller,
-      fields: _fields,
+      fields: (isEdit) => _fields,
       toFormValues: _toFormValues,
       emptyFormValues: _emptyValues,
       itemTitle: (item) => '${item.name} (${item.code})',

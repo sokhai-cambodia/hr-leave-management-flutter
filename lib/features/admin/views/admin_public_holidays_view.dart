@@ -30,7 +30,7 @@ class AdminPublicHolidaysView extends StatelessWidget {
     return AdminCrudView<PublicHolidayModel>(
       title: 'Public Holidays',
       controller: controller,
-      fields: _fields,
+      fields: (isEdit) => _fields,
       toFormValues: _toFormValues,
       emptyFormValues: _emptyValues,
       itemTitle: (item) => item.name,

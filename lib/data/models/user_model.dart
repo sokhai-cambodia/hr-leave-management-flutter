@@ -18,6 +18,7 @@ class UserModel {
     required this.isSuperuser,
     this.fullName,
     this.team,
+    this.teamId,
   });
 
   final String id;
@@ -26,6 +27,11 @@ class UserModel {
   final bool isSuperuser;
   final String? fullName;
   final TeamSummary? team;
+
+  /// The raw FK, alongside the resolved [team] object - kept distinct so
+  /// Task 8.3's team-picker prefill can read the id directly rather than
+  /// assuming [team] is always populated wherever [teamId] is.
+  final String? teamId;
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     final teamJson = json['team'] as Map<String, dynamic>?;
@@ -36,6 +42,7 @@ class UserModel {
       isSuperuser: json['is_superuser'] as bool,
       fullName: json['full_name'] as String?,
       team: teamJson != null ? TeamSummary.fromJson(teamJson) : null,
+      teamId: json['team_id'] as String?,
     );
   }
 }

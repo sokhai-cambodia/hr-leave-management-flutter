@@ -7,6 +7,8 @@ import '../../features/admin/views/admin_users_view.dart';
 import '../../features/admin/bindings/leave_types_admin_binding.dart';
 import '../../features/admin/bindings/policies_admin_binding.dart';
 import '../../features/admin/bindings/public_holidays_admin_binding.dart';
+import '../../features/admin/bindings/teams_admin_binding.dart';
+import '../../features/admin/bindings/users_admin_binding.dart';
 import '../../features/admin/views/leave_types_view.dart';
 import '../../features/admin/views/policies_view.dart';
 import '../../features/approvals/bindings/approvals_binding.dart';
@@ -101,6 +103,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.adminTeams,
       page: () => const AdminTeamsView(),
+      binding: TeamsAdminBinding(),
       middlewares: [AuthMiddleware(), SuperuserMiddleware()],
     ),
     GetPage(
@@ -111,6 +114,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.adminUsers,
       page: () => const AdminUsersView(),
+      binding: UsersAdminBinding(),
       middlewares: [AuthMiddleware(), SuperuserMiddleware()],
     ),
   ];

@@ -11,6 +11,7 @@ import '../../data/repositories/policies_repository.dart';
 import '../../data/repositories/public_holidays_repository.dart';
 import '../../data/repositories/recommends_repository.dart';
 import '../../data/repositories/teams_repository.dart';
+import '../../data/repositories/users_repository.dart';
 import '../../features/auth/controllers/auth_controller.dart';
 
 class InitialBinding extends Bindings {
@@ -28,6 +29,7 @@ class InitialBinding extends Bindings {
     Get.put(LeaveTypesRepository(dio: dioClient.dio));
     Get.put(PublicHolidaysRepository(dio: dioClient.dio));
     Get.put(PoliciesRepository(dio: dioClient.dio));
+    Get.put(UsersRepository(dio: dioClient.dio));
     Get.put(RecommendsRepository(dio: dioClient.dio));
     final authController = Get.put(
       AuthController(

@@ -48,7 +48,7 @@ class LeaveTypesView extends StatelessWidget {
     return AdminCrudView<LeaveTypeModel>(
       title: 'Leave Types',
       controller: controller,
-      fields: _fields,
+      fields: (isEdit) => _fields,
       toFormValues: _toFormValues,
       emptyFormValues: _emptyValues,
       itemTitle: (item) => '${item.name} (${item.code})',

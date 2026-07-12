@@ -10,6 +10,19 @@ enum AdminFieldType {
   /// holidays) that store the date as an opaque string on the wire, so it
   /// must round-trip exactly with no timezone/format drift.
   date,
+
+  /// A searchable picker over [AdminFieldSpec.options] (Task 8.3) - e.g.
+  /// Teams' team_owner_id (pick a user) or Users' team_id (pick a team).
+  /// The stored form value is always the selected option's [id].
+  relation,
+}
+
+/// One selectable entry for a [AdminFieldType.relation] field.
+class AdminPickerOption {
+  const AdminPickerOption({required this.id, required this.label});
+
+  final String id;
+  final String label;
 }
 
 /// Describes one field of a generic admin create/edit form (Task 8.1). The
@@ -22,6 +35,8 @@ class AdminFieldSpec {
     required this.type,
     this.required = false,
     this.validator,
+    this.obscureText = false,
+    this.options = const [],
   });
 
   /// The key this field's value is stored under in the form-values map
@@ -31,7 +46,18 @@ class AdminFieldSpec {
   final AdminFieldType type;
   final bool required;
 
-  /// Extra validation beyond [required] (e.g. max length). Only consulted
-  /// for [AdminFieldType.text]/[AdminFieldType.multilineText].
+  /// Extra validation beyond [required] (e.g. max length, min length). Only
+  /// consulted for [AdminFieldType.text]/[AdminFieldType.multilineText] -
+  /// runs only when the field has a non-empty value, so it composes with an
+  /// optional field left blank.
   final String? Function(String? value)? validator;
+
+  /// Masks input (e.g. a password field). Only meaningful for
+  /// [AdminFieldType.text].
+  final bool obscureText;
+
+  /// Selectable entries for [AdminFieldType.relation]. Ignored otherwise.
+  /// Built fresh per dialog-open by the caller (see [AdminCrudView.fields])
+  /// since it usually comes from a live fetch, not a fixed list.
+  final List<AdminPickerOption> options;
 }

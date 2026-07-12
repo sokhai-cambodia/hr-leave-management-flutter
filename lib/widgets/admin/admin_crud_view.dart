@@ -26,7 +26,12 @@ class AdminCrudView<T> extends StatefulWidget {
 
   final String title;
   final AdminCrudController<T> controller;
-  final List<AdminFieldSpec> fields;
+
+  /// Built fresh each time a dialog opens (not a fixed list) so a field's
+  /// shape can depend on create-vs-edit (e.g. Users' password: required on
+  /// create, optional on edit) or on freshly-fetched picker options (Teams/
+  /// Users' relational fields).
+  final List<AdminFieldSpec> Function(bool isEdit) fields;
 
   /// Pre-populates the edit dialog from an existing item.
   final Map<String, dynamic> Function(T item) toFormValues;
@@ -68,7 +73,7 @@ class _AdminCrudViewState<T> extends State<AdminCrudView<T>> {
     Get.dialog(
       AdminFormDialog(
         title: 'New ${widget.title}',
-        fields: widget.fields,
+        fields: widget.fields(false),
         initialValues: widget.emptyFormValues,
         onSubmit: widget.controller.create,
       ),
@@ -79,7 +84,7 @@ class _AdminCrudViewState<T> extends State<AdminCrudView<T>> {
     Get.dialog(
       AdminFormDialog(
         title: 'Edit ${widget.title}',
-        fields: widget.fields,
+        fields: widget.fields(true),
         initialValues: widget.toFormValues(item),
         onSubmit: (values) => widget.controller.edit(widget.controller.idOf(item), values),
       ),

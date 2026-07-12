@@ -1,11 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../../widgets/placeholder_screen.dart';
+import '../../../data/models/user_model.dart';
+import '../../../widgets/admin/admin_crud_view.dart';
+import '../../../widgets/admin/admin_field_spec.dart';
+import '../controllers/users_admin_controller.dart';
 
 class AdminUsersView extends StatelessWidget {
   const AdminUsersView({super.key});
 
+  Map<String, dynamic> _toFormValues(UserModel item) => {
+    'email': item.email,
+    'password': null,
+    'full_name': item.fullName,
+    'team_id': item.teamId,
+    'is_active': item.isActive,
+    'is_superuser': item.isSuperuser,
+  };
+
   @override
-  Widget build(BuildContext context) =>
-      const PlaceholderScreen(title: 'Users');
+  Widget build(BuildContext context) {
+    final controller = Get.find<UsersAdminController>();
+
+    return AdminCrudView<UserModel>(
+      title: 'Users',
+      controller: controller,
+      fields: (isEdit) => [
+        const AdminFieldSpec(key: 'email', label: 'Email', type: AdminFieldType.text, required: true),
+        AdminFieldSpec(
+          key: 'password',
+          label: isEdit ? 'New Password (leave blank to keep current)' : 'Password',
+          type: AdminFieldType.text,
+          required: !isEdit,
+          obscureText: true,
+          validator: (value) =>
+              (value?.length ?? 0) < 8 ? 'Must be at least 8 characters' : null,
+        ),
+        const AdminFieldSpec(key: 'full_name', label: 'Full Name', type: AdminFieldType.text),
+        AdminFieldSpec(
+          key: 'team_id',
+          label: 'Team',
+          type: AdminFieldType.relation,
+          options: controller.teamOptions,
+        ),
+        const AdminFieldSpec(key: 'is_active', label: 'Active', type: AdminFieldType.boolean),
+        const AdminFieldSpec(key: 'is_superuser', label: 'Superuser', type: AdminFieldType.boolean),
+      ],
+      toFormValues: _toFormValues,
+      emptyFormValues: const {
+        'email': '',
+        'password': '',
+        'full_name': null,
+        'team_id': null,
+        'is_active': true,
+        'is_superuser': false,
+      },
+      itemTitle: (item) => item.fullName ?? item.email,
+      itemSubtitle: (item) {
+        final team = item.team?.name ?? 'No team';
+        final flags = [
+          if (!item.isActive) 'Inactive',
+          if (item.isSuperuser) 'Superuser',
+        ];
+        final suffix = flags.isEmpty ? '' : ' · ${flags.join(' · ')}';
+        return '${item.email} · $team$suffix';
+      },
+      searchHint: 'Search by name or email...',
+    );
+  }
 }

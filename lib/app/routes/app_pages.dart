@@ -5,6 +5,7 @@ import '../../features/admin/views/admin_teams_view.dart';
 import '../../features/admin/views/admin_users_view.dart';
 import '../../features/admin/views/leave_types_view.dart';
 import '../../features/admin/views/policies_view.dart';
+import '../../features/approvals/bindings/approvals_binding.dart';
 import '../../features/approvals/views/approvals_view.dart';
 import '../../features/auth/views/forgot_password_view.dart';
 import '../../features/auth/views/login_view.dart';
@@ -67,6 +68,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.approvals,
       page: () => const ApprovalsView(),
+      binding: ApprovalsBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(

@@ -40,9 +40,9 @@
     "semantic_hash": "54d0f1dcb976e6ae740e5542c85770c0"
   },
   "lib/app/routes/app_pages.dart": {
-    "mtime": 1783865755.845533,
-    "ast_hash": "b71178c6a627a3ed12c52ef9432eac5c",
-    "semantic_hash": "b71178c6a627a3ed12c52ef9432eac5c"
+    "mtime": 1783871030.1236806,
+    "ast_hash": "5a1d6672ab59011d8a7f9518542d9778",
+    "semantic_hash": ""
   },
   "lib/app/routes/app_routes.dart": {
     "mtime": 1783853019.035114,
@@ -100,9 +100,9 @@
     "semantic_hash": "8d4bd7808efdd40212915d37d55660a8"
   },
   "lib/data/models/leave_plan_request_model.dart": {
-    "mtime": 1783863454.156492,
-    "ast_hash": "2a31916a74aee2603c1bca097d8e5082",
-    "semantic_hash": "2a31916a74aee2603c1bca097d8e5082"
+    "mtime": 1783870566.9376273,
+    "ast_hash": "0f839f207bcdd5b4fc9d5de345a0038d",
+    "semantic_hash": ""
   },
   "lib/data/models/leave_recommendation_model.dart": {
     "mtime": 1783865666.957636,
@@ -200,9 +200,9 @@
     "semantic_hash": "93abea2cb81870aae603d4ebe9933435"
   },
   "lib/features/approvals/views/approvals_view.dart": {
-    "mtime": 1783853069.8830032,
-    "ast_hash": "b6a3e9bdca9aef62ac1a067f1ccf4a1c",
-    "semantic_hash": "b6a3e9bdca9aef62ac1a067f1ccf4a1c"
+    "mtime": 1783871017.952155,
+    "ast_hash": "8db172dbcaed51347e946206a6b8d75c",
+    "semantic_hash": ""
   },
   "lib/features/auth/controllers/auth_controller.dart": {
     "mtime": 1783853006.1801944,
@@ -250,9 +250,9 @@
     "semantic_hash": "37142351fe3e5778af2528090bb0a866"
   },
   "lib/features/leave_plan_requests/controllers/leave_plan_requests_controller.dart": {
-    "mtime": 1783863469.3124287,
-    "ast_hash": "79341862f916cb9104406f6de8ca0f7e",
-    "semantic_hash": "79341862f916cb9104406f6de8ca0f7e"
+    "mtime": 1783871444.735858,
+    "ast_hash": "f2bd053061385cb3b9c6b4590441dd27",
+    "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/views/leave_plan_request_detail_view.dart": {
     "mtime": 1783863478.922932,
@@ -260,9 +260,9 @@
     "semantic_hash": "2ac189339f0803af85cba01be13dd947"
   },
   "lib/features/leave_plan_requests/views/leave_plan_request_form_view.dart": {
-    "mtime": 1783865442.8378677,
-    "ast_hash": "d645b2e996d2a152e6c573fc91a3ef63",
-    "semantic_hash": "d645b2e996d2a152e6c573fc91a3ef63"
+    "mtime": 1783869367.6488056,
+    "ast_hash": "80a99bf87dfea146a225f5e6757ba36b",
+    "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/views/leave_plan_requests_view.dart": {
     "mtime": 1783863473.2630486,
@@ -310,14 +310,14 @@
     "semantic_hash": "4b7bc373fbf9b7034c8996dc2d5cef4b"
   },
   "lib/features/recommendations/controllers/recommendations_controller.dart": {
-    "mtime": 1783865698.747218,
-    "ast_hash": "a06b4b6f56b653114cc98142936fd7f2",
-    "semantic_hash": "a06b4b6f56b653114cc98142936fd7f2"
+    "mtime": 1783869328.6812975,
+    "ast_hash": "8e73a8d59045a9c6a24c7a40786239f6",
+    "semantic_hash": ""
   },
   "lib/features/recommendations/views/recommendations_view.dart": {
-    "mtime": 1783865718.689957,
-    "ast_hash": "dbcad4bc5f7048191f7bef928b480dc7",
-    "semantic_hash": "dbcad4bc5f7048191f7bef928b480dc7"
+    "mtime": 1783869412.6697807,
+    "ast_hash": "a78d734a77591937a863985522cd5d53",
+    "semantic_hash": ""
   },
   "lib/main.dart": {
     "mtime": 1783850555.569335,
@@ -445,9 +445,9 @@
     "semantic_hash": "b2293cb58f1ac65bf18f6e62b56365b6"
   },
   "tasks/todo.md": {
-    "mtime": 1783866580.6435394,
-    "ast_hash": "0fa215de3ac38de5acf75684588c53fa",
-    "semantic_hash": "0fa215de3ac38de5acf75684588c53fa"
+    "mtime": 1783870835.4834142,
+    "ast_hash": "6166990c3b833a6fbed29dcd568870d1",
+    "semantic_hash": ""
   },
   "windows/CMakeLists.txt": {
     "mtime": 1783842053.9337542,
@@ -488,5 +488,15 @@
     "mtime": 1783767821.8721497,
     "ast_hash": "57838d52c318faff743130c3fcfae0c6",
     "semantic_hash": "57838d52c318faff743130c3fcfae0c6"
+  },
+  "lib/features/approvals/bindings/approvals_binding.dart": {
+    "mtime": 1783870939.0271156,
+    "ast_hash": "850e6308f1a4ba1e4f245ca98a9e1ef6",
+    "semantic_hash": ""
+  },
+  "lib/features/approvals/controllers/approvals_controller.dart": {
+    "mtime": 1783870932.7723148,
+    "ast_hash": "e1ded0a935984d4bc683175273aa5212",
+    "semantic_hash": ""
   }
 }

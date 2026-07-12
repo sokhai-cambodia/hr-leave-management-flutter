@@ -43,4 +43,27 @@ class AuthRepository {
       throw ApiException.fromDioException(e);
     }
   }
+
+  /// Email is a path segment, not a body field — matches the backend route.
+  Future<void> recoverPassword({required String email}) async {
+    try {
+      await _dio.post<Map<String, dynamic>>('/password-recovery/$email');
+    } on DioException catch (e) {
+      throw ApiException.fromDioException(e);
+    }
+  }
+
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      await _dio.post<Map<String, dynamic>>(
+        '/reset-password/',
+        data: {'token': token, 'new_password': newPassword},
+      );
+    } on DioException catch (e) {
+      throw ApiException.fromDioException(e);
+    }
+  }
 }

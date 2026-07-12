@@ -19,6 +19,14 @@ class AuthController extends GetxController {
   final errorMessage = RxnString();
   final currentUser = Rx<UserModel?>(null);
 
+  final isRecoveryLoading = false.obs;
+  final recoveryError = RxnString();
+  final recoverySuccess = false.obs;
+
+  final isResetLoading = false.obs;
+  final resetError = RxnString();
+  final resetSuccess = false.obs;
+
   bool _isHandlingUnauthorized = false;
 
   /// Runs once on app start: a stored token is validated against the
@@ -56,6 +64,40 @@ class AuthController extends GetxController {
       errorMessage.value = e.message;
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> recoverPassword({required String email}) async {
+    isRecoveryLoading.value = true;
+    recoveryError.value = null;
+    recoverySuccess.value = false;
+    try {
+      await _authRepository.recoverPassword(email: email);
+      recoverySuccess.value = true;
+    } on ApiException catch (e) {
+      recoveryError.value = e.message;
+    } finally {
+      isRecoveryLoading.value = false;
+    }
+  }
+
+  Future<void> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    isResetLoading.value = true;
+    resetError.value = null;
+    resetSuccess.value = false;
+    try {
+      await _authRepository.resetPassword(
+        token: token,
+        newPassword: newPassword,
+      );
+      resetSuccess.value = true;
+    } on ApiException catch (e) {
+      resetError.value = e.message;
+    } finally {
+      isResetLoading.value = false;
     }
   }
 

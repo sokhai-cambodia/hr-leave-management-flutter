@@ -4,16 +4,15 @@ import 'package:get/get.dart';
 import '../../../app/routes/app_routes.dart';
 import '../controllers/auth_controller.dart';
 
-class LoginView extends GetView<AuthController> {
-  const LoginView({super.key});
+class ForgotPasswordView extends GetView<AuthController> {
+  const ForgotPasswordView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final emailController = TextEditingController();
-    final passwordController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('HR Leave Management')),
+      appBar: AppBar(title: const Text('Forgot password')),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 360),
@@ -22,11 +21,17 @@ class LoginView extends GetView<AuthController> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.calendar_month_outlined, size: 64),
+                const Icon(Icons.lock_reset_outlined, size: 64),
                 const SizedBox(height: 16),
                 const Text(
-                  'Sign in',
+                  'Reset your password',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  "Enter your account's email and we'll send you a "
+                  'password-reset link.',
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
                 TextField(
@@ -34,15 +39,22 @@ class LoginView extends GetView<AuthController> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(labelText: 'Email'),
                 ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Password'),
-                ),
                 const SizedBox(height: 8),
                 Obx(() {
-                  final message = controller.errorMessage.value;
+                  if (controller.recoverySuccess.value) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        'If that email exists, a recovery message has been '
+                        'sent. Check your inbox for the reset token.',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+                  final message = controller.recoveryError.value;
                   if (message == null) return const SizedBox.shrink();
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8),
@@ -56,15 +68,14 @@ class LoginView extends GetView<AuthController> {
                   );
                 }),
                 Obx(() {
-                  final isLoading = controller.isLoading.value;
+                  final isLoading = controller.isRecoveryLoading.value;
                   return SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: isLoading
                           ? null
-                          : () => controller.login(
+                          : () => controller.recoverPassword(
                               email: emailController.text.trim(),
-                              password: passwordController.text,
                             ),
                       child: isLoading
                           ? const SizedBox(
@@ -72,14 +83,14 @@ class LoginView extends GetView<AuthController> {
                               width: 20,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : const Text('Log in'),
+                          : const Text('Send recovery email'),
                     ),
                   );
                 }),
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 TextButton(
-                  onPressed: () => Get.toNamed(Routes.forgotPassword),
-                  child: const Text('Forgot password?'),
+                  onPressed: () => Get.toNamed(Routes.resetPassword),
+                  child: const Text('I already have a reset token'),
                 ),
               ],
             ),

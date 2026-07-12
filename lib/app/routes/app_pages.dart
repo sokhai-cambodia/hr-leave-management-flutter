@@ -18,6 +18,7 @@ import '../../features/leave_requests/bindings/leave_requests_binding.dart';
 import '../../features/leave_requests/views/leave_requests_view.dart';
 import '../../features/profile/views/profile_view.dart';
 import '../../features/public_holidays/views/public_holidays_view.dart';
+import '../../features/recommendations/bindings/recommendations_binding.dart';
 import '../../features/recommendations/views/recommendations_view.dart';
 import 'app_routes.dart';
 import 'auth_middleware.dart';
@@ -60,6 +61,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.recommendations,
       page: () => const RecommendationsView(),
+      binding: RecommendationsBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(

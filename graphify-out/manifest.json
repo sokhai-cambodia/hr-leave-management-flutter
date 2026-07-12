@@ -40,8 +40,8 @@
     "semantic_hash": "54d0f1dcb976e6ae740e5542c85770c0"
   },
   "lib/app/routes/app_pages.dart": {
-    "mtime": 1783871030.1236806,
-    "ast_hash": "5a1d6672ab59011d8a7f9518542d9778",
+    "mtime": 1783872102.9383948,
+    "ast_hash": "dd324513e1a9994c1ea4c41a29c9d9ec",
     "semantic_hash": ""
   },
   "lib/app/routes/app_routes.dart": {
@@ -160,9 +160,9 @@
     "semantic_hash": "fba0e4ce35ce1586a71e856f77c1b1ef"
   },
   "lib/data/repositories/leave_types_repository.dart": {
-    "mtime": 1783863137.4223986,
-    "ast_hash": "4c5c72fc5b81d38f46aef25edbc79a83",
-    "semantic_hash": "4c5c72fc5b81d38f46aef25edbc79a83"
+    "mtime": 1783872042.7145824,
+    "ast_hash": "c90fbaf624fc527fab95d8861c466635",
+    "semantic_hash": ""
   },
   "lib/data/repositories/recommends_repository.dart": {
     "mtime": 1783865672.5134592,
@@ -190,9 +190,9 @@
     "semantic_hash": "355197db638dbd1dd9d7d519fa3a1511"
   },
   "lib/features/admin/views/leave_types_view.dart": {
-    "mtime": 1783853076.7124023,
-    "ast_hash": "0d4e0bb376a5dcae36d709f6dcf9ff2e",
-    "semantic_hash": "0d4e0bb376a5dcae36d709f6dcf9ff2e"
+    "mtime": 1783872076.716415,
+    "ast_hash": "a766d2acb6ef5529a3a7b1215db8b353",
+    "semantic_hash": ""
   },
   "lib/features/admin/views/policies_view.dart": {
     "mtime": 1783853073.9221911,
@@ -445,8 +445,8 @@
     "semantic_hash": "b2293cb58f1ac65bf18f6e62b56365b6"
   },
   "tasks/todo.md": {
-    "mtime": 1783870835.4834142,
-    "ast_hash": "6166990c3b833a6fbed29dcd568870d1",
+    "mtime": 1783871814.5284877,
+    "ast_hash": "cb88839dbca34d9368f10e71e9caa542",
     "semantic_hash": ""
   },
   "windows/CMakeLists.txt": {
@@ -497,6 +497,36 @@
   "lib/features/approvals/controllers/approvals_controller.dart": {
     "mtime": 1783870932.7723148,
     "ast_hash": "e1ded0a935984d4bc683175273aa5212",
+    "semantic_hash": ""
+  },
+  "lib/features/admin/bindings/leave_types_admin_binding.dart": {
+    "mtime": 1783872063.1136405,
+    "ast_hash": "e702f9602a7b8abc62f0b60c0c378af3",
+    "semantic_hash": ""
+  },
+  "lib/features/admin/controllers/admin_crud_controller.dart": {
+    "mtime": 1783872128.6963367,
+    "ast_hash": "fe4bfd41c49e0f0ba4fb6cace602f553",
+    "semantic_hash": ""
+  },
+  "lib/features/admin/controllers/leave_types_admin_controller.dart": {
+    "mtime": 1783872051.4494426,
+    "ast_hash": "919d83c76ae1fbb13cc94db7081a171f",
+    "semantic_hash": ""
+  },
+  "lib/widgets/admin/admin_crud_view.dart": {
+    "mtime": 1783872135.8062475,
+    "ast_hash": "c39366fff973339404a98424f68ee62c",
+    "semantic_hash": ""
+  },
+  "lib/widgets/admin/admin_field_spec.dart": {
+    "mtime": 1783871973.7508278,
+    "ast_hash": "b1ad248a7dd5d0c43a7cf59e03526065",
+    "semantic_hash": ""
+  },
+  "lib/widgets/admin/admin_form_dialog.dart": {
+    "mtime": 1783871989.949862,
+    "ast_hash": "088eb87e7b2e7305b98b4a9533f091f2",
     "semantic_hash": ""
   }
 }

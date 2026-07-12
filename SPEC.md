@@ -99,7 +99,26 @@ Per guideline, testing is "recommended" (manual) with unit tests as bonus — **
 - **Business Module**: Leave Balances (view), Leave Requests (draft/submit/approve/reject lifecycle), Leave Plan Requests (multi-date, same lifecycle), AI Recommendation flow (`GET /recommends/leave-plan` → user selects dates → `POST /leave-plan-requests` → `PUT /{id}/submit`).
 - **Audit Log**: out of scope (§7).
 
-## 9. Boundaries
+## 9. Design Tokens (shared brand, mirrored in the Android/Compose app)
+
+Chosen for a minimal/clean look, inspired generally by patterns common in attendance/leave apps (dark-first, restrained single-accent palette, filled borderless inputs, pill buttons) — not copied from any specific proprietary source. Implemented centrally in `lib/app/theme/app_theme.dart` so every screen inherits it automatically rather than being styled per-screen.
+
+| Token | Value |
+|---|---|
+| Accent/primary | `#3F51B5` (Indigo) |
+| Dark background / surface | `#0E0E12` / `#1A1A20` |
+| Light background / surface | `#F7F7FA` / `#FFFFFF` |
+| Danger / warning / success | `#E53935` / `#FB8C00` / `#43A047` |
+| Font | Poppins (via `google_fonts`; Compose side should use the Poppins downloadable/bundled font for parity) |
+| Button shape | Fully rounded pill, 52px min height |
+| Card shape | 16px corner radius |
+| Text field shape | 14px corner radius, filled, borderless |
+| Default theme mode | Dark-first (light mode available as a toggle) |
+| Icons | Material "outlined" icon variants (no third-party icon pack — `iconly` was tried and is incompatible with current Flutter's `IconData` being a `final class`; reverted) |
+
+These same values (color hex, font, corner radii) should be re-used when building the Android/Jetpack Compose app's `MaterialTheme`, so the two apps present one consistent product despite being separate codebases.
+
+## 10. Boundaries
 
 - **Always**: run `flutter analyze` clean before marking a task done; keep models in sync with the documented API contract in `PROJECT_FEATURES.md`.
 - **Ask first**: before pushing to the `origin` remote of this repo; before modifying anything in the `hr-leave-management` (backend/frontend) repo — this Flutter repo should only *consume* that API, not change it, unless a real gap is found and confirmed with the user.

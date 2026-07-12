@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'app/theme/app_theme.dart';
 import 'core/constants/env.dart';
 
 void main() {
@@ -14,13 +15,9 @@ class HrLeaveManagementApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'HR Leave Management',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo)),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-          brightness: Brightness.dark,
-        ),
-      ),
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.dark,
       home: const PlaceholderHomePage(),
     );
   }
@@ -39,7 +36,7 @@ class PlaceholderHomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.event_available, size: 64),
+              const Icon(Icons.calendar_month_outlined, size: 64),
               const SizedBox(height: 16),
               const Text(
                 'Project scaffold ready.',

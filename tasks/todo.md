@@ -41,8 +41,8 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] **Checkpoint 6**
 
 ## Phase 7 — Approvals Queue
-- [ ] 7.1 Approvals list (two tabs) + approve/reject
-- [ ] **Checkpoint 7**
+- [x] 7.1 Approvals list (two tabs) + approve/reject
+- [x] **Checkpoint 7**
 
 ## Phase 8 — Admin/Superuser Master Data CRUD
 - [ ] 8.1 Generic CRUD scaffold, proven on Leave Types

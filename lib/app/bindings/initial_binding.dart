@@ -15,11 +15,12 @@ class InitialBinding extends Bindings {
       DioClient(secureStorageService: secureStorageService),
     );
     Get.put(AuthRepository(dio: dioClient.dio));
-    Get.put(
+    final authController = Get.put(
       AuthController(
         authRepository: Get.find(),
         secureStorageService: Get.find(),
       ),
     );
+    dioClient.onUnauthorized = authController.forceLogout;
   }
 }

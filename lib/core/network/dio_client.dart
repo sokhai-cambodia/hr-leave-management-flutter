@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../constants/env.dart';
-import '../storage/secure_storage_service.dart';
+import '../storage/token_storage.dart';
 
 /// Single Dio instance for the app: base URL from [Env], an auth-header
-/// interceptor, and a 401/403 hook. [onUnauthorized] is left unset here —
-/// Task 1.2 wires it up to force a logout + redirect to `/login`.
+/// interceptor, and a session-invalidation hook. [onUnauthorized] fires on
+/// 401/403 and on the backend's 400 "Inactive user" (its shape for a
+/// deactivated account's still-valid token) — the caller (AuthController)
+/// is responsible for guarding against concurrent double-fire.
 class DioClient {
   DioClient({required this._secureStorageService})
     : dio = Dio(
@@ -27,7 +29,13 @@ class DioClient {
         },
         onError: (error, handler) {
           final statusCode = error.response?.statusCode;
-          if (statusCode == 401 || statusCode == 403) {
+          final data = error.response?.data;
+          final detail = data is Map ? data['detail'] : null;
+          final isInvalidSession =
+              statusCode == 401 ||
+              statusCode == 403 ||
+              (statusCode == 400 && detail == 'Inactive user');
+          if (isInvalidSession) {
             onUnauthorized?.call();
           }
           handler.next(error);
@@ -37,7 +45,7 @@ class DioClient {
   }
 
   final Dio dio;
-  final SecureStorageService _secureStorageService;
+  final TokenStorage _secureStorageService;
 
   VoidCallback? onUnauthorized;
 }

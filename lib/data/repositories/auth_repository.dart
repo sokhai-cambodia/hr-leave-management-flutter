@@ -30,4 +30,17 @@ class AuthRepository {
       throw ApiException.fromDioException(e);
     }
   }
+
+  /// Validates the token currently attached by DioClient's auth-header
+  /// interceptor; used for session bootstrap on app start.
+  Future<UserModel> testToken() async {
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        '/login/test-token',
+      );
+      return UserModel.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw ApiException.fromDioException(e);
+    }
+  }
 }

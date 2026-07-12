@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
 
+import '../../../app/routes/app_routes.dart';
 import '../../../core/errors/api_exception.dart';
 import '../../../core/storage/secure_storage_service.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/auth_repository.dart';
-import '../views/login_view.dart';
-import '../views/welcome_view.dart';
 
 class AuthController extends GetxController {
   AuthController({
@@ -20,6 +19,28 @@ class AuthController extends GetxController {
   final errorMessage = RxnString();
   final currentUser = Rx<UserModel?>(null);
 
+  bool _isHandlingUnauthorized = false;
+
+  /// Runs once on app start: a stored token is validated against the
+  /// backend before deciding whether to land on the welcome screen or
+  /// the login screen, so authenticated UI never flashes unauthenticated
+  /// (or vice versa).
+  Future<void> bootstrap() async {
+    final token = await _secureStorageService.getToken();
+    if (token == null) {
+      Get.offAllNamed(Routes.login);
+      return;
+    }
+
+    try {
+      currentUser.value = await _authRepository.testToken();
+      Get.offAllNamed(Routes.welcome);
+    } on ApiException {
+      await _secureStorageService.deleteToken();
+      Get.offAllNamed(Routes.login);
+    }
+  }
+
   Future<void> login({required String email, required String password}) async {
     isLoading.value = true;
     errorMessage.value = null;
@@ -30,7 +51,7 @@ class AuthController extends GetxController {
       );
       await _secureStorageService.saveToken(token);
       currentUser.value = await _authRepository.fetchMe();
-      Get.off(() => const WelcomeView());
+      Get.offAllNamed(Routes.welcome);
     } on ApiException catch (e) {
       errorMessage.value = e.message;
     } finally {
@@ -41,6 +62,19 @@ class AuthController extends GetxController {
   Future<void> logout() async {
     await _secureStorageService.deleteToken();
     currentUser.value = null;
-    Get.off(() => const LoginView());
+    Get.offAllNamed(Routes.login);
+  }
+
+  /// Wired to DioClient.onUnauthorized — any 401/403 anywhere in the app
+  /// forces a logout. Guarded so concurrent in-flight requests that all
+  /// 401 at once only trigger one logout/redirect.
+  Future<void> forceLogout() async {
+    if (_isHandlingUnauthorized) return;
+    _isHandlingUnauthorized = true;
+    try {
+      await logout();
+    } finally {
+      _isHandlingUnauthorized = false;
+    }
   }
 }

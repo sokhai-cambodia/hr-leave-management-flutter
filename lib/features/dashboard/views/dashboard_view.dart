@@ -3,21 +3,30 @@ import 'package:get/get.dart';
 
 import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_theme.dart';
+import '../../../data/models/leave_balance_model.dart';
 import '../../../data/models/user_model.dart';
 import '../../../widgets/app_shell_scaffold.dart';
 import '../../auth/controllers/auth_controller.dart';
+import '../controllers/dashboard_controller.dart';
 
-class DashboardView extends GetView<AuthController> {
+class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.find<AuthController>();
+    final dashboardController = Get.find<DashboardController>();
+
     return AppShellScaffold(
       title: 'Dashboard',
       body: Obx(() {
-        final user = controller.currentUser.value;
+        final user = authController.currentUser.value;
         final isSuperuser = user?.isSuperuser ?? false;
-        final isApprover = controller.isApprover.value;
+        final isApprover = authController.isApprover.value;
+
+        final balances = dashboardController.balances;
+        final isLoadingBalances = dashboardController.isLoadingBalances.value;
+        final balancesError = dashboardController.balancesError.value;
 
         final tiles = <_NavTileData>[
           _NavTileData(
@@ -77,16 +86,20 @@ class DashboardView extends GetView<AuthController> {
           children: [
             _ProfileCard(user: user),
             const SizedBox(height: 16),
-            const Row(
+            Row(
               children: [
                 Expanded(
                   child: _PlaceholderStatCard(
-                    label: 'Leave Balances',
-                    value: '—',
+                    label: 'Available Days',
+                    value: _availableDaysSummary(
+                      balances: balances,
+                      isLoading: isLoadingBalances,
+                      hasError: balancesError != null,
+                    ),
                   ),
                 ),
-                SizedBox(width: 12),
-                Expanded(
+                const SizedBox(width: 12),
+                const Expanded(
                   child: _PlaceholderStatCard(
                     label: 'Pending Requests',
                     value: '—',
@@ -98,6 +111,15 @@ class DashboardView extends GetView<AuthController> {
             const _PlaceholderStatCard(
               label: 'Recent Activity',
               value: 'Nothing yet',
+            ),
+            const SizedBox(height: 20),
+            Text('Leave Balances', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            _LeaveBalancesSection(
+              isLoading: isLoadingBalances,
+              error: balancesError,
+              balances: balances,
+              onRetry: dashboardController.fetchBalances,
             ),
             const SizedBox(height: 20),
             Text('Quick actions', style: Theme.of(context).textTheme.titleMedium),
@@ -115,6 +137,26 @@ class DashboardView extends GetView<AuthController> {
         );
       }),
     );
+  }
+
+  static String _availableDaysSummary({
+    required List<LeaveBalanceModel> balances,
+    required bool isLoading,
+    required bool hasError,
+  }) {
+    if (isLoading) return '—';
+    if (hasError) return 'N/A';
+    final total = balances.fold<double>(
+      0,
+      (sum, balance) => sum + balance.availableBalance,
+    );
+    return _formatDays(total);
+  }
+
+  static String _formatDays(double value) {
+    return value == value.roundToDouble()
+        ? value.toStringAsFixed(0)
+        : value.toStringAsFixed(1);
   }
 }
 
@@ -183,6 +225,92 @@ class _PlaceholderStatCard extends StatelessWidget {
             Text(label, style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 4),
             Text(value, style: Theme.of(context).textTheme.titleLarge),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LeaveBalancesSection extends StatelessWidget {
+  const _LeaveBalancesSection({
+    required this.isLoading,
+    required this.error,
+    required this.balances,
+    required this.onRetry,
+  });
+
+  final bool isLoading;
+  final String? error;
+  final List<LeaveBalanceModel> balances;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (error != null) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(error!, textAlign: TextAlign.center),
+              const SizedBox(height: 8),
+              OutlinedButton(onPressed: onRetry, child: const Text('Retry')),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (balances.isEmpty) {
+      return const Card(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('No leave balances yet.'),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        for (final balance in balances) _LeaveBalanceTile(balance: balance),
+      ],
+    );
+  }
+}
+
+class _LeaveBalanceTile extends StatelessWidget {
+  const _LeaveBalanceTile({required this.balance});
+
+  final LeaveBalanceModel balance;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text('${balance.leaveType.name} (${balance.leaveType.code})'),
+        subtitle: Text(
+          'Balance ${DashboardView._formatDays(balance.balance)} · '
+          'Taken ${DashboardView._formatDays(balance.takenBalance)}',
+        ),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              DashboardView._formatDays(balance.availableBalance),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('available', style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ),

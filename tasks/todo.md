@@ -19,8 +19,8 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] **Checkpoint 2**
 
 ## Phase 3 — Leave Balances
-- [ ] 3.1 Leave balances list, wired into dashboard
-- [ ] **Checkpoint 3**
+- [x] 3.1 Leave balances list, wired into dashboard
+- [x] **Checkpoint 3**
 
 ## Phase 4 — Leave Requests
 - [ ] 4.1 List + detail (read-only)

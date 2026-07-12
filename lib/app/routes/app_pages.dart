@@ -10,6 +10,7 @@ import '../../features/auth/views/forgot_password_view.dart';
 import '../../features/auth/views/login_view.dart';
 import '../../features/auth/views/reset_password_view.dart';
 import '../../features/auth/views/splash_view.dart';
+import '../../features/dashboard/bindings/dashboard_binding.dart';
 import '../../features/dashboard/views/dashboard_view.dart';
 import '../../features/leave_plan_requests/views/leave_plan_requests_view.dart';
 import '../../features/leave_requests/views/leave_requests_view.dart';
@@ -34,6 +35,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.dashboard,
       page: () => const DashboardView(),
+      binding: DashboardBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(

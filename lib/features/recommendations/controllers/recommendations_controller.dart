@@ -19,6 +19,7 @@ class RecommendationsController extends GetxController {
   final leaveTypeName = RxnString();
   final isLoading = false.obs;
   final errorMessage = RxnString();
+  final selectedDates = <DateTime>{}.obs;
 
   @override
   void onInit() {
@@ -32,11 +33,37 @@ class RecommendationsController extends GetxController {
     fetchRecommendations();
   }
 
+  bool isSelected(DateTime date) => selectedDates.contains(date);
+
+  void toggleDateSelection(DateTime date) {
+    if (selectedDates.contains(date)) {
+      selectedDates.remove(date);
+    } else {
+      selectedDates.add(date);
+    }
+  }
+
+  bool get isAllSelected {
+    final dates = recommendations.value?.data ?? const [];
+    return dates.isNotEmpty &&
+        dates.every((item) => selectedDates.contains(item.leaveDate));
+  }
+
+  void toggleSelectAll() {
+    final dates = recommendations.value?.data ?? const [];
+    if (isAllSelected) {
+      selectedDates.clear();
+    } else {
+      selectedDates.addAll(dates.map((item) => item.leaveDate));
+    }
+  }
+
   Future<void> fetchRecommendations() async {
     isLoading.value = true;
     errorMessage.value = null;
     recommendations.value = null;
     leaveTypeName.value = null;
+    selectedDates.clear();
 
     try {
       final result = await recommendsRepository.fetchRecommendations(

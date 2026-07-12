@@ -36,9 +36,9 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 
 ## Phase 6 — AI Recommendation Flow (headline feature)
 - [x] 6.1 Fetch & display recommendations
-- [ ] 6.2 Selection UI → build plan-request draft
-- [ ] 6.3 One-tap create & submit, success state
-- [ ] **Checkpoint 6**
+- [x] 6.2 Selection UI → build plan-request draft
+- [x] 6.3 One-tap create & submit, success state
+- [x] **Checkpoint 6**
 
 ## Phase 7 — Approvals Queue
 - [ ] 7.1 Approvals list (two tabs) + approve/reject

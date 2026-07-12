@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../data/models/leave_plan_request_model.dart';
 import '../controllers/leave_plan_requests_controller.dart';
+import 'leave_plan_request_detail_view.dart';
 
 class LeavePlanRequestFormView extends StatefulWidget {
   const LeavePlanRequestFormView({
@@ -30,6 +31,13 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
   final _selectedDates = <DateTime>[].obs;
 
   bool get _isEdit => widget.request != null;
+
+  /// The recommendation flow ("6.2 Selection UI") is the only caller that
+  /// pre-populates dates on a *new* request, so its presence doubles as the
+  /// signal to offer the one-tap "Submit Now" action (6.3) alongside the
+  /// plain draft save.
+  bool get _isFromRecommendation =>
+      !_isEdit && (widget.initialDates?.isNotEmpty ?? false);
 
   @override
   void initState() {
@@ -90,16 +98,21 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
-  Future<void> _save() async {
-    if (!_formKey.currentState!.validate()) return;
+  bool _validateForm() {
+    if (!_formKey.currentState!.validate()) return false;
     if (_selectedDates.isEmpty) {
       Get.snackbar(
         'Validation Error',
         'Please select at least one planned date.',
         snackPosition: SnackPosition.BOTTOM,
       );
-      return;
+      return false;
     }
+    return true;
+  }
+
+  Future<void> _save() async {
+    if (!_validateForm()) return;
 
     bool success;
     if (_isEdit) {
@@ -128,6 +141,24 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
         backgroundColor: Colors.green.withValues(alpha: 0.1),
         colorText: Colors.green[800],
       );
+    }
+  }
+
+  Future<void> _saveAndSubmit() async {
+    if (!_validateForm()) return;
+
+    final result = await controller.createAndSubmitRequest(
+      description: _descriptionController.text.trim(),
+      leaveTypeId: _selectedLeaveTypeId!,
+      dates: _selectedDates,
+    );
+
+    // Non-null even on submit failure (draft was still created) - route to
+    // its detail either way so the draft is never silently lost; the detail
+    // view already offers a Submit action for a still-draft request.
+    if (result != null) {
+      Get.back();
+      Get.to(() => LeavePlanRequestDetailView(requestId: result.id));
     }
   }
 
@@ -272,13 +303,31 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
               ),
               const SizedBox(height: 36),
 
-              // Action button
-              Obx(() => controller.isSubmitting.value
-                  ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
-                      onPressed: _save,
-                      child: Text(_isEdit ? 'Update Plan' : 'Save as Draft'),
-                    )),
+              // Action button(s)
+              Obx(() {
+                if (controller.isSubmitting.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (_isFromRecommendation) {
+                  return Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: _saveAndSubmit,
+                        child: const Text('Submit Now'),
+                      ),
+                      const SizedBox(height: 12),
+                      OutlinedButton(
+                        onPressed: _save,
+                        child: const Text('Save as Draft'),
+                      ),
+                    ],
+                  );
+                }
+                return ElevatedButton(
+                  onPressed: _save,
+                  child: Text(_isEdit ? 'Update Plan' : 'Save as Draft'),
+                );
+              }),
             ],
           ),
         );

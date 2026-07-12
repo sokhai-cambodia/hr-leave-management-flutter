@@ -201,6 +201,80 @@ class LeavePlanRequestsController extends GetxController {
     }
   }
 
+  /// Creates a draft then immediately submits it (the recommendation flow's
+  /// "Submit now" gesture). Returns the resulting request whether submission
+  /// succeeded (status `pending`) or failed (stays `draft`, but the draft is
+  /// still created and reachable in the list/detail) so the caller can
+  /// navigate to it either way. Returns null only if creation itself failed.
+  Future<LeavePlanRequestModel?> createAndSubmitRequest({
+    String? description,
+    required String leaveTypeId,
+    required List<DateTime> dates,
+  }) async {
+    isSubmitting.value = true;
+    formErrorMessage.value = null;
+
+    LeavePlanRequestModel created;
+    try {
+      created = await leavePlanRequestsRepository.createLeavePlanRequest(
+        description: description,
+        leaveTypeId: leaveTypeId,
+        dates: dates,
+      );
+      leavePlanRequests.insert(0, created);
+    } on ApiException catch (e) {
+      formErrorMessage.value = e.message;
+      isSubmitting.value = false;
+      return null;
+    }
+
+    try {
+      // Dio's own connect/receive timeouts don't cover this: on some devices
+      // the request never reaches the transport layer at all (observed hang
+      // in the token-read step of the auth interceptor, before dispatch), so
+      // this call needs its own hard ceiling or a stall here would spin the
+      // UI forever with no feedback - the created draft must stay reachable.
+      final submitted = await leavePlanRequestsRepository
+          .submitLeavePlanRequest(created.id)
+          .timeout(
+            const Duration(seconds: 20),
+            onTimeout: () => throw ApiException(
+              'The submit request timed out. Your draft was saved - open it '
+              'from the list to retry submitting.',
+            ),
+          );
+      final index = leavePlanRequests.indexWhere((r) => r.id == created.id);
+      if (index != -1) {
+        leavePlanRequests[index] = submitted;
+      }
+      Get.snackbar(
+        'Success',
+        'Leave plan request submitted successfully.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green.withValues(alpha: 0.1),
+        colorText: Colors.green[800],
+      );
+      return submitted;
+    } on ApiException catch (e) {
+      String userFriendlyMessage = e.message;
+      if (e.statusCode == 422 || e.message.contains('No approver found')) {
+        userFriendlyMessage =
+            "You don't have a line approver assigned yet, contact an admin";
+      }
+      Get.snackbar(
+        'Submission Failed',
+        userFriendlyMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
+        colorText: Colors.red[800],
+        duration: const Duration(seconds: 5),
+      );
+      return created;
+    } finally {
+      isSubmitting.value = false;
+    }
+  }
+
   /// Submits a draft leave plan request
   Future<bool> submitRequest(String id) async {
     isSubmitting.value = true;

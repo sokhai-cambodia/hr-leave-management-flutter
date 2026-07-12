@@ -52,7 +52,7 @@ class LeavePlanRequestModel {
   final String? approverId;
   final DateTime? approvalAt;
   final String status; // 'draft' | 'pending' | 'approved' | 'rejected'
-  final int amount;
+  final double amount;
   final List<LeavePlanDetailModel> details;
   final UserSummary owner;
   final LeaveTypeSummary leaveType;
@@ -74,7 +74,7 @@ class LeavePlanRequestModel {
           ? DateTime.parse(json['approval_at'] as String)
           : null,
       status: json['status'] as String,
-      amount: json['amount'] as int,
+      amount: (json['amount'] as num).toDouble(),
       details: detailsList
           .map((e) => LeavePlanDetailModel.fromJson(e as Map<String, dynamic>))
           .toList(),

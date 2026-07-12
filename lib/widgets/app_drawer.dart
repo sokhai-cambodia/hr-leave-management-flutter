@@ -145,7 +145,10 @@ class _NavTile extends StatelessWidget {
       ).colorScheme.primary.withValues(alpha: 0.08),
       onTap: () {
         Navigator.of(context).pop();
-        if (!isCurrent) Get.offAllNamed(route);
+        // toNamed (not offAllNamed) - a normal push keeps the prior screen
+        // on the stack so the system back button returns to it instead of
+        // exiting the app (there'd be nothing left to pop otherwise).
+        if (!isCurrent) Get.toNamed(route);
       },
     );
   }

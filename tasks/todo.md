@@ -45,7 +45,7 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] **Checkpoint 7**
 
 ## Phase 8 — Admin/Superuser Master Data CRUD
-- [ ] 8.1 Generic CRUD scaffold, proven on Leave Types
+- [x] 8.1 Generic CRUD scaffold, proven on Leave Types
 - [ ] 8.2 Apply pattern: Public Holidays, Policies
 - [ ] 8.3 Apply pattern: Teams, Users (relational pickers)
 - [ ] **Checkpoint 8**

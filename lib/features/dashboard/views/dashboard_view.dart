@@ -336,7 +336,9 @@ class _NavGridTile extends StatelessWidget {
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(AppShapes.cardRadius),
-        onTap: () => Get.offAllNamed(data.route),
+        // toNamed (not offAllNamed) - keeps Dashboard on the stack so back
+        // returns here instead of exiting the app.
+        onTap: () => Get.toNamed(data.route),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(

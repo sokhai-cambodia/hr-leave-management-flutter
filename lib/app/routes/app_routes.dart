@@ -3,7 +3,20 @@ abstract class Routes {
 
   static const splash = '/splash';
   static const login = '/login';
-  static const welcome = '/welcome';
   static const forgotPassword = '/forgot-password';
   static const resetPassword = '/reset-password';
+
+  static const dashboard = '/dashboard';
+  static const publicHolidays = '/public-holidays';
+  static const leavePlanRequests = '/leave-plan-requests';
+  static const leaveRequests = '/leave-requests';
+  static const recommendations = '/recommendations';
+  static const approvals = '/approvals';
+  static const profile = '/profile';
+
+  static const adminPolicies = '/admin/policies';
+  static const adminLeaveTypes = '/admin/leave-types';
+  static const adminTeams = '/admin/teams';
+  static const adminLeaveBalances = '/admin/leave-balances';
+  static const adminUsers = '/admin/users';
 }

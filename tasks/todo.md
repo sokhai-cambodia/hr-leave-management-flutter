@@ -14,9 +14,9 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] **Checkpoint 1**
 
 ## Phase 2 — App Shell, Role-Adaptive Navigation, Dashboard
-- [ ] 2.1 App shell + GetX routing + static role-based nav (superuser branch)
-- [ ] 2.2 Team-owner detection + Approvals nav entry
-- [ ] **Checkpoint 2**
+- [x] 2.1 App shell + GetX routing + static role-based nav (superuser branch)
+- [x] 2.2 Team-owner detection + Approvals nav entry
+- [x] **Checkpoint 2**
 
 ## Phase 3 — Leave Balances
 - [ ] 3.1 Leave balances list, wired into dashboard

@@ -4,6 +4,7 @@ import '../../core/network/dio_client.dart';
 import '../../core/storage/local_cache_service.dart';
 import '../../core/storage/secure_storage_service.dart';
 import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/teams_repository.dart';
 import '../../features/auth/controllers/auth_controller.dart';
 
 class InitialBinding extends Bindings {
@@ -15,9 +16,11 @@ class InitialBinding extends Bindings {
       DioClient(secureStorageService: secureStorageService),
     );
     Get.put(AuthRepository(dio: dioClient.dio));
+    Get.put(TeamsRepository(dio: dioClient.dio));
     final authController = Get.put(
       AuthController(
         authRepository: Get.find(),
+        teamsRepository: Get.find(),
         secureStorageService: Get.find(),
       ),
     );

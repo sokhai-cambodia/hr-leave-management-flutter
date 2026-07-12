@@ -5,19 +5,27 @@ import '../../../core/errors/api_exception.dart';
 import '../../../core/storage/secure_storage_service.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/auth_repository.dart';
+import '../../../data/repositories/teams_repository.dart';
 
 class AuthController extends GetxController {
   AuthController({
     required this._authRepository,
+    required this._teamsRepository,
     required this._secureStorageService,
   });
 
   final AuthRepository _authRepository;
+  final TeamsRepository _teamsRepository;
   final SecureStorageService _secureStorageService;
 
   final isLoading = false.obs;
   final errorMessage = RxnString();
   final currentUser = Rx<UserModel?>(null);
+
+  /// "Am I a team owner" — computed once per session (login/bootstrap), not
+  /// re-fetched per screen. No direct `is_team_owner` flag exists on `User`;
+  /// this is the only viable heuristic (see Task 2.2).
+  final isApprover = false.obs;
 
   final isRecoveryLoading = false.obs;
   final recoveryError = RxnString();
@@ -30,7 +38,7 @@ class AuthController extends GetxController {
   bool _isHandlingUnauthorized = false;
 
   /// Runs once on app start: a stored token is validated against the
-  /// backend before deciding whether to land on the welcome screen or
+  /// backend before deciding whether to land on the dashboard or
   /// the login screen, so authenticated UI never flashes unauthenticated
   /// (or vice versa).
   Future<void> bootstrap() async {
@@ -42,7 +50,8 @@ class AuthController extends GetxController {
 
     try {
       currentUser.value = await _authRepository.testToken();
-      Get.offAllNamed(Routes.welcome);
+      await _refreshApproverStatus();
+      Get.offAllNamed(Routes.dashboard);
     } on ApiException {
       await _secureStorageService.deleteToken();
       Get.offAllNamed(Routes.login);
@@ -59,11 +68,25 @@ class AuthController extends GetxController {
       );
       await _secureStorageService.saveToken(token);
       currentUser.value = await _authRepository.fetchMe();
-      Get.offAllNamed(Routes.welcome);
+      await _refreshApproverStatus();
+      Get.offAllNamed(Routes.dashboard);
     } on ApiException catch (e) {
       errorMessage.value = e.message;
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// Failures here don't block login/bootstrap — losing the Approvals nav
+  /// entry is a minor degradation, not a reason to force a logout.
+  Future<void> _refreshApproverStatus() async {
+    final userId = currentUser.value?.id;
+    if (userId == null) return;
+    try {
+      final teams = await _teamsRepository.fetchTeams();
+      isApprover.value = teams.any((team) => team.teamOwnerId == userId);
+    } on ApiException {
+      isApprover.value = false;
     }
   }
 
@@ -104,6 +127,7 @@ class AuthController extends GetxController {
   Future<void> logout() async {
     await _secureStorageService.deleteToken();
     currentUser.value = null;
+    isApprover.value = false;
     Get.offAllNamed(Routes.login);
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:hr_leave_management/core/storage/secure_storage_service.dart';
 import 'package:hr_leave_management/data/repositories/auth_repository.dart';
+import 'package:hr_leave_management/data/repositories/teams_repository.dart';
 import 'package:hr_leave_management/features/auth/controllers/auth_controller.dart';
 import 'package:hr_leave_management/features/auth/views/login_view.dart';
 
@@ -14,6 +15,7 @@ void main() {
     Get.put(
       AuthController(
         authRepository: AuthRepository(dio: Dio()),
+        teamsRepository: TeamsRepository(dio: Dio()),
         secureStorageService: SecureStorageService(),
       ),
     );

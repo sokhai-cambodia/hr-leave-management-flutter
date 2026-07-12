@@ -101,20 +101,23 @@ Per guideline, testing is "recommended" (manual) with unit tests as bonus — **
 
 ## 9. Design Tokens (shared brand, mirrored in the Android/Compose app)
 
-Chosen for a minimal/clean look, inspired generally by patterns common in attendance/leave apps (dark-first, restrained single-accent palette, filled borderless inputs, pill buttons) — not copied from any specific proprietary source. Implemented centrally in `lib/app/theme/app_theme.dart` so every screen inherits it automatically rather than being styled per-screen.
+Chosen for a minimal/clean, light-first look, adopted from reviewing a Figma Community HRMS reference (`figma.com/design/qaCZJAA9Uca4nGziJ5wx9m` — a Community file, published for reuse/inspiration; only the design direction was taken, not any copied assets). Implemented centrally in `lib/app/theme/app_theme.dart` so every screen inherits it automatically rather than being styled per-screen. Superseded an earlier dark/indigo/pill-button/filled-input direction (v1) after this reference was found to match what the user wanted better.
 
 | Token | Value |
 |---|---|
-| Accent/primary | `#3F51B5` (Indigo) |
-| Dark background / surface | `#0E0E12` / `#1A1A20` |
-| Light background / surface | `#F7F7FA` / `#FFFFFF` |
-| Danger / warning / success | `#E53935` / `#FB8C00` / `#43A047` |
+| Accent/primary | `#CA282C` (brick red) |
+| Dark background / surface | `#121212` / `#1E1E1E` |
+| Light background / surface | `#F7F7F8` / `#FFFFFF` |
+| Light border | `#E1E1E4` |
+| Danger / warning / success | `#CA282C` / `#FB8C00` / `#2E7D32` |
 | Font | Poppins (via `google_fonts`; Compose side should use the Poppins downloadable/bundled font for parity) |
-| Button shape | Fully rounded pill, 52px min height |
-| Card shape | 16px corner radius |
-| Text field shape | 14px corner radius, filled, borderless |
-| Default theme mode | Dark-first (light mode available as a toggle) |
+| Button shape | 12px corner radius (not a full pill), 52px min height |
+| Card shape | 14px corner radius, subtle elevation/shadow |
+| Text field shape | 12px corner radius, **outlined/bordered** (not filled-borderless), border color from `lightBorder`, primary-colored focus border |
+| Default theme mode | Light-first (dark mode available as a toggle) |
 | Icons | Material "outlined" icon variants (no third-party icon pack — `iconly` was tried and is incompatible with current Flutter's `IconData` being a `final class`; reverted) |
+| Dashboard navigation pattern | 2-column card grid of icon+label tiles (from the reference's Dashboard screen) rather than a plain list |
+| Choice inputs | Segmented chip toggles for binary/small-set choices (e.g. Full day/AM/PM, Yes/No) — pattern from the reference's Leave Request form |
 
 These same values (color hex, font, corner radii) should be re-used when building the Android/Jetpack Compose app's `MaterialTheme`, so the two apps present one consistent product despite being separate codebases.
 

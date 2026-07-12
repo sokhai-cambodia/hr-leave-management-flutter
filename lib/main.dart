@@ -17,7 +17,7 @@ class HrLeaveManagementApp extends StatelessWidget {
       title: 'HR Leave Management',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
       home: const PlaceholderHomePage(),
     );
   }

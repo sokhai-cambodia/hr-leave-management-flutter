@@ -4,6 +4,7 @@ import '../../core/network/dio_client.dart';
 import '../../core/storage/local_cache_service.dart';
 import '../../core/storage/secure_storage_service.dart';
 import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/leave_plan_requests_repository.dart';
 import '../../data/repositories/leave_requests_repository.dart';
 import '../../data/repositories/leave_types_repository.dart';
 import '../../data/repositories/teams_repository.dart';
@@ -20,6 +21,7 @@ class InitialBinding extends Bindings {
     Get.put(AuthRepository(dio: dioClient.dio));
     Get.put(TeamsRepository(dio: dioClient.dio));
     Get.put(LeaveRequestsRepository(dio: dioClient.dio));
+    Get.put(LeavePlanRequestsRepository(dio: dioClient.dio));
     Get.put(LeaveTypesRepository(dio: dioClient.dio));
     final authController = Get.put(
       AuthController(

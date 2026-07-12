@@ -29,10 +29,10 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] **Checkpoint 4**
 
 ## Phase 5 — Leave Plan Requests
-- [ ] 5.1 List + detail (detail = list of dates)
-- [ ] 5.2 Create/edit (multi-date picker, duplicate guard) + delete
-- [ ] 5.3 Submit action
-- [ ] **Checkpoint 5**
+- [x] 5.1 List + detail (detail = list of dates)
+- [x] 5.2 Create/edit (multi-date picker, duplicate guard) + delete
+- [x] 5.3 Submit action
+- [x] **Checkpoint 5**
 
 ## Phase 6 — AI Recommendation Flow (headline feature)
 - [ ] 6.1 Fetch & display recommendations

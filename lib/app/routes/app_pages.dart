@@ -12,6 +12,7 @@ import '../../features/auth/views/reset_password_view.dart';
 import '../../features/auth/views/splash_view.dart';
 import '../../features/dashboard/bindings/dashboard_binding.dart';
 import '../../features/dashboard/views/dashboard_view.dart';
+import '../../features/leave_plan_requests/bindings/leave_plan_requests_binding.dart';
 import '../../features/leave_plan_requests/views/leave_plan_requests_view.dart';
 import '../../features/leave_requests/bindings/leave_requests_binding.dart';
 import '../../features/leave_requests/views/leave_requests_view.dart';
@@ -47,6 +48,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.leavePlanRequests,
       page: () => const LeavePlanRequestsView(),
+      binding: LeavePlanRequestsBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(

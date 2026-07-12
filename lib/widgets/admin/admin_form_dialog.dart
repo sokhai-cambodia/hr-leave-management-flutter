@@ -67,9 +67,14 @@ class _AdminFormDialogState extends State<AdminFormDialog> {
         case AdminFieldType.boolean:
           values[field.key] = _boolValues[field.key] ?? false;
         case AdminFieldType.number:
-          values[field.key] = int.parse(_textControllers[field.key]!.text.trim());
+          final text = _textControllers[field.key]!.text.trim();
+          values[field.key] = text.isEmpty ? null : int.parse(text);
+        case AdminFieldType.decimal:
+          final text = _textControllers[field.key]!.text.trim();
+          values[field.key] = text.isEmpty ? null : double.parse(text);
         case AdminFieldType.text:
         case AdminFieldType.multilineText:
+        case AdminFieldType.date:
           final text = _textControllers[field.key]!.text.trim();
           values[field.key] = text.isEmpty ? null : text;
       }
@@ -82,6 +87,27 @@ class _AdminFormDialogState extends State<AdminFormDialog> {
     if (success) Get.back();
   }
 
+  Future<void> _pickDate(AdminFieldSpec field) async {
+    final current = _textControllers[field.key]!.text.trim();
+    final initial = DateTime.tryParse(current) ?? DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked == null) return;
+    // Manual y/m/d formatting, not toIso8601String() - the backend stores
+    // this as a plain string and must get back exactly "YYYY-MM-DD" with no
+    // time/timezone component riding along.
+    setState(() {
+      _textControllers[field.key]!.text =
+          '${picked.year.toString().padLeft(4, '0')}-'
+          '${picked.month.toString().padLeft(2, '0')}-'
+          '${picked.day.toString().padLeft(2, '0')}';
+    });
+  }
+
   Widget _buildField(AdminFieldSpec field) {
     if (field.type == AdminFieldType.boolean) {
       return SwitchListTile(
@@ -92,15 +118,24 @@ class _AdminFormDialogState extends State<AdminFormDialog> {
       );
     }
 
+    final isDate = field.type == AdminFieldType.date;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
         controller: _textControllers[field.key],
-        keyboardType: field.type == AdminFieldType.number
-            ? TextInputType.number
-            : TextInputType.text,
+        readOnly: isDate,
+        onTap: isDate ? () => _pickDate(field) : null,
+        keyboardType: switch (field.type) {
+          AdminFieldType.number => TextInputType.number,
+          AdminFieldType.decimal => const TextInputType.numberWithOptions(decimal: true),
+          _ => TextInputType.text,
+        },
         maxLines: field.type == AdminFieldType.multilineText ? 3 : 1,
-        decoration: InputDecoration(labelText: field.label),
+        decoration: InputDecoration(
+          labelText: field.label,
+          suffixIcon: isDate ? const Icon(Icons.calendar_today_outlined) : null,
+        ),
         validator: (value) {
           final trimmed = value?.trim() ?? '';
           if (field.required && trimmed.isEmpty) {
@@ -108,6 +143,9 @@ class _AdminFormDialogState extends State<AdminFormDialog> {
           }
           if (field.type == AdminFieldType.number && trimmed.isNotEmpty) {
             if (int.tryParse(trimmed) == null) return 'Must be a whole number';
+          }
+          if (field.type == AdminFieldType.decimal && trimmed.isNotEmpty) {
+            if (double.tryParse(trimmed) == null) return 'Must be a number';
           }
           if (trimmed.isNotEmpty && field.validator != null) {
             return field.validator!(trimmed);

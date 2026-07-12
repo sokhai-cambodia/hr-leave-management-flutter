@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
 
 import '../../features/admin/views/admin_leave_balances_view.dart';
+import '../../features/admin/views/admin_public_holidays_view.dart';
 import '../../features/admin/views/admin_teams_view.dart';
 import '../../features/admin/views/admin_users_view.dart';
 import '../../features/admin/bindings/leave_types_admin_binding.dart';
+import '../../features/admin/bindings/policies_admin_binding.dart';
+import '../../features/admin/bindings/public_holidays_admin_binding.dart';
 import '../../features/admin/views/leave_types_view.dart';
 import '../../features/admin/views/policies_view.dart';
 import '../../features/approvals/bindings/approvals_binding.dart';
@@ -80,6 +83,13 @@ abstract class AppPages {
     GetPage(
       name: Routes.adminPolicies,
       page: () => const PoliciesView(),
+      binding: PoliciesAdminBinding(),
+      middlewares: [AuthMiddleware(), SuperuserMiddleware()],
+    ),
+    GetPage(
+      name: Routes.adminPublicHolidays,
+      page: () => const AdminPublicHolidaysView(),
+      binding: PublicHolidaysAdminBinding(),
       middlewares: [AuthMiddleware(), SuperuserMiddleware()],
     ),
     GetPage(

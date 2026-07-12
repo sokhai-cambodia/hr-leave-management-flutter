@@ -1,4 +1,16 @@
-enum AdminFieldType { text, multilineText, number, boolean }
+enum AdminFieldType {
+  text,
+  multilineText,
+  number,
+  decimal,
+  boolean,
+
+  /// A date-picker-driven field whose value is always a plain "YYYY-MM-DD"
+  /// string, never a DateTime - matches backend resources (e.g. public
+  /// holidays) that store the date as an opaque string on the wire, so it
+  /// must round-trip exactly with no timezone/format drift.
+  date,
+}
 
 /// Describes one field of a generic admin create/edit form (Task 8.1). The
 /// dialog builds its inputs purely from a list of these - adding a resource

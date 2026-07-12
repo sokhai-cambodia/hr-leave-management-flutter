@@ -83,6 +83,11 @@ class AppDrawer extends StatelessWidget {
                   route: Routes.adminPolicies,
                 ),
                 _NavTile(
+                  icon: Icons.beach_access_outlined,
+                  label: 'Public Holidays',
+                  route: Routes.adminPublicHolidays,
+                ),
+                _NavTile(
                   icon: Icons.category_outlined,
                   label: 'Leave Types',
                   route: Routes.adminLeaveTypes,

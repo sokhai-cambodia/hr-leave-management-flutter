@@ -15,6 +15,7 @@ abstract class Routes {
   static const profile = '/profile';
 
   static const adminPolicies = '/admin/policies';
+  static const adminPublicHolidays = '/admin/public-holidays';
   static const adminLeaveTypes = '/admin/leave-types';
   static const adminTeams = '/admin/teams';
   static const adminLeaveBalances = '/admin/leave-balances';

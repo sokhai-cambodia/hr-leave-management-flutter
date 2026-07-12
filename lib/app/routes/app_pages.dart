@@ -13,6 +13,7 @@ import '../../features/auth/views/splash_view.dart';
 import '../../features/dashboard/bindings/dashboard_binding.dart';
 import '../../features/dashboard/views/dashboard_view.dart';
 import '../../features/leave_plan_requests/views/leave_plan_requests_view.dart';
+import '../../features/leave_requests/bindings/leave_requests_binding.dart';
 import '../../features/leave_requests/views/leave_requests_view.dart';
 import '../../features/profile/views/profile_view.dart';
 import '../../features/public_holidays/views/public_holidays_view.dart';
@@ -51,6 +52,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.leaveRequests,
       page: () => const LeaveRequestsView(),
+      binding: LeaveRequestsBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(

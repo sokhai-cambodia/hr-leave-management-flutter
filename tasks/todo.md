@@ -23,10 +23,10 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] **Checkpoint 3**
 
 ## Phase 4 — Leave Requests
-- [ ] 4.1 List + detail (read-only)
-- [ ] 4.2 Create draft, edit, delete (draft-only)
-- [ ] 4.3 Submit action + balance-debit visibility
-- [ ] **Checkpoint 4**
+- [x] 4.1 List + detail (read-only)
+- [x] 4.2 Create draft, edit, delete (draft-only)
+- [x] 4.3 Submit action + balance-debit visibility
+- [x] **Checkpoint 4**
 
 ## Phase 5 — Leave Plan Requests
 - [ ] 5.1 List + detail (detail = list of dates)

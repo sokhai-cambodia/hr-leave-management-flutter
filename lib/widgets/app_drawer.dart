@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../app/routes/app_routes.dart';
+import '../app/theme/app_theme.dart';
 import '../features/auth/controllers/auth_controller.dart';
 
 /// Persistent side nav, included on every authenticated screen via
@@ -29,7 +30,21 @@ class AppDrawer extends StatelessWidget {
                 accountName: Text(user?.fullName ?? 'HR Leave Management'),
                 accountEmail: Text(user?.email ?? ''),
                 currentAccountPicture: CircleAvatar(
-                  child: Text(_initials(user?.fullName ?? user?.email)),
+                  // UserAccountsDrawerHeader's default background is
+                  // colorScheme.primary (this app's brick red), and
+                  // CircleAvatar's own default fill was landing on a
+                  // similar shade with no explicit color set - invisible
+                  // against the header, unlike on the white dashboard card.
+                  // Explicit white-on-red guarantees contrast here.
+                  backgroundColor: Colors.white,
+                  child: Text(
+                    _initials(user?.fullName ?? user?.email),
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
               ),
               _NavTile(

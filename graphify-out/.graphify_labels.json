@@ -77,5 +77,9 @@
   "75": "splash_view.dart",
   "76": "local_cache_service.dart",
   "77": "dashboard_binding.dart",
-  "78": "List"
+  "78": "List",
+  "79": "users_repository.dart",
+  "80": "AdminCrudController",
+  "81": "LeavePlanRequestsController",
+  "82": "package:get/get.dart"
 }

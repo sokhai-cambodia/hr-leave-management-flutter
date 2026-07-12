@@ -172,7 +172,11 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
           onPressed: () => Get.back(),
         ),
       ),
-      body: Obx(() {
+      // Without this, the bottom-most action button can end up rendered
+      // behind the system gesture-nav bar on some devices (unclickable) -
+      // Scaffold.body isn't safe-area-wrapped by default.
+      body: SafeArea(
+        child: Obx(() {
         if (controller.isLoadingLeaveTypes.value) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -331,7 +335,8 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
             ],
           ),
         );
-      }),
+        }),
+      ),
     );
   }
 }

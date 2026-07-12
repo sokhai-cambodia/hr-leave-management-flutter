@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hr_leave_management/main.dart';
 
 void main() {
-  testWidgets('app launches to the placeholder home screen', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('app launches to the login screen', (WidgetTester tester) async {
     await tester.pumpWidget(const HrLeaveManagementApp());
 
     expect(find.text('HR Leave Management'), findsWidgets);
-    expect(find.text('Project scaffold ready.'), findsOneWidget);
+    expect(find.text('Sign in'), findsOneWidget);
+    expect(find.widgetWithText(ElevatedButton, 'Log in'), findsOneWidget);
   });
 }

@@ -5,7 +5,7 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 ## Phase 0 — Environment & Scaffolding
 - [x] 0.1 Project scaffold, dependencies, folder skeleton, lint
 - [x] 0.2 Core network/storage infra + connectivity smoke test
-- [ ] **Checkpoint 0**
+- [x] **Checkpoint 0**
 
 ## Phase 1 — Auth & Session
 - [ ] 1.1 Login + token storage + current-user fetch + minimal authenticated screen

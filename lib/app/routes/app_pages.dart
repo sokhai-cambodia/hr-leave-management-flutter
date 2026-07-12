@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../features/admin/views/admin_leave_balances_view.dart';
 import '../../features/admin/views/admin_teams_view.dart';
 import '../../features/admin/views/admin_users_view.dart';
+import '../../features/admin/bindings/leave_types_admin_binding.dart';
 import '../../features/admin/views/leave_types_view.dart';
 import '../../features/admin/views/policies_view.dart';
 import '../../features/approvals/bindings/approvals_binding.dart';
@@ -84,6 +85,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.adminLeaveTypes,
       page: () => const LeaveTypesView(),
+      binding: LeaveTypesAdminBinding(),
       middlewares: [AuthMiddleware(), SuperuserMiddleware()],
     ),
     GetPage(

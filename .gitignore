@@ -43,3 +43,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Claude Code local settings (machine-specific paths/permissions)
+.claude/
+
+# graphify machine-specific state and regenerable cache
+graphify-out/.graphify_python
+graphify-out/.graphify_root
+graphify-out/cache/

@@ -35,18 +35,18 @@
     "semantic_hash": "087a01c04d081ae02a8e5db89f4bf3f3"
   },
   "lib/app/bindings/initial_binding.dart": {
-    "mtime": 1783958056.2251184,
-    "ast_hash": "9f8fe1e95e5bd05af85958296b491062",
+    "mtime": 1783963195.1393383,
+    "ast_hash": "984ab7a1b4c073c5a795682d6682b6fc",
     "semantic_hash": ""
   },
   "lib/app/routes/app_pages.dart": {
-    "mtime": 1783958933.0758932,
-    "ast_hash": "5559cc70dfef1740ece16430e720d5c7",
+    "mtime": 1783963272.063345,
+    "ast_hash": "21570ef8e0885b6c014ed84d10b4bc35",
     "semantic_hash": ""
   },
   "lib/app/routes/app_routes.dart": {
-    "mtime": 1783872969.6347823,
-    "ast_hash": "a203d7597d18088ce2e156cfd5335246",
+    "mtime": 1783963256.4837046,
+    "ast_hash": "d3fa0db05465236a3a57559151f74a51",
     "semantic_hash": ""
   },
   "lib/app/routes/auth_middleware.dart": {
@@ -150,14 +150,14 @@
     "semantic_hash": ""
   },
   "lib/data/repositories/leave_plan_requests_repository.dart": {
-    "mtime": 1783863457.2024782,
-    "ast_hash": "0aa02e61b2cab3c6f40700bab100a502",
-    "semantic_hash": "0aa02e61b2cab3c6f40700bab100a502"
+    "mtime": 1783962532.9974391,
+    "ast_hash": "e913c47a7c0278bb73ae9dbb1150cc2d",
+    "semantic_hash": ""
   },
   "lib/data/repositories/leave_requests_repository.dart": {
-    "mtime": 1783863098.432719,
-    "ast_hash": "fba0e4ce35ce1586a71e856f77c1b1ef",
-    "semantic_hash": "fba0e4ce35ce1586a71e856f77c1b1ef"
+    "mtime": 1783962518.3505943,
+    "ast_hash": "dabb8ecd5ffac6344bb75ceed01db920",
+    "semantic_hash": ""
   },
   "lib/data/repositories/leave_types_repository.dart": {
     "mtime": 1783872042.7145824,
@@ -230,18 +230,18 @@
     "semantic_hash": "0751a05144a51bdd713fb52290e2835b"
   },
   "lib/features/dashboard/bindings/dashboard_binding.dart": {
-    "mtime": 1783960020.4854558,
-    "ast_hash": "2a3ae057c66794bf196328bb56479fb2",
+    "mtime": 1783962583.5597484,
+    "ast_hash": "c4b130a5dc6ca64191be24d84ec293b3",
     "semantic_hash": ""
   },
   "lib/features/dashboard/controllers/dashboard_controller.dart": {
-    "mtime": 1783960064.1600156,
-    "ast_hash": "88536ca09adb8151a7d3604cae8d2d83",
+    "mtime": 1783962574.3273365,
+    "ast_hash": "5ce5ed1ffeacbbcc4b33aa85242d5420",
     "semantic_hash": ""
   },
   "lib/features/dashboard/views/dashboard_view.dart": {
-    "mtime": 1783960049.5251021,
-    "ast_hash": "3042858d10fc53246b104a776bd9f364",
+    "mtime": 1783963277.2175736,
+    "ast_hash": "6790114e1c3d2f90bf6b8106a5ea5496",
     "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/bindings/leave_plan_requests_binding.dart": {
@@ -299,11 +299,6 @@
     "ast_hash": "c18f5aeceed8a6434c33246bb8f092cc",
     "semantic_hash": "c18f5aeceed8a6434c33246bb8f092cc"
   },
-  "lib/features/public_holidays/views/public_holidays_view.dart": {
-    "mtime": 1783958923.5350215,
-    "ast_hash": "3e2a6a6c9ac3b4e2940c19bf9d14799e",
-    "semantic_hash": ""
-  },
   "lib/features/recommendations/bindings/recommendations_binding.dart": {
     "mtime": 1783865679.3782873,
     "ast_hash": "4b7bc373fbf9b7034c8996dc2d5cef4b",
@@ -325,8 +320,8 @@
     "semantic_hash": ""
   },
   "lib/widgets/app_drawer.dart": {
-    "mtime": 1783873315.1852348,
-    "ast_hash": "41907776131aa716cd2561d956b47628",
+    "mtime": 1783963282.287067,
+    "ast_hash": "62282216217f9d579d29afc99546791e",
     "semantic_hash": ""
   },
   "lib/widgets/app_shell_scaffold.dart": {
@@ -425,8 +420,8 @@
     "semantic_hash": ""
   },
   "SPEC.md": {
-    "mtime": 1783959467.7512677,
-    "ast_hash": "155ab04b5ab84d9e3c61b7a56463fef2",
+    "mtime": 1783963473.2512589,
+    "ast_hash": "6e3b36caf7a92c4b26b6f5002cc13eaf",
     "semantic_hash": ""
   },
   "analysis_options.yaml": {
@@ -440,13 +435,13 @@
     "semantic_hash": ""
   },
   "tasks/plan.md": {
-    "mtime": 1783961214.3047934,
-    "ast_hash": "a6db46ca98956c9df7066f33cb6d5f41",
+    "mtime": 1783963432.874307,
+    "ast_hash": "1b85ab850a40cebc0796e6b347f95f1a",
     "semantic_hash": ""
   },
   "tasks/todo.md": {
-    "mtime": 1783961225.436544,
-    "ast_hash": "8c706dd92ae18d59f91f215dcbb1e3f0",
+    "mtime": 1783963447.1992483,
+    "ast_hash": "2cdc2cfa9d59516bc29294af657a56fc",
     "semantic_hash": ""
   },
   "windows/CMakeLists.txt": {
@@ -495,8 +490,8 @@
     "semantic_hash": ""
   },
   "lib/features/approvals/controllers/approvals_controller.dart": {
-    "mtime": 1783870932.7723148,
-    "ast_hash": "e1ded0a935984d4bc683175273aa5212",
+    "mtime": 1783962600.2715273,
+    "ast_hash": "417d51b045f9290ecd1a243eada1f59f",
     "semantic_hash": ""
   },
   "lib/features/admin/bindings/leave_types_admin_binding.dart": {
@@ -609,19 +604,44 @@
     "ast_hash": "04731fb44fce19df90f90f37d54c5aa2",
     "semantic_hash": ""
   },
-  "lib/features/public_holidays/bindings/public_holidays_binding.dart": {
-    "mtime": 1783958901.7834816,
-    "ast_hash": "a3ba6890859511ad5bcc2c67f059ed1d",
+  "lib/data/models/pending_approvals_count_model.dart": {
+    "mtime": 1783962538.647254,
+    "ast_hash": "bcbc53534e7feece112e6b090b920f49",
     "semantic_hash": ""
   },
-  "lib/features/public_holidays/controllers/public_holidays_controller.dart": {
-    "mtime": 1783958892.048656,
-    "ast_hash": "ad9dd2af5d66666127c41311903f4322",
+  "lib/data/models/schedule_model.dart": {
+    "mtime": 1783963174.8315732,
+    "ast_hash": "657fa211ae0b8460646824aa40d406d8",
     "semantic_hash": ""
   },
-  "test/unit/public_holidays_test.dart": {
-    "mtime": 1783958946.0061724,
-    "ast_hash": "12441e03bde1156963ec9a90c2206548",
+  "lib/data/repositories/approvals_repository.dart": {
+    "mtime": 1783962544.5848196,
+    "ast_hash": "bad5f7ff29dde09554fafcdb193b6e98",
+    "semantic_hash": ""
+  },
+  "lib/data/repositories/schedule_repository.dart": {
+    "mtime": 1783963181.9938917,
+    "ast_hash": "28ec45f577ce62b927829601974468c6",
+    "semantic_hash": ""
+  },
+  "lib/features/schedule/bindings/schedule_binding.dart": {
+    "mtime": 1783963215.5398984,
+    "ast_hash": "cddd6ff2568b8f436a2940934df639cb",
+    "semantic_hash": ""
+  },
+  "lib/features/schedule/controllers/schedule_controller.dart": {
+    "mtime": 1783963210.7747016,
+    "ast_hash": "b3154e94fa7536cdfe9f409cf1fd2421",
+    "semantic_hash": ""
+  },
+  "lib/features/schedule/views/schedule_view.dart": {
+    "mtime": 1783963244.7753627,
+    "ast_hash": "699c9e4299dcad80328bec18957939e0",
+    "semantic_hash": ""
+  },
+  "test/unit/schedule_test.dart": {
+    "mtime": 1783963310.2084734,
+    "ast_hash": "a9b2feb7c10f3d3a0db1d49eebd37a34",
     "semantic_hash": ""
   }
 }

@@ -92,5 +92,18 @@
   "90": "hr_leave_management",
   "91": "Phase 0 — Environment & Scaffolding",
   "92": "Phase 2 — App Shell, Role-Adaptive Navigation, Dashboard",
-  "93": "Phase 9 — Hardening & Report-Readiness"
+  "93": "Phase 9 — Hardening & Report-Readiness",
+  "94": "StatelessWidget",
+  "95": "pending_approvals_count_model.dart",
+  "96": "../controllers/public_holidays_controller.dart",
+  "97": "LeavePlanRequestsRepository",
+  "98": "LeaveRequestsRepository",
+  "99": "package:hr_leave_management/data/models/public_holiday_model.dart",
+  "100": "package:hr_leave_management/features/public_holidays/controllers/public_holidays_controller.dart",
+  "101": "package:table_calendar/table_calendar.dart",
+  "102": "PublicHolidayModel",
+  "103": "PublicHolidaysRepository",
+  "104": "splash_view.dart",
+  "105": "../../features/public_holidays/bindings/public_holidays_binding.dart",
+  "106": "../../features/public_holidays/views/public_holidays_view.dart"
 }

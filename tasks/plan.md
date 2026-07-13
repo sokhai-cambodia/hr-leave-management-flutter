@@ -309,6 +309,22 @@ Per this repo's boundary (Flutter only *consumes* the backend API, doesn't chang
 
 ---
 
+## Phase 12 — In-App Notifications (backend written, not yet deployed at time of Flutter integration)
+
+Backend (`../hr-leave-management`) already has `Notification` model, `NotificationService` (creates a row on leave/leave-plan submit → notifies approver; approve/reject → notifies owner, no self-notification on submit), and `GET/PUT /notifications/*` routes, fully documented in `PROJECT_FEATURES.md` §14 — written by the user directly in the backend repo, not yet committed/deployed as of this Flutter-side work. Flutter integration was written against that documented contract ahead of deployment; endpoints will 404 until deployed, which the app handles gracefully (silent badge-poll failures, a normal error+retry state on the notifications list).
+
+### Task 12.1 — Notifications data layer, global badge, and list screen
+- **Depends on:** 2.1 (AppShellScaffold), Auth (session lifecycle)
+- New `NotificationModel`/`NotificationsPage` (`lib/data/models/notification_model.dart`) and `NotificationsRepository` (`fetchNotifications({skip, limit, isRead})`, `fetchUnreadCount()`, `markRead(id)`, `markAllRead()`), registered globally in `initial_binding.dart`.
+- New `NotificationsController` (`lib/features/notifications/controllers/notifications_controller.dart`) — registered **globally/permanent** in `InitialBinding` (not per-route via a lazy binding), because the unread badge needs to stay live on every screen, not just while the Notifications screen itself is open. Uses `ever<UserModel?>(authController.currentUser, ...)` to start a 30-second `Timer.periodic` poll of `GET /notifications/unread-count` on login/session-bootstrap and stop it (clearing local state) on logout — reactive to auth state rather than `AuthController` needing to know about notifications. Badge-poll failures are silent (no error toast every 30s); the list screen's own fetch surfaces a normal error+retry state. `markAsRead`/`markAllAsRead` update local state optimistically before the API call resolves.
+- New `NotificationsView` (`lib/features/notifications/views/notifications_view.dart`) — standard list-screen pattern (loading/error/empty/infinite-scroll/pull-to-refresh, mirroring `LeaveRequestsView`), unread rows visually distinct (bold text + accent dot + tinted background), "Mark all read" AppBar action, tapping a row marks it read and navigates by `entityType` (`leave_request` → `Routes.leaveRequests`, `leave_plan_request` → `Routes.leavePlanRequests` — the list screen, not a deep link to the specific record; jumping straight to the exact record was deferred as a nice-to-have, not needed for a working first version).
+- `AppShellScaffold` (`lib/widgets/app_shell_scaffold.dart`) now bakes in a bell icon + unread-count badge as a trailing AppBar action on every authenticated screen (appended after any caller-supplied `actions`), rather than requiring each screen to opt in individually — tapping it opens `Routes.notifications`.
+- New route `Routes.notifications` = `/notifications`, no binding needed (controller is already global).
+- **Acceptance:** `flutter analyze` clean; `flutter test` green (only the pre-existing unrelated `dio_client_unauthorized_test.dart` failures remain); app builds/installs/launches without crashing even with the backend not yet deployed (bell badge just stays at 0, notifications list shows a normal error+retry state instead of a 404 crash).
+- **Verify (once the backend is deployed):** submit a leave request as one test account, confirm the assigned approver's badge count increments within ~30s (or on next app open); approve/reject it, confirm the submitter's badge increments; tap a notification, confirm it's marked read (badge decrements) and navigates to the right list; "Mark all read" zeroes the badge.
+
+---
+
 ## Sequencing
 
 ```
@@ -323,6 +339,8 @@ Phase 0 (scaffold+infra)
               → Phase 8 (admin CRUD)          ← needs 2.1 only; kept last per user decision
                 → Phase 9 (hardening)
                   → Phase 10 (post-launch enhancements, found/requested after Checkpoint 9)
+                    → Phase 11 (backend API enhancements + Flutter integration)
+                      → Phase 12 (in-app notifications)
 ```
 
 ## Critical Files

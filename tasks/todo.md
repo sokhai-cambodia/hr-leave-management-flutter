@@ -66,3 +66,6 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] 11.2 New `GET /approvals/pending-count` + Dashboard "Pending Approvals" tappable card
 - [x] 11.3 New `GET /schedule/?year&month` (public holidays + team leave) + Schedule feature (replaces Public Holidays screen)
 - [x] 11.4 Scope Leave Requests/Leave Plan Requests lists to owner_id; remove "Pending Requests" card and Quick Actions "Approvals" tile (redundant with "Pending Approvals")
+
+## Phase 12 — In-App Notifications (backend written by user, not yet deployed)
+- [x] 12.1 Notifications data layer, global unread badge (every screen via `AppShellScaffold`), and list screen with mark-read/mark-all-read

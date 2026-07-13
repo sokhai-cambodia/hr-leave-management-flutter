@@ -55,7 +55,6 @@ class DashboardView extends StatelessWidget {
               Icons.fact_check_outlined,
               Routes.approvals,
             ),
-          _NavTileData('Profile', Icons.person_outline, Routes.profile),
           if (isSuperuser) ...[
             _NavTileData(
               'Manage Public Holidays',

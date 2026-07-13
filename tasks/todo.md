@@ -54,3 +54,7 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 ## Phase 9 — Hardening & Report-Readiness
 - [x] 9.1 Targeted unit tests
 - [x] 9.2 Analyze-clean pass + empty/error/loading state audit + feature checklist walkthrough
+
+## Phase 10 — Post-Launch Enhancements
+- [x] 10.1 Employee Public Holidays month-calendar view (table_calendar)
+- [x] 10.2 Remove redundant Profile tile from Dashboard Quick Actions

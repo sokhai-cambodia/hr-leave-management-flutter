@@ -248,6 +248,27 @@ Sliced as pattern-then-apply across 6 resources, not 6 near-duplicate tasks.
 
 ---
 
+## Phase 10 — Post-Launch Enhancements (after Checkpoint 9)
+
+### Task 10.1 — Employee Public Holidays month-calendar view
+- **Depends on:** 2.1 (route existed, unimplemented — `PublicHolidaysView` shipped in Phase 2 as a `PlaceholderScreen` and was never revisited in Phase 3-9's happy-path build-out)
+- Replaced the placeholder with a real month-view calendar using the `table_calendar` package (`^3.2.0`, added via `flutter pub add table_calendar`; pulls in `intl`/`simple_gesture_detector` transitively — no direct `intl` usage added elsewhere in the app, month/date headings are still formatted manually to match this codebase's existing convention). New files: `lib/features/public_holidays/controllers/public_holidays_controller.dart`, `lib/features/public_holidays/bindings/public_holidays_binding.dart`, rewritten `lib/features/public_holidays/views/public_holidays_view.dart`.
+- No server-side month/year filter exists on `GET /public-holidays/` (only `skip`/`limit`), so the controller fetches once with a generous `limit` (500) on `onInit` — same "small master-data table, fetch once" precedent as `TeamsAdminController._loadUserOptions`. Two pure/static functions do the client-side work, unit-tested directly (no GetX bootstrap needed), same spirit as `LeavePlanRequestsController.isDuplicateDate`: `PublicHolidaysController.groupByDay(List<PublicHolidayModel>) → Map<DateTime, List<PublicHolidayModel>>` (day-normalized, feeds the calendar's `eventLoader` for marker dots) and `PublicHolidaysController.holidaysInMonth(List<PublicHolidayModel>, DateTime) → List<PublicHolidayModel>` (feeds the list section below the calendar). `PublicHolidayModel.date` stays a `String` throughout — `DateTime.parse` is only used transiently for grouping/display, never round-tripped back to the wire.
+- UI: `TableCalendar<PublicHolidayModel>` themed with existing tokens (`AppColors.primary` for today, `AppColors.warning` for holiday marker dots, `formatButtonVisible: false`, centered header) inside a `Card`; below it, a heading for the visible month plus a `Column` of `Card`s (mirroring `LeaveRequestsView._buildRequestCard`'s inline shape) listing that month's holidays, or an empty-state message.
+- Route: `Routes.publicHolidays` in `lib/app/routes/app_pages.dart` gained a `binding: PublicHolidaysBinding()` (previously had none).
+- **For Android/Compose parity:** the two pure grouping/filtering functions above are the reusable "logic," independent of `table_calendar`'s specific widget API — any calendar/month-view component on the Android side needs equivalent day-grouping and month-filtering over the same `GET /public-holidays/` payload shape (`id`, `date` as `"YYYY-MM-DD"`, `name`, `description?`).
+- **Acceptance:** calendar renders holiday markers; month navigation (prev/next) works; list below matches the visible month; `flutter analyze` clean; `flutter test` green (new `test/unit/public_holidays_test.dart` covers both pure functions, including a Dec 31/Jan 1 year-boundary case).
+- **Verify:** manual — Dashboard → Public Holidays as a logged-in employee on the physical test device; confirm markers, navigation, and list all agree; admin's separate "Manage Public Holidays" CRUD screen (Task 8.4) spot-checked unaffected.
+
+### Task 10.2 — Remove redundant Profile tile from Dashboard Quick Actions
+- **Depends on:** 2.1
+- `Routes.profile` was reachable two ways: the Dashboard's Quick Actions grid tile and the drawer's "Settings / Profile" entry (`lib/widgets/app_drawer.dart`). Removed the Quick Actions duplicate (`lib/features/dashboard/views/dashboard_view.dart`) — Profile remains reachable via the drawer only.
+- **For Android/Compose parity:** if the Android dashboard mirrors this Quick Actions grid, don't include a Profile tile there either — keep account/profile access to a single nav surface (equivalent of the drawer) to avoid the same duplication.
+- **Acceptance:** Profile no longer appears in Quick Actions; still reachable from the drawer.
+- **Verify:** manual — confirm on the physical test device.
+
+---
+
 ## Sequencing
 
 ```
@@ -261,6 +282,7 @@ Phase 0 (scaffold+infra)
             → Phase 7 (approvals)             ← needs 2.2+4+5
               → Phase 8 (admin CRUD)          ← needs 2.1 only; kept last per user decision
                 → Phase 9 (hardening)
+                  → Phase 10 (post-launch enhancements, found/requested after Checkpoint 9)
 ```
 
 ## Critical Files

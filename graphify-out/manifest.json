@@ -230,18 +230,18 @@
     "semantic_hash": "0751a05144a51bdd713fb52290e2835b"
   },
   "lib/features/dashboard/bindings/dashboard_binding.dart": {
-    "mtime": 1783958056.2282522,
-    "ast_hash": "872b12c7311ba8e0a9d983157540f1b1",
+    "mtime": 1783960020.4854558,
+    "ast_hash": "2a3ae057c66794bf196328bb56479fb2",
     "semantic_hash": ""
   },
   "lib/features/dashboard/controllers/dashboard_controller.dart": {
-    "mtime": 1783862023.1180751,
-    "ast_hash": "6b52ff88501c22ad634932c9d2fc1921",
-    "semantic_hash": "6b52ff88501c22ad634932c9d2fc1921"
+    "mtime": 1783960064.1600156,
+    "ast_hash": "88536ca09adb8151a7d3604cae8d2d83",
+    "semantic_hash": ""
   },
   "lib/features/dashboard/views/dashboard_view.dart": {
-    "mtime": 1783959068.0936165,
-    "ast_hash": "3259a0475eedffe2448f9f6bd66e01c9",
+    "mtime": 1783960049.5251021,
+    "ast_hash": "3042858d10fc53246b104a776bd9f364",
     "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/bindings/leave_plan_requests_binding.dart": {
@@ -440,13 +440,13 @@
     "semantic_hash": ""
   },
   "tasks/plan.md": {
-    "mtime": 1783959443.055492,
-    "ast_hash": "48d992d6a25706a8503611ff58721dc2",
+    "mtime": 1783961214.3047934,
+    "ast_hash": "a6db46ca98956c9df7066f33cb6d5f41",
     "semantic_hash": ""
   },
   "tasks/todo.md": {
-    "mtime": 1783959451.7967217,
-    "ast_hash": "848ec98eeb3cfeb5dd6fc819dd3d034c",
+    "mtime": 1783961225.436544,
+    "ast_hash": "8c706dd92ae18d59f91f215dcbb1e3f0",
     "semantic_hash": ""
   },
   "windows/CMakeLists.txt": {

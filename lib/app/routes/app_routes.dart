@@ -12,6 +12,7 @@ abstract class Routes {
   static const leaveRequests = '/leave-requests';
   static const recommendations = '/recommendations';
   static const approvals = '/approvals';
+  static const notifications = '/notifications';
   static const profile = '/profile';
 
   static const adminPolicies = '/admin/policies';

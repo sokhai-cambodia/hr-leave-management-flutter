@@ -40,8 +40,8 @@
     "semantic_hash": ""
   },
   "lib/app/routes/app_pages.dart": {
-    "mtime": 1783958056.2261639,
-    "ast_hash": "276ea3c793369c6354a5fc77ffa68fd9",
+    "mtime": 1783958933.0758932,
+    "ast_hash": "5559cc70dfef1740ece16430e720d5c7",
     "semantic_hash": ""
   },
   "lib/app/routes/app_routes.dart": {
@@ -240,8 +240,8 @@
     "semantic_hash": "6b52ff88501c22ad634932c9d2fc1921"
   },
   "lib/features/dashboard/views/dashboard_view.dart": {
-    "mtime": 1783958056.2287748,
-    "ast_hash": "0df0468ea3c4456fa430e0ebeed382fd",
+    "mtime": 1783959068.0936165,
+    "ast_hash": "3259a0475eedffe2448f9f6bd66e01c9",
     "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/bindings/leave_plan_requests_binding.dart": {
@@ -300,9 +300,9 @@
     "semantic_hash": "c18f5aeceed8a6434c33246bb8f092cc"
   },
   "lib/features/public_holidays/views/public_holidays_view.dart": {
-    "mtime": 1783853053.008673,
-    "ast_hash": "01bbb61a31f1ce2b5be700de8473de99",
-    "semantic_hash": "01bbb61a31f1ce2b5be700de8473de99"
+    "mtime": 1783958923.5350215,
+    "ast_hash": "3e2a6a6c9ac3b4e2940c19bf9d14799e",
+    "semantic_hash": ""
   },
   "lib/features/recommendations/bindings/recommendations_binding.dart": {
     "mtime": 1783865679.3782873,
@@ -425,8 +425,8 @@
     "semantic_hash": ""
   },
   "SPEC.md": {
-    "mtime": 1783958384.9630089,
-    "ast_hash": "17fbde7b169c82cc69f10ce2c6a7c514",
+    "mtime": 1783959467.7512677,
+    "ast_hash": "155ab04b5ab84d9e3c61b7a56463fef2",
     "semantic_hash": ""
   },
   "analysis_options.yaml": {
@@ -435,18 +435,18 @@
     "semantic_hash": "9e65f4b9beebb674c0dc252f70a5c177"
   },
   "pubspec.yaml": {
-    "mtime": 1783952563.835243,
-    "ast_hash": "fd418cd3fc24d61ab2409bdbd1f15cb1",
+    "mtime": 1783958875.9989407,
+    "ast_hash": "cbdec319419a15479054de7ce3d20de4",
     "semantic_hash": ""
   },
   "tasks/plan.md": {
-    "mtime": 1783958369.6111426,
-    "ast_hash": "e275511c6294277b9f6554fa6400657a",
+    "mtime": 1783959443.055492,
+    "ast_hash": "48d992d6a25706a8503611ff58721dc2",
     "semantic_hash": ""
   },
   "tasks/todo.md": {
-    "mtime": 1783958375.058476,
-    "ast_hash": "0378b0a7e5fc185b82967119e4a5b1ba",
+    "mtime": 1783959451.7967217,
+    "ast_hash": "848ec98eeb3cfeb5dd6fc819dd3d034c",
     "semantic_hash": ""
   },
   "windows/CMakeLists.txt": {
@@ -607,6 +607,21 @@
   "lib/features/admin/controllers/leave_balances_admin_controller.dart": {
     "mtime": 1783957953.5080757,
     "ast_hash": "04731fb44fce19df90f90f37d54c5aa2",
+    "semantic_hash": ""
+  },
+  "lib/features/public_holidays/bindings/public_holidays_binding.dart": {
+    "mtime": 1783958901.7834816,
+    "ast_hash": "a3ba6890859511ad5bcc2c67f059ed1d",
+    "semantic_hash": ""
+  },
+  "lib/features/public_holidays/controllers/public_holidays_controller.dart": {
+    "mtime": 1783958892.048656,
+    "ast_hash": "ad9dd2af5d66666127c41311903f4322",
+    "semantic_hash": ""
+  },
+  "test/unit/public_holidays_test.dart": {
+    "mtime": 1783958946.0061724,
+    "ast_hash": "12441e03bde1156963ec9a90c2206548",
     "semantic_hash": ""
   }
 }

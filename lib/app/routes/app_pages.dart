@@ -4,6 +4,7 @@ import '../../features/admin/views/admin_leave_balances_view.dart';
 import '../../features/admin/views/admin_public_holidays_view.dart';
 import '../../features/admin/views/admin_teams_view.dart';
 import '../../features/admin/views/admin_users_view.dart';
+import '../../features/admin/bindings/leave_balances_admin_binding.dart';
 import '../../features/admin/bindings/leave_types_admin_binding.dart';
 import '../../features/admin/bindings/policies_admin_binding.dart';
 import '../../features/admin/bindings/public_holidays_admin_binding.dart';
@@ -109,6 +110,7 @@ abstract class AppPages {
     GetPage(
       name: Routes.adminLeaveBalances,
       page: () => const AdminLeaveBalancesView(),
+      binding: LeaveBalancesAdminBinding(),
       middlewares: [AuthMiddleware(), SuperuserMiddleware()],
     ),
     GetPage(

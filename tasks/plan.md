@@ -200,7 +200,7 @@ Kept separate from Phase 4 (not folded in) because the create/edit form is mater
 
 ## Phase 8 — Admin/Superuser Master Data CRUD
 
-Sliced as pattern-then-apply across 5 resources, not 5 near-duplicate tasks.
+Sliced as pattern-then-apply across 6 resources, not 6 near-duplicate tasks.
 
 ### Task 8.1 — Generic CRUD scaffold, proven on Leave Types
 - **Depends on:** 2.1
@@ -220,7 +220,15 @@ Sliced as pattern-then-apply across 5 resources, not 5 near-duplicate tasks.
 - **Acceptance:** team creation lets you pick an existing user as owner via search; user creation requires password, edit doesn't; assigning `team_id`/`team_owner_id` in-app is reflected on next login — **closes the loop**: an employee assigned as a team owner via this screen becomes eligible for the Phase 2.2 Approvals nav entry without touching `/docs`.
 - **Verify:** create a team in-app, assign an existing employee as owner; log in as that employee, confirm Approvals now appears (no Swagger UI needed).
 
-**Checkpoint 8** — all 5 admin resources CRUD-able in-app; team-owner assignment loop fully closed in-app.
+### Task 8.4 — Apply pattern: Leave Balances (admin) + fix missing Public Holidays nav entry
+- **Depends on:** 8.1
+- **Found gap (post-Checkpoint-8 manual test):** 2.1's nav plan always listed `Leave Balances(admin)` for superusers and the dashboard tile existed, but no 8.1-8.3 task actually implemented it — `AdminLeaveBalancesView` shipped as an unwired `PlaceholderScreen`, and `Routes.adminLeaveBalances` had no binding, so opening it would have crashed on `Get.find()`. Separately, `AdminPublicHolidaysView` from 8.2 was fully implemented and routed but had no dashboard nav entry pointing at it — only the (still-placeholder) employee-facing `PublicHolidaysView` tile existed, so a superuser had no in-app way to reach the admin CRUD screen at all.
+- Leave Balances CRUD: `owner_id` and `leave_type_id` both use the Task 8.3 relational-picker pattern (employee picker via `UsersRepository`, leave-type picker via `LeaveTypesRepository.fetchLeaveTypes()`); `year` is a plain 4-digit string field (matches the backend's `str`-typed column, not numeric); `balance` is decimal. `taken_balance`/`available_balance` are server-computed and not part of the create/update payload. Backend endpoints: `GET/POST /leave-balances/`, `PUT/DELETE /leave-balances/{id}` (list is not superuser-gated server-side, unusually — every other admin list is — the Flutter route still gates it client-side via `SuperuserMiddleware`, matching the pattern for the other 5 resources). `LeaveBalanceModel` extended with nullable `ownerId`/`owner` (a `UserSummary`) since the existing `/leave-balances/me` self-view path doesn't need them.
+- Public Holidays nav: added a superuser-only "Manage Public Holidays" dashboard tile pointing at the existing `Routes.adminPublicHolidays`, distinct from the general "Public Holidays" tile (still a placeholder for all roles — a separate, still-open gap, not part of this fix).
+- **Acceptance:** superuser full CRUD loop on Leave Balances entirely in-app (create/edit/delete a balance for any employee); "Manage Public Holidays" reachable from the dashboard and functional; non-superuser can't reach either route.
+- **Verify:** `flutter analyze` clean; `flutter test` green (pre-existing `dio_client_unauthorized_test.dart` DotEnv-init failures are unrelated/pre-existing, not caused by this task); manual CRUD loop as superuser on both screens.
+
+**Checkpoint 8** — all 6 admin resources CRUD-able in-app; team-owner assignment loop fully closed in-app.
 
 ---
 

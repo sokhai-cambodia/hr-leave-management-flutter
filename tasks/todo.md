@@ -48,6 +48,7 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] 8.1 Generic CRUD scaffold, proven on Leave Types
 - [x] 8.2 Apply pattern: Public Holidays, Policies
 - [x] 8.3 Apply pattern: Teams, Users (relational pickers)
+- [x] 8.4 Apply pattern: Leave Balances (admin); fix missing Public Holidays admin nav entry — both were gaps found after Checkpoint 8
 - [x] **Checkpoint 8**
 
 ## Phase 9 — Hardening & Report-Readiness

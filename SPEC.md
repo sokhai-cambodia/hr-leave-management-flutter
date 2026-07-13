@@ -95,8 +95,8 @@ Per guideline, testing is "recommended" (manual) with unit tests as bonus — **
 - **Authentication**: login (OAuth2 password flow), logout (clear token), forgot password (`POST /password-recovery/{email}`), reset password (`POST /reset-password/`). No refresh token (§7).
 - **User Management**: self profile view/edit (`GET/PATCH /users/me`), change password; superuser CRUD on all users (`/users`).
 - **Dashboard**: role-adaptive summary — leave balances, pending requests, recent activity, entry point to AI recommendations; approvals count badge for team owners.
-- **Master Data** (admin/superuser CRUD, search + pagination): Teams, Leave Types, Public Holidays, Policies.
-- **Business Module**: Leave Balances (view), Leave Requests (draft/submit/approve/reject lifecycle), Leave Plan Requests (multi-date, same lifecycle), AI Recommendation flow (`GET /recommends/leave-plan` → user selects dates → `POST /leave-plan-requests` → `PUT /{id}/submit`).
+- **Master Data** (admin/superuser CRUD, search + pagination): Teams, Leave Types, Public Holidays, Policies, Leave Balances. Leave Balances admin CRUD (`owner_id` + `leave_type_id` relational pickers, `year` as a 4-digit string, `balance` decimal; `taken_balance`/`available_balance` are server-computed, not part of the create/update payload) lets a superuser adjust any employee's balance without touching Swagger UI — see `tasks/plan.md` Task 8.4 for the full field contract (useful reference for the parallel Android/Compose app, §9).
+- **Business Module**: Leave Balances (self view on the dashboard; full CRUD across all employees for superusers, see Master Data above), Leave Requests (draft/submit/approve/reject lifecycle), Leave Plan Requests (multi-date, same lifecycle), AI Recommendation flow (`GET /recommends/leave-plan` → user selects dates → `POST /leave-plan-requests` → `PUT /{id}/submit`).
 - **Audit Log**: out of scope (§7).
 
 ## 9. Design Tokens (shared brand, mirrored in the Android/Compose app)

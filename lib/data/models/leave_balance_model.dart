@@ -1,3 +1,5 @@
+import 'user_summary.dart';
+
 class LeaveTypeSummary {
   const LeaveTypeSummary({
     required this.id,
@@ -18,9 +20,12 @@ class LeaveTypeSummary {
   }
 }
 
-/// Mirrors the backend's `LeaveBalancePublic` response from
-/// `GET /leave-balances/me`. `available_balance` is trusted as sent by the
-/// server (`balance - taken_balance`), never recomputed client-side.
+/// Mirrors the backend's `LeaveBalancePublic` response, returned by both
+/// `GET /leave-balances/me` (owner/owner_id present but unused there) and
+/// the admin `GET /leave-balances/` list. `available_balance` is trusted as
+/// sent by the server (`balance - taken_balance`), never recomputed
+/// client-side. `ownerId`/`owner` are nullable since the `/me` endpoint's
+/// caller already knows the owner is themselves and doesn't need them.
 class LeaveBalanceModel {
   const LeaveBalanceModel({
     required this.id,
@@ -29,6 +34,8 @@ class LeaveBalanceModel {
     required this.takenBalance,
     required this.availableBalance,
     required this.leaveType,
+    this.ownerId,
+    this.owner,
   });
 
   final String id;
@@ -37,8 +44,11 @@ class LeaveBalanceModel {
   final double takenBalance;
   final double availableBalance;
   final LeaveTypeSummary leaveType;
+  final String? ownerId;
+  final UserSummary? owner;
 
   factory LeaveBalanceModel.fromJson(Map<String, dynamic> json) {
+    final ownerJson = json['owner'] as Map<String, dynamic>?;
     return LeaveBalanceModel(
       id: json['id'] as String,
       year: json['year'] as String,
@@ -48,6 +58,8 @@ class LeaveBalanceModel {
       leaveType: LeaveTypeSummary.fromJson(
         json['leave_type'] as Map<String, dynamic>,
       ),
+      ownerId: json['owner_id'] as String?,
+      owner: ownerJson != null ? UserSummary.fromJson(ownerJson) : null,
     );
   }
 }

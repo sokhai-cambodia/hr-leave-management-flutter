@@ -35,18 +35,18 @@
     "semantic_hash": "087a01c04d081ae02a8e5db89f4bf3f3"
   },
   "lib/app/bindings/initial_binding.dart": {
-    "mtime": 1783963195.1393383,
-    "ast_hash": "984ab7a1b4c073c5a795682d6682b6fc",
+    "mtime": 1783965208.2105732,
+    "ast_hash": "8e6b3807b21033a97ea8ee8982e33bd9",
     "semantic_hash": ""
   },
   "lib/app/routes/app_pages.dart": {
-    "mtime": 1783963272.063345,
-    "ast_hash": "21570ef8e0885b6c014ed84d10b4bc35",
+    "mtime": 1783965269.640591,
+    "ast_hash": "f6202dab384011e784092c4cc8738e24",
     "semantic_hash": ""
   },
   "lib/app/routes/app_routes.dart": {
-    "mtime": 1783963256.4837046,
-    "ast_hash": "d3fa0db05465236a3a57559151f74a51",
+    "mtime": 1783965221.5913982,
+    "ast_hash": "672010788467306ea87d902675b7535c",
     "semantic_hash": ""
   },
   "lib/app/routes/auth_middleware.dart": {
@@ -325,9 +325,9 @@
     "semantic_hash": ""
   },
   "lib/widgets/app_shell_scaffold.dart": {
-    "mtime": 1783853044.1796026,
-    "ast_hash": "844a66f67c38aa47528b7323b60f2c6b",
-    "semantic_hash": "844a66f67c38aa47528b7323b60f2c6b"
+    "mtime": 1783965284.2276502,
+    "ast_hash": "af283ec51c73b0c36c1b2903951febcd",
+    "semantic_hash": ""
   },
   "lib/widgets/placeholder_screen.dart": {
     "mtime": 1783853049.3397894,
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "SPEC.md": {
-    "mtime": 1783964063.3484945,
-    "ast_hash": "339cf092336dbf3127fddf9bd11975e3",
+    "mtime": 1783965542.3781033,
+    "ast_hash": "b37a5f72e5f5fb8bfe38fae31422705f",
     "semantic_hash": ""
   },
   "analysis_options.yaml": {
@@ -435,13 +435,13 @@
     "semantic_hash": ""
   },
   "tasks/plan.md": {
-    "mtime": 1783964039.8730748,
-    "ast_hash": "c2d1f2cafdce9f83d88699a7e0ff238a",
+    "mtime": 1783965510.0834835,
+    "ast_hash": "c274134a8ccac793b69f25d7bd2c2fc4",
     "semantic_hash": ""
   },
   "tasks/todo.md": {
-    "mtime": 1783964051.7500646,
-    "ast_hash": "18d3cfd23eb6c435043c0a3f69098fcb",
+    "mtime": 1783965521.942072,
+    "ast_hash": "4fa71651ce44e9eb3827ec54a5846617",
     "semantic_hash": ""
   },
   "windows/CMakeLists.txt": {
@@ -642,6 +642,26 @@
   "test/unit/schedule_test.dart": {
     "mtime": 1783963310.2084734,
     "ast_hash": "a9b2feb7c10f3d3a0db1d49eebd37a34",
+    "semantic_hash": ""
+  },
+  "lib/data/models/notification_model.dart": {
+    "mtime": 1783965151.2221897,
+    "ast_hash": "87c7c4b2acce9429642b25fb29cfe4d4",
+    "semantic_hash": ""
+  },
+  "lib/data/repositories/notifications_repository.dart": {
+    "mtime": 1783965160.8642702,
+    "ast_hash": "d40c2d76d3362acbb8c7e440cd602446",
+    "semantic_hash": ""
+  },
+  "lib/features/notifications/controllers/notifications_controller.dart": {
+    "mtime": 1783965186.6818364,
+    "ast_hash": "8e8939f7b30f80f32f9e9a0d7f6293a6",
+    "semantic_hash": ""
+  },
+  "lib/features/notifications/views/notifications_view.dart": {
+    "mtime": 1783965250.0197635,
+    "ast_hash": "fdeb68afa5aa54df766d02263d2196fc",
     "semantic_hash": ""
   }
 }

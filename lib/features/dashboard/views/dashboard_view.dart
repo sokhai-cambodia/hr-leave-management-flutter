@@ -32,11 +32,16 @@ class DashboardView extends StatelessWidget {
         final isLoadingPendingCount = dashboardController.isLoadingPendingCount.value;
         final pendingCountError = dashboardController.pendingCountError.value;
 
+        final pendingApprovalsCount = dashboardController.pendingApprovalsCount.value;
+        final isLoadingPendingApprovals =
+            dashboardController.isLoadingPendingApprovals.value;
+        final pendingApprovalsError = dashboardController.pendingApprovalsError.value;
+
         final tiles = <_NavTileData>[
           _NavTileData(
-            'Public Holidays',
-            Icons.beach_access_outlined,
-            Routes.publicHolidays,
+            'Schedule',
+            Icons.calendar_month_outlined,
+            Routes.schedule,
           ),
           _NavTileData(
             'Leave Plan Requests',
@@ -119,6 +124,18 @@ class DashboardView extends StatelessWidget {
                 ),
               ],
             ),
+            if (isApprover) ...[
+              const SizedBox(height: 12),
+              _PlaceholderStatCard(
+                label: 'Pending Approvals',
+                value: _pendingRequestsSummary(
+                  count: pendingApprovalsCount,
+                  isLoading: isLoadingPendingApprovals,
+                  hasError: pendingApprovalsError != null,
+                ),
+                onTap: () => Get.toNamed(Routes.approvals),
+              ),
+            ],
             const SizedBox(height: 20),
             Text('Leave Balances', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
@@ -226,23 +243,39 @@ class _ProfileCard extends StatelessWidget {
 }
 
 class _PlaceholderStatCard extends StatelessWidget {
-  const _PlaceholderStatCard({required this.label, required this.value});
+  const _PlaceholderStatCard({
+    required this.label,
+    required this.value,
+    this.onTap,
+  });
 
   final String label;
   final String value;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: Theme.of(context).textTheme.bodySmall),
-            const SizedBox(height: 4),
-            Text(value, style: Theme.of(context).textTheme.titleLarge),
-          ],
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(label, style: Theme.of(context).textTheme.bodySmall),
+                  const SizedBox(height: 4),
+                  Text(value, style: Theme.of(context).textTheme.titleLarge),
+                ],
+              ),
+              if (onTap != null)
+                const Icon(Icons.chevron_right, color: Colors.grey),
+            ],
+          ),
         ),
       ),
     );

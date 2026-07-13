@@ -10,6 +10,7 @@ class DashboardBinding extends Bindings {
         leaveBalancesRepository: Get.find(),
         leaveRequestsRepository: Get.find(),
         leavePlanRequestsRepository: Get.find(),
+        approvalsRepository: Get.find(),
       ),
     );
   }

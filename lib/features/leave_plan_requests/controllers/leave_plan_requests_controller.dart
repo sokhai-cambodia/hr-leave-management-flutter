@@ -6,6 +6,7 @@ import '../../../data/models/leave_plan_request_model.dart';
 import '../../../data/models/leave_type_model.dart';
 import '../../../data/repositories/leave_plan_requests_repository.dart';
 import '../../../data/repositories/leave_types_repository.dart';
+import '../../auth/controllers/auth_controller.dart';
 
 class LeavePlanRequestsController extends GetxController {
   LeavePlanRequestsController({
@@ -14,6 +15,7 @@ class LeavePlanRequestsController extends GetxController {
 
   final LeavePlanRequestsRepository leavePlanRequestsRepository;
   final _leaveTypesRepository = Get.find<LeaveTypesRepository>();
+  final _authController = Get.find<AuthController>();
 
   // List View State
   final leavePlanRequests = <LeavePlanRequestModel>[].obs;
@@ -49,7 +51,9 @@ class LeavePlanRequestsController extends GetxController {
         d.day == newDate.day);
   }
 
-  /// Fetches leave plan requests with pagination (infinite scroll)
+  /// Fetches leave plan requests with pagination (infinite scroll). Scoped
+  /// to the current user's own submissions (`owner_id`) - see
+  /// LeaveRequestsController.fetchLeaveRequests for why this is needed.
   Future<void> fetchLeavePlanRequests({bool isRefresh = false}) async {
     if (isRefresh) {
       _skip = 0;
@@ -66,6 +70,7 @@ class LeavePlanRequestsController extends GetxController {
       final result = await leavePlanRequestsRepository.fetchLeavePlanRequests(
         skip: _skip,
         limit: _limit,
+        ownerId: _authController.currentUser.value?.id,
       );
 
       leavePlanRequests.addAll(result.data);

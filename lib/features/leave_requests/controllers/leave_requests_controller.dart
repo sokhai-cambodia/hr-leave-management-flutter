@@ -6,6 +6,7 @@ import '../../../data/models/leave_request_model.dart';
 import '../../../data/models/leave_type_model.dart';
 import '../../../data/repositories/leave_requests_repository.dart';
 import '../../../data/repositories/leave_types_repository.dart';
+import '../../auth/controllers/auth_controller.dart';
 
 class LeaveRequestsController extends GetxController {
   LeaveRequestsController({
@@ -14,6 +15,7 @@ class LeaveRequestsController extends GetxController {
 
   final LeaveRequestsRepository leaveRequestsRepository;
   final _leaveTypesRepository = Get.find<LeaveTypesRepository>();
+  final _authController = Get.find<AuthController>();
 
   // List View State
   final leaveRequests = <LeaveRequestModel>[].obs;
@@ -41,7 +43,13 @@ class LeaveRequestsController extends GetxController {
     fetchLeaveRequests(isRefresh: true);
   }
 
-  /// Fetches leave requests with pagination (infinite scroll)
+  /// Fetches leave requests with pagination (infinite scroll). Scoped to
+  /// the current user's own submissions (`owner_id`) - without this, the
+  /// backend's base visibility scope for non-superusers also includes rows
+  /// where the user is the approver, and superusers get every row in the
+  /// system, both of which would show up mixed into what's meant to be a
+  /// personal "my requests" list. The Approvals screen is the dedicated
+  /// place to see items awaiting approval (Task 11.1).
   Future<void> fetchLeaveRequests({bool isRefresh = false}) async {
     if (isRefresh) {
       _skip = 0;
@@ -58,6 +66,7 @@ class LeaveRequestsController extends GetxController {
       final result = await leaveRequestsRepository.fetchLeaveRequests(
         skip: _skip,
         limit: _limit,
+        ownerId: _authController.currentUser.value?.id,
       );
 
       leaveRequests.addAll(result.data);

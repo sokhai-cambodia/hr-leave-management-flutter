@@ -56,12 +56,12 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] 9.2 Analyze-clean pass + empty/error/loading state audit + feature checklist walkthrough
 
 ## Phase 10 — Post-Launch Enhancements
-- [x] 10.1 Employee Public Holidays month-calendar view (table_calendar)
+- [x] 10.1 Employee Public Holidays month-calendar view (table_calendar) — superseded by Task 11.3's Schedule feature
 - [x] 10.2 Remove redundant Profile tile from Dashboard Quick Actions
 - [x] 10.3 Remove "Recent Activity" placeholder stat card
-- [x] 10.4 Wire "Pending Requests" dashboard stat to real data (client-side filtered pending backend Task 11.1)
+- [x] 10.4 Wire "Pending Requests" dashboard stat to real data — later simplified by Task 11.1's query params
 
-## Phase 11 — Backend API Enhancements (proposed, not yet implemented — tracked for `../hr-leave-management`)
-- [ ] 11.1 Query-param filtering (`status`/`owner_id`/`approver_id`) on `GET /leave-requests/` and `GET /leave-plan-requests/`
-- [ ] 11.2 New `GET /approvals/pending-count`
-- [ ] 11.3 New `GET /schedule/?year&month` (public holidays + team leave)
+## Phase 11 — Backend API Enhancements + Flutter Integration (backend in `../hr-leave-management`, deployed on Render)
+- [x] 11.1 Query-param filtering (`status`/`owner_id`/`approver_id`) on `GET /leave-requests/` and `GET /leave-plan-requests/` + Flutter integration
+- [x] 11.2 New `GET /approvals/pending-count` + Dashboard "Pending Approvals" tappable card
+- [x] 11.3 New `GET /schedule/?year&month` (public holidays + team leave) + Schedule feature (replaces Public Holidays screen)

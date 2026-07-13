@@ -65,9 +65,9 @@
     "semantic_hash": "7e73b6f593143416b2dc818987ae81cb"
   },
   "lib/core/constants/env.dart": {
-    "mtime": 1783842102.3247,
-    "ast_hash": "f706ea903eeecbe87f7c8d8b84ce3bbb",
-    "semantic_hash": "f706ea903eeecbe87f7c8d8b84ce3bbb"
+    "mtime": 1783952576.8829155,
+    "ast_hash": "c0ac99ca1feffb356012b48b21ada6cf",
+    "semantic_hash": ""
   },
   "lib/core/errors/api_exception.dart": {
     "mtime": 1783848072.2918403,
@@ -320,9 +320,9 @@
     "semantic_hash": ""
   },
   "lib/main.dart": {
-    "mtime": 1783850555.569335,
-    "ast_hash": "1e33d296b5aefd222a150f8a25bef425",
-    "semantic_hash": "1e33d296b5aefd222a150f8a25bef425"
+    "mtime": 1783952583.5234609,
+    "ast_hash": "969e573e64be1f387cd61a7c7f03f849",
+    "semantic_hash": ""
   },
   "lib/widgets/app_drawer.dart": {
     "mtime": 1783873315.1852348,
@@ -415,8 +415,8 @@
     "semantic_hash": "7569387d58711ab975940f4df3b4bcda"
   },
   "CLAUDE.md": {
-    "mtime": 1783868141.4262123,
-    "ast_hash": "b5c247c9d09735dd01d984c17675be31",
+    "mtime": 1783952772.9635072,
+    "ast_hash": "b88df01954014cf5b88c156ca42b5f20",
     "semantic_hash": ""
   },
   "README.md": {
@@ -435,9 +435,9 @@
     "semantic_hash": "9e65f4b9beebb674c0dc252f70a5c177"
   },
   "pubspec.yaml": {
-    "mtime": 1783844488.2821813,
-    "ast_hash": "a444924098c012a152fee7d75d8ade39",
-    "semantic_hash": "a444924098c012a152fee7d75d8ade39"
+    "mtime": 1783952563.835243,
+    "ast_hash": "fd418cd3fc24d61ab2409bdbd1f15cb1",
+    "semantic_hash": ""
   },
   "tasks/plan.md": {
     "mtime": 1783841907.8946614,
@@ -445,8 +445,8 @@
     "semantic_hash": "b2293cb58f1ac65bf18f6e62b56365b6"
   },
   "tasks/todo.md": {
-    "mtime": 1783873426.435014,
-    "ast_hash": "45868d6d591db1e11d349939d3ee4f66",
+    "mtime": 1783874510.9303174,
+    "ast_hash": "a1bbeeee7c4601b8f2054abd7c619399",
     "semantic_hash": ""
   },
   "windows/CMakeLists.txt": {

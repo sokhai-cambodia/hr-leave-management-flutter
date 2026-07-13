@@ -8,8 +8,6 @@ class DashboardBinding extends Bindings {
     Get.lazyPut(
       () => DashboardController(
         leaveBalancesRepository: Get.find(),
-        leaveRequestsRepository: Get.find(),
-        leavePlanRequestsRepository: Get.find(),
         approvalsRepository: Get.find(),
       ),
     );

@@ -28,10 +28,6 @@ class DashboardView extends StatelessWidget {
         final isLoadingBalances = dashboardController.isLoadingBalances.value;
         final balancesError = dashboardController.balancesError.value;
 
-        final pendingRequestsCount = dashboardController.pendingRequestsCount.value;
-        final isLoadingPendingCount = dashboardController.isLoadingPendingCount.value;
-        final pendingCountError = dashboardController.pendingCountError.value;
-
         final pendingApprovalsCount = dashboardController.pendingApprovalsCount.value;
         final isLoadingPendingApprovals =
             dashboardController.isLoadingPendingApprovals.value;
@@ -58,12 +54,6 @@ class DashboardView extends StatelessWidget {
             Icons.auto_awesome_outlined,
             Routes.recommendations,
           ),
-          if (isApprover)
-            _NavTileData(
-              'Approvals',
-              Icons.fact_check_outlined,
-              Routes.approvals,
-            ),
           if (isSuperuser) ...[
             _NavTileData(
               'Manage Public Holidays',
@@ -111,31 +101,22 @@ class DashboardView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _PlaceholderStatCard(
-                    label: 'Pending Requests',
-                    value: _pendingRequestsSummary(
-                      count: pendingRequestsCount,
-                      isLoading: isLoadingPendingCount,
-                      hasError: pendingCountError != null,
+                if (isApprover) ...[
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _PlaceholderStatCard(
+                      label: 'Pending Approvals',
+                      value: _pendingCountSummary(
+                        count: pendingApprovalsCount,
+                        isLoading: isLoadingPendingApprovals,
+                        hasError: pendingApprovalsError != null,
+                      ),
+                      onTap: () => Get.toNamed(Routes.approvals),
                     ),
                   ),
-                ),
+                ],
               ],
             ),
-            if (isApprover) ...[
-              const SizedBox(height: 12),
-              _PlaceholderStatCard(
-                label: 'Pending Approvals',
-                value: _pendingRequestsSummary(
-                  count: pendingApprovalsCount,
-                  isLoading: isLoadingPendingApprovals,
-                  hasError: pendingApprovalsError != null,
-                ),
-                onTap: () => Get.toNamed(Routes.approvals),
-              ),
-            ],
             const SizedBox(height: 20),
             Text('Leave Balances', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
@@ -177,7 +158,7 @@ class DashboardView extends StatelessWidget {
     return _formatDays(total);
   }
 
-  static String _pendingRequestsSummary({
+  static String _pendingCountSummary({
     required int count,
     required bool isLoading,
     required bool hasError,

@@ -53,9 +53,9 @@ class AppDrawer extends StatelessWidget {
                 route: Routes.dashboard,
               ),
               _NavTile(
-                icon: Icons.beach_access_outlined,
-                label: 'Public Holidays',
-                route: Routes.publicHolidays,
+                icon: Icons.calendar_month_outlined,
+                label: 'Schedule',
+                route: Routes.schedule,
               ),
               _NavTile(
                 icon: Icons.event_note_outlined,

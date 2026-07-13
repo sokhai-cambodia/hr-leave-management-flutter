@@ -267,6 +267,38 @@ Sliced as pattern-then-apply across 6 resources, not 6 near-duplicate tasks.
 - **Acceptance:** Profile no longer appears in Quick Actions; still reachable from the drawer.
 - **Verify:** manual — confirm on the physical test device.
 
+### Task 10.3 — Remove "Recent Activity" placeholder stat card
+- **Depends on:** 2.1
+- `dashboard_view.dart`'s "Recent Activity" `_PlaceholderStatCard` was hardcoded to always show `'Nothing yet'`, never wired to any data (SPEC §8 listed it as an intended feature, but Phase 3-9 never implemented it). Removed the card rather than leave a permanently-fake stat on screen.
+- **Acceptance:** Dashboard no longer shows a "Recent Activity" card.
+- **Verify:** manual — confirm on the physical test device.
+
+### Task 10.4 — Wire "Pending Requests" dashboard stat to real data
+- **Depends on:** 2.1, 4.x, 5.x
+- The "Pending Requests" card was the other hardcoded placeholder (`value: '—'`) next to "Available Days". Wired it to a real count: the current employee's **own** submissions (`ownerId == currentUser.id`) across both `LeaveRequestModel`/`LeavePlanRequestModel` with `status == 'pending'` — distinct from the separate Approvals queue, which is items awaiting *their* approval as a team owner.
+- No backend filter/count endpoint exists for this (see Phase 11 below — this is exactly the gap Phase 11 proposes fixing), so `DashboardController.fetchPendingRequestsCount()` walks every page of `GET /leave-requests/` and `GET /leave-plan-requests/` and filters client-side, same pattern/rationale as `ApprovalsController.fetchApprovals()` (`_fetchAllLeaveRequests`/`_fetchAllLeavePlanRequests` page-walking helpers, duplicated here rather than shared since each controller's filter predicate differs — `ownerId` here vs. `approverId` in Approvals). `DashboardController` gained `leaveRequestsRepository`/`leavePlanRequestsRepository` constructor deps (already globally registered in `initial_binding.dart`, just newly injected here) and `_authController = Get.find<AuthController>()` for `currentUser.id`.
+- **Once Phase 11's `GET /leave-requests/?owner_id={me}&status=pending&limit=1` (+ leave-plan equivalent) lands:** replace the page-walking with two cheap `count`-only calls, dropping `_fetchAllLeaveRequests`/`_fetchAllLeavePlanRequests` from this controller entirely.
+- **Acceptance:** card shows a real number (own pending submissions only, not team/approver items); `flutter analyze` clean.
+- **Verify:** manual — confirm the count matches the employee's actual pending submissions on the physical test device.
+
+---
+
+## Phase 11 — Backend API Enhancements (proposed, tracked here; implemented in `../hr-leave-management`)
+
+Per this repo's boundary (Flutter only *consumes* the backend API, doesn't change it, `CLAUDE.md`), these are specs for backend work happening in the sibling repo — recorded here so the eventual Flutter-side follow-up changes are tracked, and as a reference for the parallel Android/Compose app's equivalent needs. **Not yet implemented as of this writing.**
+
+### Task 11.1 — Query-param filtering on `GET /leave-requests/` and `GET /leave-plan-requests/`
+- Add three optional params to each: `status: str | None`, `owner_id: UUID | None`, `approver_id: UUID | None`. Additive/backward-compatible — AND onto the existing non-superuser visibility scope (`owner_id==me OR approver_id==me`), don't replace it; non-superusers passing an `owner_id`/`approver_id` other than their own `id` should have it ignored (treated as unset), not error.
+- **Unblocks:** Task 10.4 (drop page-walking, use `?owner_id={me}&status=pending&limit=1` + read `count`), `ApprovalsController.fetchApprovals` (drop page-walking, use `?approver_id={me}&status=pending`), and optionally a cleaner "my submissions only" plain Leave Requests/Leave Plan Requests list (`?owner_id={me}`) if desired later.
+
+### Task 11.2 — New `GET /approvals/pending-count`
+- Cheap combined count (no row hydration) for a future Approvals nav badge (the "approvals count badge for team owners" SPEC §8 always intended but never built): `{"leave_requests": int, "leave_plan_requests": int, "total": int}`, counting rows where `approver_id == current_user.id AND status == 'pending'` per table.
+
+### Task 11.3 — New `GET /schedule/?year=<int>&month=<int 1-12>`
+- Combines public holidays + the caller's team's approved leave into one payload for the eventual "Schedule" screen (successor to Task 10.1's Public Holidays-only calendar): `{"year", "month", "public_holidays": [...], "team_leave": [...]}`.
+- `team_leave` unifies `LeaveRequest` (real date range) and `LeavePlanRequest` (one entry per `LeavePlanDetail`, `start_date == end_date`) into one flat shape: `{id, source: "leave_request"|"leave_plan_request", owner: UserPresentable, leave_type: LeaveTypePresentable, start_date, end_date}` — decided to include `leave_type` (not a generic "On Leave" marker) after weighing privacy vs. usefulness. Filtered to `status == 'approved'` and `owner.team_id == current_user.team_id`; empty list (not an error) if the caller has no team. Include entries whose range *overlaps* the queried month (not just ones starting inside it — e.g. a request spanning Jun 29–Jul 2 must appear when querying July).
+- **Unblocks:** renaming/extending Task 10.1's `PublicHolidaysController`/`public_holidays_view.dart` into a `Schedule` feature showing both public holidays and team leave together, one API call.
+
 ---
 
 ## Sequencing

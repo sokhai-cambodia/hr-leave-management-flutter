@@ -58,3 +58,10 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 ## Phase 10 — Post-Launch Enhancements
 - [x] 10.1 Employee Public Holidays month-calendar view (table_calendar)
 - [x] 10.2 Remove redundant Profile tile from Dashboard Quick Actions
+- [x] 10.3 Remove "Recent Activity" placeholder stat card
+- [x] 10.4 Wire "Pending Requests" dashboard stat to real data (client-side filtered pending backend Task 11.1)
+
+## Phase 11 — Backend API Enhancements (proposed, not yet implemented — tracked for `../hr-leave-management`)
+- [ ] 11.1 Query-param filtering (`status`/`owner_id`/`approver_id`) on `GET /leave-requests/` and `GET /leave-plan-requests/`
+- [ ] 11.2 New `GET /approvals/pending-count`
+- [ ] 11.3 New `GET /schedule/?year&month` (public holidays + team leave)

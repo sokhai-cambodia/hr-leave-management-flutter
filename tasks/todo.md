@@ -59,9 +59,10 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] 10.1 Employee Public Holidays month-calendar view (table_calendar) — superseded by Task 11.3's Schedule feature
 - [x] 10.2 Remove redundant Profile tile from Dashboard Quick Actions
 - [x] 10.3 Remove "Recent Activity" placeholder stat card
-- [x] 10.4 Wire "Pending Requests" dashboard stat to real data — later simplified by Task 11.1's query params
+- [x] 10.4 Wire "Pending Requests" dashboard stat to real data — later removed outright (Task 11.4)
 
 ## Phase 11 — Backend API Enhancements + Flutter Integration (backend in `../hr-leave-management`, deployed on Render)
 - [x] 11.1 Query-param filtering (`status`/`owner_id`/`approver_id`) on `GET /leave-requests/` and `GET /leave-plan-requests/` + Flutter integration
 - [x] 11.2 New `GET /approvals/pending-count` + Dashboard "Pending Approvals" tappable card
 - [x] 11.3 New `GET /schedule/?year&month` (public holidays + team leave) + Schedule feature (replaces Public Holidays screen)
+- [x] 11.4 Scope Leave Requests/Leave Plan Requests lists to owner_id; remove "Pending Requests" card and Quick Actions "Approvals" tile (redundant with "Pending Approvals")

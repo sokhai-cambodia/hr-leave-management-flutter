@@ -28,6 +28,10 @@ class DashboardView extends StatelessWidget {
         final isLoadingBalances = dashboardController.isLoadingBalances.value;
         final balancesError = dashboardController.balancesError.value;
 
+        final pendingRequestsCount = dashboardController.pendingRequestsCount.value;
+        final isLoadingPendingCount = dashboardController.isLoadingPendingCount.value;
+        final pendingCountError = dashboardController.pendingCountError.value;
+
         final tiles = <_NavTileData>[
           _NavTileData(
             'Public Holidays',
@@ -103,18 +107,17 @@ class DashboardView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: _PlaceholderStatCard(
                     label: 'Pending Requests',
-                    value: '—',
+                    value: _pendingRequestsSummary(
+                      count: pendingRequestsCount,
+                      isLoading: isLoadingPendingCount,
+                      hasError: pendingCountError != null,
+                    ),
                   ),
                 ),
               ],
-            ),
-            const SizedBox(height: 12),
-            const _PlaceholderStatCard(
-              label: 'Recent Activity',
-              value: 'Nothing yet',
             ),
             const SizedBox(height: 20),
             Text('Leave Balances', style: Theme.of(context).textTheme.titleMedium),
@@ -155,6 +158,16 @@ class DashboardView extends StatelessWidget {
       (sum, balance) => sum + balance.availableBalance,
     );
     return _formatDays(total);
+  }
+
+  static String _pendingRequestsSummary({
+    required int count,
+    required bool isLoading,
+    required bool hasError,
+  }) {
+    if (isLoading) return '—';
+    if (hasError) return 'N/A';
+    return count.toString();
   }
 
   static String _formatDays(double value) {

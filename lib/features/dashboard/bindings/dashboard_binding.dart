@@ -6,7 +6,11 @@ class DashboardBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(
-      () => DashboardController(leaveBalancesRepository: Get.find()),
+      () => DashboardController(
+        leaveBalancesRepository: Get.find(),
+        leaveRequestsRepository: Get.find(),
+        leavePlanRequestsRepository: Get.find(),
+      ),
     );
   }
 }

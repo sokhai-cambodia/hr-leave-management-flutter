@@ -46,11 +46,26 @@ class ApprovalsView extends StatelessWidget {
         title: 'Approvals',
         body: Column(
           children: [
-            const TabBar(
-              tabs: [
-                Tab(text: 'Leave Requests'),
-                Tab(text: 'Leave Plans'),
-              ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.sm,
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(AppSpacing.xs),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(AppShapes.pillRadius),
+                ),
+                child: const TabBar(
+                  tabs: [
+                    Tab(text: 'Leave Requests'),
+                    Tab(text: 'Leave Plans'),
+                  ],
+                ),
+              ),
             ),
             Expanded(
               child: Obx(() {
@@ -105,8 +120,8 @@ class ApprovalsView extends StatelessWidget {
     return Obx(() {
       final items = controller.pendingLeaveRequests;
       if (items.isEmpty) {
-        return const Center(
-          child: Text('No leave requests waiting for your approval.'),
+        return const _EmptyApprovalsState(
+          message: 'No leave requests waiting for your approval.',
         );
       }
       return RefreshIndicator(
@@ -125,8 +140,8 @@ class ApprovalsView extends StatelessWidget {
     return Obx(() {
       final items = controller.pendingLeavePlanRequests;
       if (items.isEmpty) {
-        return const Center(
-          child: Text('No leave plans waiting for your approval.'),
+        return const _EmptyApprovalsState(
+          message: 'No leave plans waiting for your approval.',
         );
       }
       return RefreshIndicator(
@@ -149,56 +164,78 @@ class ApprovalsView extends StatelessWidget {
       final isProcessing = controller.processingIds.contains(request.id);
       return Card(
         margin: const EdgeInsets.only(bottom: 12),
+        clipBehavior: Clip.antiAlias,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                request.owner.fullName ?? request.owner.email,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      request.owner.fullName ?? request.owner.email,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  _TypeBadge(label: request.leaveType.name),
+                ],
               ),
-              const SizedBox(height: 4),
-              Text(
-                request.leaveType.name,
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Icon(
-                    Icons.date_range_outlined,
+                    Icons.calendar_today_outlined,
                     size: 16,
                     color: Colors.grey[600],
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '${_formatDate(request.startDate)} to ${_formatDate(request.endDate)} '
-                    '(${request.amount == 1 ? "1 day" : "${request.amount} days"})',
-                    style: const TextStyle(fontSize: 13),
+                    '${_formatDate(request.startDate)} to ${_formatDate(request.endDate)}',
+                    style: TextStyle(color: Colors.grey[800], fontSize: 14),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Icon(
+                    Icons.timelapse_outlined,
+                    size: 16,
+                    color: Colors.grey[600],
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${request.amount} ${request.amount == 1 ? "Day" : "Days"}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
               if (request.description != null &&
                   request.description!.isNotEmpty) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Text(
                   request.description!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.grey[700],
+                    color: Colors.grey[600],
                     fontSize: 13,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
               ],
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               if (isProcessing)
                 const Center(child: CircularProgressIndicator())
               else
@@ -211,6 +248,7 @@ class ApprovalsView extends StatelessWidget {
                         ),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.danger,
+                          side: const BorderSide(color: AppColors.danger),
                         ),
                         child: const Text('Reject'),
                       ),
@@ -249,28 +287,31 @@ class ApprovalsView extends StatelessWidget {
 
       return Card(
         margin: const EdgeInsets.only(bottom: 12),
+        clipBehavior: Clip.antiAlias,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                request.owner.fullName ?? request.owner.email,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      request.owner.fullName ?? request.owner.email,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  _TypeBadge(label: request.leaveType.name),
+                ],
               ),
-              const SizedBox(height: 4),
-              Text(
-                request.leaveType.name,
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -283,24 +324,26 @@ class ApprovalsView extends StatelessWidget {
                   Expanded(
                     child: Text(
                       datesPreview.isEmpty ? 'No dates selected' : datesPreview,
-                      style: const TextStyle(fontSize: 13),
+                      style: TextStyle(color: Colors.grey[800], fontSize: 14),
                     ),
                   ),
                 ],
               ),
               if (request.description != null &&
                   request.description!.isNotEmpty) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Text(
                   request.description!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.grey[700],
+                    color: Colors.grey[600],
                     fontSize: 13,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
               ],
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               if (isProcessing)
                 const Center(child: CircularProgressIndicator())
               else
@@ -313,6 +356,7 @@ class ApprovalsView extends StatelessWidget {
                         ),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.danger,
+                          side: const BorderSide(color: AppColors.danger),
                         ),
                         child: const Text('Reject'),
                       ),
@@ -335,5 +379,66 @@ class ApprovalsView extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class _EmptyApprovalsState extends StatelessWidget {
+  const _EmptyApprovalsState({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.fact_check_outlined, size: 64, color: Colors.grey[400]),
+            const SizedBox(height: 16),
+            const Text(
+              'All caught up',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey[600]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Pill tag for the leave type, mirroring the status-badge shape used on
+/// the Leaves list cards - every approvals-inbox item is implicitly
+/// "pending" so the badge slot here carries the type instead of a status.
+class _TypeBadge extends StatelessWidget {
+  const _TypeBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppShapes.pillRadius),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: AppColors.primary,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
 }

@@ -61,35 +61,38 @@ class DashboardView extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: StatCard(
-                  label: 'Available Days',
-                  value: _availableDaysSummary(
-                    balances: balances,
-                    isLoading: isLoadingBalances,
-                    hasError: balancesError != null,
-                  ),
-                  color: AppColors.info,
-                ),
-              ),
-              if (isApprover) ...[
-                const SizedBox(width: 12),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 Expanded(
                   child: StatCard(
-                    label: 'Pending Approvals',
-                    value: _pendingCountSummary(
-                      count: pendingApprovalsCount,
-                      isLoading: isLoadingPendingApprovals,
-                      hasError: pendingApprovalsError != null,
+                    label: 'Available Days',
+                    value: _availableDaysSummary(
+                      balances: balances,
+                      isLoading: isLoadingBalances,
+                      hasError: balancesError != null,
                     ),
-                    color: AppColors.warning,
-                    onTap: () => Get.toNamed(Routes.approvals),
+                    color: AppColors.info,
                   ),
                 ),
+                if (isApprover) ...[
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: StatCard(
+                      label: 'Pending Approvals',
+                      value: _pendingCountSummary(
+                        count: pendingApprovalsCount,
+                        isLoading: isLoadingPendingApprovals,
+                        hasError: pendingApprovalsError != null,
+                      ),
+                      color: AppColors.warning,
+                      onTap: () => Get.toNamed(Routes.approvals),
+                    ),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
           const SizedBox(height: 20),
           Text(

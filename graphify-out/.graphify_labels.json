@@ -106,9 +106,16 @@
   "104": "Bindings",
   "105": "../../features/dashboard/bindings/dashboard_binding.dart",
   "106": "../../features/leave_plan_requests/bindings/leave_plan_requests_binding.dart",
-  "107": "../../features/leave_requests/bindings/leave_requests_binding.dart",
+  "107": "schedule_view.dart",
   "108": "RegisterPlugins",
   "109": "List",
-  "110": "env.dart",
-  "111": "RegisterPlugins"
+  "110": "admin_public_holidays_view.dart",
+  "111": "admin_users_view.dart",
+  "112": "leave_type_model.dart",
+  "113": "login_view.dart",
+  "114": "local_cache_service.dart",
+  "115": "user_summary.dart",
+  "116": "recommendations_binding.dart",
+  "117": "schedule_binding.dart",
+  "118": "List"
 }

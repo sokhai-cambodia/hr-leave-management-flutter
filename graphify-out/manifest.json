@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "lib/features/approvals/views/approvals_view.dart": {
-    "mtime": 1784031249.9535449,
-    "ast_hash": "e78a14e3a133795cf3257afea5a3be59",
+    "mtime": 1784041695.6444247,
+    "ast_hash": "2c8cb83452921983acf905c7f46891c8",
     "semantic_hash": ""
   },
   "lib/features/auth/controllers/auth_controller.dart": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "lib/features/dashboard/views/dashboard_view.dart": {
-    "mtime": 1784031249.9555442,
-    "ast_hash": "3a96828b172ddc4b0b03313fa79d0230",
+    "mtime": 1784041489.8983338,
+    "ast_hash": "c067b90fa00087454ff6a8b4b3e025fe",
     "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/bindings/leave_plan_requests_binding.dart": {

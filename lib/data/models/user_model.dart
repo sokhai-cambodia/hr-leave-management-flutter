@@ -17,6 +17,8 @@ class UserModel {
     required this.isActive,
     required this.isSuperuser,
     this.fullName,
+    this.username,
+    this.phoneNumber,
     this.team,
     this.teamId,
   });
@@ -26,6 +28,13 @@ class UserModel {
   final bool isActive;
   final bool isSuperuser;
   final String? fullName;
+
+  /// Admin-set only - not self-editable (see Profile). Lets the user log in
+  /// with either this or their email.
+  final String? username;
+
+  /// Self-editable via Profile - used for the QR business-card feature.
+  final String? phoneNumber;
   final TeamSummary? team;
 
   /// The raw FK, alongside the resolved [team] object - kept distinct so
@@ -41,6 +50,8 @@ class UserModel {
       isActive: json['is_active'] as bool,
       isSuperuser: json['is_superuser'] as bool,
       fullName: json['full_name'] as String?,
+      username: json['username'] as String?,
+      phoneNumber: json['phone_number'] as String?,
       team: teamJson != null ? TeamSummary.fromJson(teamJson) : null,
       teamId: json['team_id'] as String?,
     );

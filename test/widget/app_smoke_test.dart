@@ -23,7 +23,7 @@ void main() {
     await tester.pumpWidget(GetMaterialApp(home: const LoginView()));
 
     expect(find.textContaining('Leave'), findsWidgets);
-    expect(find.text('Email'), findsWidgets);
+    expect(find.text('Email or Username'), findsWidgets);
     expect(find.widgetWithText(ElevatedButton, 'Log In'), findsOneWidget);
   });
 }

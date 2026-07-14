@@ -43,7 +43,8 @@ class UsersAdminController extends AdminCrudController<UserModel> {
   @override
   bool matchesSearch(UserModel item, String query) =>
       item.email.toLowerCase().contains(query) ||
-      (item.fullName?.toLowerCase().contains(query) ?? false);
+      (item.fullName?.toLowerCase().contains(query) ?? false) ||
+      (item.username?.toLowerCase().contains(query) ?? false);
 
   @override
   Future<PaginatedResult<UserModel>> fetchPage({
@@ -59,6 +60,8 @@ class UsersAdminController extends AdminCrudController<UserModel> {
       email: values['email'] as String,
       password: values['password'] as String,
       fullName: values['full_name'] as String?,
+      username: values['username'] as String?,
+      phoneNumber: values['phone_number'] as String?,
       isActive: values['is_active'] as bool,
       isSuperuser: values['is_superuser'] as bool,
       teamId: values['team_id'] as String?,
@@ -72,6 +75,8 @@ class UsersAdminController extends AdminCrudController<UserModel> {
       email: values['email'] as String,
       password: values['password'] as String?,
       fullName: values['full_name'] as String?,
+      username: values['username'] as String?,
+      phoneNumber: values['phone_number'] as String?,
       isActive: values['is_active'] as bool,
       isSuperuser: values['is_superuser'] as bool,
       teamId: values['team_id'] as String?,

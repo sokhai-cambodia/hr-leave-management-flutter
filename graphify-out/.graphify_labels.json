@@ -103,12 +103,13 @@
   "101": "package:table_calendar/table_calendar.dart",
   "102": "package:flutter/material.dart",
   "103": "schedule_binding.dart",
+  "104": "../../../core/errors/api_exception.dart",
   "105": "../../features/dashboard/bindings/dashboard_binding.dart",
+  "106": "package:dio/dio.dart",
   "107": "schedule_view.dart",
   "108": "RegisterPlugins",
   "109": "List",
   "110": "admin_public_holidays_view.dart",
   "111": "admin_users_view.dart",
-  "115": "user_summary.dart",
-  "118": "List"
+  "112": "../../../app/theme/app_theme.dart"
 }

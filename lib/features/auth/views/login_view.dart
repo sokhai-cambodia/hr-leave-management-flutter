@@ -84,12 +84,14 @@ class LoginView extends GetView<AuthController> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  const _FieldLabel('Email'),
+                  const _FieldLabel('Email or Username'),
                   const SizedBox(height: 8),
                   TextField(
                     controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(hintText: 'Email'),
+                    keyboardType: TextInputType.text,
+                    decoration: const InputDecoration(
+                      hintText: 'Email or username',
+                    ),
                   ),
                   const SizedBox(height: 24),
                   const _FieldLabel('Password'),

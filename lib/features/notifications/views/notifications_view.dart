@@ -16,7 +16,8 @@ class NotificationsView extends StatefulWidget {
 }
 
 class _NotificationsViewState extends State<NotificationsView> {
-  final NotificationsController controller = Get.find<NotificationsController>();
+  final NotificationsController controller =
+      Get.find<NotificationsController>();
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -49,7 +50,9 @@ class _NotificationsViewState extends State<NotificationsView> {
     if (notification.entityType == 'leave_request') {
       Get.to(() => LeaveRequestDetailView(requestId: notification.entityId));
     } else if (notification.entityType == 'leave_plan_request') {
-      Get.to(() => LeavePlanRequestDetailView(requestId: notification.entityId));
+      Get.to(
+        () => LeavePlanRequestDetailView(requestId: notification.entityId),
+      );
     }
   }
 
@@ -127,7 +130,8 @@ class _NotificationsViewState extends State<NotificationsView> {
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
-            itemCount: controller.notifications.length +
+            itemCount:
+                controller.notifications.length +
                 (controller.hasMore.value ? 1 : 0),
             itemBuilder: (context, index) {
               if (index == controller.notifications.length) {
@@ -156,7 +160,9 @@ class _NotificationsViewState extends State<NotificationsView> {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       clipBehavior: Clip.antiAlias,
-      color: notification.isRead ? null : AppColors.primary.withValues(alpha: 0.05),
+      color: notification.isRead
+          ? null
+          : AppColors.primary.withValues(alpha: 0.05),
       child: InkWell(
         onTap: () => _onTapNotification(notification),
         child: Padding(

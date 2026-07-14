@@ -18,18 +18,11 @@ import '../../features/auth/views/forgot_password_view.dart';
 import '../../features/auth/views/login_view.dart';
 import '../../features/auth/views/reset_password_view.dart';
 import '../../features/auth/views/splash_view.dart';
-import '../../features/dashboard/bindings/dashboard_binding.dart';
-import '../../features/dashboard/views/dashboard_view.dart';
-import '../../features/leave_plan_requests/bindings/leave_plan_requests_binding.dart';
-import '../../features/leave_plan_requests/views/leave_plan_requests_view.dart';
-import '../../features/leave_requests/bindings/leave_requests_binding.dart';
-import '../../features/leave_requests/views/leave_requests_view.dart';
 import '../../features/notifications/views/notifications_view.dart';
-import '../../features/profile/views/profile_view.dart';
 import '../../features/recommendations/bindings/recommendations_binding.dart';
 import '../../features/recommendations/views/recommendations_view.dart';
-import '../../features/schedule/bindings/schedule_binding.dart';
-import '../../features/schedule/views/schedule_view.dart';
+import '../shell/main_shell_binding.dart';
+import '../shell/main_shell_view.dart';
 import 'app_routes.dart';
 import 'auth_middleware.dart';
 import 'superuser_middleware.dart';
@@ -47,26 +40,8 @@ abstract class AppPages {
     GetPage(name: Routes.resetPassword, page: () => const ResetPasswordView()),
     GetPage(
       name: Routes.dashboard,
-      page: () => const DashboardView(),
-      binding: DashboardBinding(),
-      middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.schedule,
-      page: () => const ScheduleView(),
-      binding: ScheduleBinding(),
-      middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.leavePlanRequests,
-      page: () => const LeavePlanRequestsView(),
-      binding: LeavePlanRequestsBinding(),
-      middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.leaveRequests,
-      page: () => const LeaveRequestsView(),
-      binding: LeaveRequestsBinding(),
+      page: () => const MainShellView(),
+      binding: MainShellBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(
@@ -84,11 +59,6 @@ abstract class AppPages {
     GetPage(
       name: Routes.notifications,
       page: () => const NotificationsView(),
-      middlewares: [AuthMiddleware()],
-    ),
-    GetPage(
-      name: Routes.profile,
-      page: () => const ProfileView(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(

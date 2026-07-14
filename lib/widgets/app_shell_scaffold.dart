@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 import '../app/routes/app_routes.dart';
 import '../app/theme/app_theme.dart';
 import '../features/notifications/controllers/notifications_controller.dart';
-import 'app_drawer.dart';
 
-/// Shared Scaffold + Drawer wrapper so every authenticated screen exposes
-/// the same persistent nav (Task 2.1) without a nested-navigator shell.
-/// Also bakes in the notifications bell + unread badge (Task 12.1) so every
-/// screen gets it for free, rather than each view opting in individually.
+/// Shared Scaffold wrapper for *pushed* secondary screens (detail views,
+/// approvals, recommendations, notifications, admin) - these live outside
+/// the bottom-nav shell ([MainShellView]) and get a back arrow from the
+/// navigator instead of a drawer. Also bakes in the notifications bell +
+/// unread badge (Task 12.1) so every screen gets it for free.
 class AppShellScaffold extends StatelessWidget {
   const AppShellScaffold({
     super.key,
@@ -29,17 +29,18 @@ class AppShellScaffold extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        actions: [...?actions, const _NotificationsBellButton()],
+        actions: [...?actions, const NotificationsBellButton()],
       ),
-      drawer: const AppDrawer(),
       body: body,
       floatingActionButton: floatingActionButton,
     );
   }
 }
 
-class _NotificationsBellButton extends StatelessWidget {
-  const _NotificationsBellButton();
+/// Public so [MainShellView]'s own AppBar (the bottom-nav tabs) can reuse
+/// the same bell + unread badge.
+class NotificationsBellButton extends StatelessWidget {
+  const NotificationsBellButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +61,14 @@ class _NotificationsBellButton extends StatelessWidget {
               top: 6,
               child: IgnorePointer(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                  constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 1,
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
                   decoration: const BoxDecoration(
                     color: AppColors.danger,
                     shape: BoxShape.circle,

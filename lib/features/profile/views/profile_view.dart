@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../widgets/app_shell_scaffold.dart';
+import '../../../app/routes/app_routes.dart';
 import '../../auth/controllers/auth_controller.dart';
 
 class ProfileView extends GetView<AuthController> {
@@ -9,52 +9,122 @@ class ProfileView extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    return AppShellScaffold(
-      title: 'Profile',
-      body: Obx(() {
-        final user = controller.currentUser.value;
-        final role = user?.isSuperuser == true
-            ? 'Superuser'
-            : controller.isApprover.value
-            ? 'Team owner / approver'
-            : 'Employee';
+    return Obx(() {
+      final user = controller.currentUser.value;
+      final isSuperuser = user?.isSuperuser ?? false;
+      final role = isSuperuser
+          ? 'Superuser'
+          : controller.isApprover.value
+          ? 'Team owner / approver'
+          : 'Employee';
 
-        return ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user?.fullName ?? 'Unnamed user',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+      return ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user?.fullName ?? 'Unnamed user',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 4),
-                    Text(user?.email ?? ''),
-                    const SizedBox(height: 16),
-                    _InfoRow(
-                      label: 'Team',
-                      value: user?.team?.name ?? 'No team assigned',
-                    ),
-                    _InfoRow(label: 'Role', value: role),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(user?.email ?? ''),
+                  const SizedBox(height: 16),
+                  _InfoRow(
+                    label: 'Team',
+                    value: user?.team?.name ?? 'No team assigned',
+                  ),
+                  _InfoRow(label: 'Role', value: role),
+                ],
               ),
             ),
+          ),
+          if (isSuperuser) ...[
             const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: controller.logout,
-              icon: const Icon(Icons.logout),
-              label: const Text('Log out'),
+            Card(
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Admin',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  _AdminTile(
+                    icon: Icons.rule_outlined,
+                    label: 'Policies',
+                    route: Routes.adminPolicies,
+                  ),
+                  _AdminTile(
+                    icon: Icons.beach_access_outlined,
+                    label: 'Public Holidays',
+                    route: Routes.adminPublicHolidays,
+                  ),
+                  _AdminTile(
+                    icon: Icons.category_outlined,
+                    label: 'Leave Types',
+                    route: Routes.adminLeaveTypes,
+                  ),
+                  _AdminTile(
+                    icon: Icons.groups_outlined,
+                    label: 'Teams',
+                    route: Routes.adminTeams,
+                  ),
+                  _AdminTile(
+                    icon: Icons.account_balance_wallet_outlined,
+                    label: 'Leave Balances',
+                    route: Routes.adminLeaveBalances,
+                  ),
+                  _AdminTile(
+                    icon: Icons.admin_panel_settings_outlined,
+                    label: 'Users',
+                    route: Routes.adminUsers,
+                  ),
+                ],
+              ),
             ),
           ],
-        );
-      }),
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: controller.logout,
+            icon: const Icon(Icons.logout),
+            label: const Text('Log out'),
+          ),
+        ],
+      );
+    });
+  }
+}
+
+class _AdminTile extends StatelessWidget {
+  const _AdminTile({
+    required this.icon,
+    required this.label,
+    required this.route,
+  });
+
+  final IconData icon;
+  final String label;
+  final String route;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(label),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => Get.toNamed(route),
     );
   }
 }

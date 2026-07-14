@@ -57,7 +57,8 @@ class StatCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (onTap != null) Icon(Icons.chevron_right, color: pastel.foreground),
+              if (onTap != null)
+                Icon(Icons.chevron_right, color: pastel.foreground),
             ],
           ),
         ),

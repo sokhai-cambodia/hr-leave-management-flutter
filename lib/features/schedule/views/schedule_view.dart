@@ -5,7 +5,6 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../data/models/public_holiday_model.dart';
 import '../../../data/models/schedule_model.dart';
-import '../../../widgets/app_shell_scaffold.dart';
 import '../controllers/schedule_controller.dart';
 
 const _monthNames = [
@@ -43,186 +42,179 @@ class ScheduleView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<ScheduleController>();
 
-    return AppShellScaffold(
-      title: 'Schedule',
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-        if (controller.errorMessage.value != null) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.error_outline, size: 64, color: AppColors.danger),
-                  const SizedBox(height: 16),
-                  Text(
-                    controller.errorMessage.value!,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: controller.fetchSchedule,
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        final schedule = controller.schedule.value;
-        final holidays = schedule?.publicHolidays ?? const [];
-        final teamLeave = schedule?.teamLeave ?? const [];
-
-        final groupedHolidays = ScheduleController.groupHolidaysByDay(
-          holidays,
-        );
-        final groupedTeamLeave = ScheduleController.groupTeamLeaveByDay(
-          teamLeave,
-        );
-
-        final sortedHolidays = [...holidays]
-          ..sort((a, b) => a.date.compareTo(b.date));
-        final sortedTeamLeave = [...teamLeave]
-          ..sort((a, b) => a.startDate.compareTo(b.startDate));
-
-        return RefreshIndicator(
-          onRefresh: controller.fetchSchedule,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.all(16),
+      if (controller.errorMessage.value != null) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: TableCalendar<Object>(
-                      firstDay: DateTime.utc(2020, 1, 1),
-                      lastDay: DateTime.utc(2035, 12, 31),
-                      focusedDay: controller.focusedMonth.value,
-                      calendarFormat: CalendarFormat.month,
-                      headerStyle: const HeaderStyle(
-                        formatButtonVisible: false,
-                        titleCentered: true,
-                        titleTextStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                        ),
-                        leftChevronIcon: Icon(Icons.chevron_left_outlined),
-                        rightChevronIcon: Icon(Icons.chevron_right_outlined),
-                      ),
-                      daysOfWeekStyle: const DaysOfWeekStyle(
-                        weekdayStyle: TextStyle(color: Colors.grey),
-                        weekendStyle: TextStyle(color: Colors.grey),
-                      ),
-                      eventLoader: (day) {
-                        final key = DateTime(day.year, day.month, day.day);
-                        return [
-                          ...?groupedHolidays[key],
-                          ...?groupedTeamLeave[key],
-                        ];
-                      },
-                      calendarStyle: CalendarStyle(
-                        outsideDaysVisible: false,
-                        todayDecoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.15),
-                          shape: BoxShape.circle,
-                        ),
-                        todayTextStyle: const TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      calendarBuilders: CalendarBuilders<Object>(
-                        markerBuilder: (context, day, events) {
-                          if (events.isEmpty) return null;
-                          final key = DateTime(day.year, day.month, day.day);
-                          final hasHoliday = groupedHolidays.containsKey(key);
-                          final hasTeamLeave = groupedTeamLeave.containsKey(
-                            key,
-                          );
-                          return Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (hasHoliday)
-                                const _MarkerDot(color: AppColors.warning),
-                              if (hasHoliday && hasTeamLeave)
-                                const SizedBox(width: 3),
-                              if (hasTeamLeave)
-                                const _MarkerDot(color: AppColors.primary),
-                            ],
-                          );
-                        },
-                      ),
-                      onPageChanged: (focusedDay) {
-                        controller.changeMonth(focusedDay);
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    const _LegendDot(
-                      color: AppColors.warning,
-                      label: 'Public Holiday',
-                    ),
-                    const SizedBox(width: 16),
-                    const _LegendDot(
-                      color: AppColors.primary,
-                      label: 'Team Leave',
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
+                Icon(Icons.error_outline, size: 64, color: AppColors.danger),
+                const SizedBox(height: 16),
                 Text(
-                  'Holidays in ${_formatMonthHeading(controller.focusedMonth.value)}',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  controller.errorMessage.value!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 12),
-                if (sortedHolidays.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Center(
-                      child: Text(
-                        'No public holidays this month.',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ),
-                  )
-                else
-                  ...sortedHolidays.map(_buildHolidayCard),
-                const SizedBox(height: 20),
-                Text(
-                  'Team Leave in ${_formatMonthHeading(controller.focusedMonth.value)}',
-                  style: Theme.of(context).textTheme.titleMedium,
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: controller.fetchSchedule,
+                  child: const Text('Retry'),
                 ),
-                const SizedBox(height: 12),
-                if (sortedTeamLeave.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Center(
-                      child: Text(
-                        'No teammates on leave this month.',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ),
-                  )
-                else
-                  ...sortedTeamLeave.map(_buildTeamLeaveCard),
               ],
             ),
           ),
         );
-      }),
-    );
+      }
+
+      final schedule = controller.schedule.value;
+      final holidays = schedule?.publicHolidays ?? const [];
+      final teamLeave = schedule?.teamLeave ?? const [];
+
+      final groupedHolidays = ScheduleController.groupHolidaysByDay(holidays);
+      final groupedTeamLeave = ScheduleController.groupTeamLeaveByDay(
+        teamLeave,
+      );
+
+      final sortedHolidays = [...holidays]
+        ..sort((a, b) => a.date.compareTo(b.date));
+      final sortedTeamLeave = [...teamLeave]
+        ..sort((a, b) => a.startDate.compareTo(b.startDate));
+
+      return RefreshIndicator(
+        onRefresh: controller.fetchSchedule,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Card(
+                clipBehavior: Clip.antiAlias,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: TableCalendar<Object>(
+                    firstDay: DateTime.utc(2020, 1, 1),
+                    lastDay: DateTime.utc(2035, 12, 31),
+                    focusedDay: controller.focusedMonth.value,
+                    calendarFormat: CalendarFormat.month,
+                    headerStyle: const HeaderStyle(
+                      formatButtonVisible: false,
+                      titleCentered: true,
+                      titleTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                      leftChevronIcon: Icon(Icons.chevron_left_outlined),
+                      rightChevronIcon: Icon(Icons.chevron_right_outlined),
+                    ),
+                    daysOfWeekStyle: const DaysOfWeekStyle(
+                      weekdayStyle: TextStyle(color: Colors.grey),
+                      weekendStyle: TextStyle(color: Colors.grey),
+                    ),
+                    eventLoader: (day) {
+                      final key = DateTime(day.year, day.month, day.day);
+                      return [
+                        ...?groupedHolidays[key],
+                        ...?groupedTeamLeave[key],
+                      ];
+                    },
+                    calendarStyle: CalendarStyle(
+                      outsideDaysVisible: false,
+                      todayDecoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      todayTextStyle: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    calendarBuilders: CalendarBuilders<Object>(
+                      markerBuilder: (context, day, events) {
+                        if (events.isEmpty) return null;
+                        final key = DateTime(day.year, day.month, day.day);
+                        final hasHoliday = groupedHolidays.containsKey(key);
+                        final hasTeamLeave = groupedTeamLeave.containsKey(key);
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (hasHoliday)
+                              const _MarkerDot(color: AppColors.warning),
+                            if (hasHoliday && hasTeamLeave)
+                              const SizedBox(width: 3),
+                            if (hasTeamLeave)
+                              const _MarkerDot(color: AppColors.primary),
+                          ],
+                        );
+                      },
+                    ),
+                    onPageChanged: (focusedDay) {
+                      controller.changeMonth(focusedDay);
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const _LegendDot(
+                    color: AppColors.warning,
+                    label: 'Public Holiday',
+                  ),
+                  const SizedBox(width: 16),
+                  const _LegendDot(
+                    color: AppColors.primary,
+                    label: 'Team Leave',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Holidays in ${_formatMonthHeading(controller.focusedMonth.value)}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 12),
+              if (sortedHolidays.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: Text(
+                      'No public holidays this month.',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                  ),
+                )
+              else
+                ...sortedHolidays.map(_buildHolidayCard),
+              const SizedBox(height: 20),
+              Text(
+                'Team Leave in ${_formatMonthHeading(controller.focusedMonth.value)}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 12),
+              if (sortedTeamLeave.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Center(
+                    child: Text(
+                      'No teammates on leave this month.',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                  ),
+                )
+              else
+                ...sortedTeamLeave.map(_buildTeamLeaveCard),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   Widget _buildHolidayCard(PublicHolidayModel holiday) {

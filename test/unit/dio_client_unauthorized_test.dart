@@ -40,9 +40,7 @@ void main() {
     test(
       'a 400 "Inactive user" response (deactivated account) triggers onUnauthorized',
       () async {
-        final dioClient = DioClient(
-          secureStorageService: _FakeTokenStorage(),
-        );
+        final dioClient = DioClient(secureStorageService: _FakeTokenStorage());
         dioClient.dio.httpClientAdapter = _FixedStatusAdapter(
           400,
           body: '{"detail": "Inactive user"}',
@@ -63,9 +61,7 @@ void main() {
     test(
       'a 400 with an unrelated detail (e.g. bad login) does not trigger onUnauthorized',
       () async {
-        final dioClient = DioClient(
-          secureStorageService: _FakeTokenStorage(),
-        );
+        final dioClient = DioClient(secureStorageService: _FakeTokenStorage());
         dioClient.dio.httpClientAdapter = _FixedStatusAdapter(
           400,
           body: '{"detail": "Incorrect email or password"}',

@@ -9,9 +9,7 @@ import '../../../data/repositories/leave_types_repository.dart';
 import '../../auth/controllers/auth_controller.dart';
 
 class LeaveRequestsController extends GetxController {
-  LeaveRequestsController({
-    required this.leaveRequestsRepository,
-  });
+  LeaveRequestsController({required this.leaveRequestsRepository});
 
   final LeaveRequestsRepository leaveRequestsRepository;
   final _leaveTypesRepository = Get.find<LeaveTypesRepository>();
@@ -210,7 +208,9 @@ class LeaveRequestsController extends GetxController {
   Future<bool> submitRequest(String id) async {
     isSubmitting.value = true;
     try {
-      final updatedRequest = await leaveRequestsRepository.submitLeaveRequest(id);
+      final updatedRequest = await leaveRequestsRepository.submitLeaveRequest(
+        id,
+      );
 
       // Update in list
       final index = leaveRequests.indexWhere((r) => r.id == id);

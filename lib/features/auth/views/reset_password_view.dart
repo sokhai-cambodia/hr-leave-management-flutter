@@ -48,10 +48,7 @@ class ResetPasswordView extends GetView<AuthController> {
                   const SizedBox(height: 16),
                   const Text(
                     'Enter your reset token',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   const Text(
@@ -65,7 +62,8 @@ class ResetPasswordView extends GetView<AuthController> {
                     minLines: 1,
                     maxLines: 4,
                     decoration: const InputDecoration(labelText: 'Reset token'),
-                    validator: (value) => (value == null || value.trim().isEmpty)
+                    validator: (value) =>
+                        (value == null || value.trim().isEmpty)
                         ? 'Reset token is required'
                         : null,
                   ),
@@ -73,7 +71,9 @@ class ResetPasswordView extends GetView<AuthController> {
                   TextFormField(
                     controller: passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(labelText: 'New password'),
+                    decoration: const InputDecoration(
+                      labelText: 'New password',
+                    ),
                     validator: (value) => (value == null || value.isEmpty)
                         ? 'New password is required'
                         : null,

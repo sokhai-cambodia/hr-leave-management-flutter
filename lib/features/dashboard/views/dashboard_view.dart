@@ -7,6 +7,8 @@ import '../../../data/models/leave_balance_model.dart';
 import '../../../data/models/user_model.dart';
 import '../../../widgets/stat_card.dart';
 import '../../auth/controllers/auth_controller.dart';
+import '../../leave_plan_requests/views/leave_plan_request_form_view.dart';
+import '../../leave_requests/views/leave_request_form_view.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends StatelessWidget {
@@ -36,6 +38,28 @@ class DashboardView extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           _ProfileCard(user: user),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _QuickActionButton(
+                  icon: Icons.request_page_outlined,
+                  label: 'Request Leave',
+                  color: AppColors.primary,
+                  onTap: () => Get.to(() => const LeaveRequestFormView()),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _QuickActionButton(
+                  icon: Icons.event_note_outlined,
+                  label: 'Plan Leave',
+                  color: AppColors.warning,
+                  onTap: () => Get.to(() => const LeavePlanRequestFormView()),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -127,6 +151,53 @@ class DashboardView extends StatelessWidget {
   }
 }
 
+/// Pastel rounded-rect action tile, mirrors the reference design's
+/// Check In/Check Out button row on the home screen.
+class _QuickActionButton extends StatelessWidget {
+  const _QuickActionButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final pastel = AppColors.pastel(color);
+    return Material(
+      color: pastel.background,
+      borderRadius: BorderRadius.circular(AppShapes.cardRadius),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppShapes.cardRadius),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+          child: Column(
+            children: [
+              Icon(icon, color: pastel.foreground),
+              const SizedBox(height: 8),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: pastel.foreground,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ProfileCard extends StatelessWidget {
   const _ProfileCard({required this.user});
 
@@ -141,7 +212,12 @@ class _ProfileCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 28,
-              child: Text(_initials(user?.fullName ?? user?.email)),
+              backgroundColor: AppColors.pastel(AppColors.primary).background,
+              foregroundColor: AppColors.primary,
+              child: Text(
+                _initials(user?.fullName ?? user?.email),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(

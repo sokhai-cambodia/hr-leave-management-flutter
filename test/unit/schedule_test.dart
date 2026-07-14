@@ -40,8 +40,16 @@ void main() {
   });
 
   group('ScheduleController.groupTeamLeaveByDay', () {
-    const owner = UserSummary(id: 'u1', email: 'alice@example.com', fullName: 'Alice');
-    const leaveType = LeaveTypeSummary(id: 'lt1', code: 'AL', name: 'Annual Leave');
+    const owner = UserSummary(
+      id: 'u1',
+      email: 'alice@example.com',
+      fullName: 'Alice',
+    );
+    const leaveType = LeaveTypeSummary(
+      id: 'lt1',
+      code: 'AL',
+      name: 'Annual Leave',
+    );
 
     test('a single-day entry produces exactly one key', () {
       const entry = TeamLeaveEntryModel(

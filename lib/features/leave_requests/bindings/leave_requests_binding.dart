@@ -6,9 +6,7 @@ class LeaveRequestsBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<LeaveRequestsController>(
-      () => LeaveRequestsController(
-        leaveRequestsRepository: Get.find(),
-      ),
+      () => LeaveRequestsController(leaveRequestsRepository: Get.find()),
     );
   }
 }

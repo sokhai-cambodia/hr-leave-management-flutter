@@ -9,7 +9,10 @@ class AuthRepository {
   final Dio _dio;
 
   /// OAuth2 password flow — FastAPI expects a form-encoded body.
-  Future<String> login({required String email, required String password}) async {
+  Future<String> login({
+    required String email,
+    required String password,
+  }) async {
     try {
       final response = await _dio.post<Map<String, dynamic>>(
         '/login/access-token',

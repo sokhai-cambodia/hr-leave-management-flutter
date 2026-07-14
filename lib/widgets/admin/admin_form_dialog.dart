@@ -87,7 +87,8 @@ class _AdminFormDialogState extends State<AdminFormDialog> {
     for (final field in widget.fields) {
       if (field.type == AdminFieldType.relation &&
           field.required &&
-          (_relationValues[field.key] == null || _relationValues[field.key]!.isEmpty)) {
+          (_relationValues[field.key] == null ||
+              _relationValues[field.key]!.isEmpty)) {
         setState(() => _relationError = '${field.label} is required');
         return;
       }
@@ -147,7 +148,10 @@ class _AdminFormDialogState extends State<AdminFormDialog> {
   Widget _buildRelationField(AdminFieldSpec field) {
     final options = field.required
         ? field.options
-        : [const AdminPickerOption(id: _noneOptionId, label: '— None —'), ...field.options];
+        : [
+            const AdminPickerOption(id: _noneOptionId, label: '— None —'),
+            ...field.options,
+          ];
     final currentOption = _findOption(field, _relationValues[field.key]);
 
     return Padding(
@@ -164,19 +168,22 @@ class _AdminFormDialogState extends State<AdminFormDialog> {
           _relationValues[field.key] = option.id;
           _relationError = null;
         }),
-        fieldViewBuilder: (context, textController, focusNode, onFieldSubmitted) {
-          return TextFormField(
-            controller: textController,
-            focusNode: focusNode,
-            decoration: InputDecoration(
-              labelText: field.label,
-              suffixIcon: const Icon(Icons.search),
-              errorText: _relationError != null && _relationValues[field.key] == null
-                  ? _relationError
-                  : null,
-            ),
-          );
-        },
+        fieldViewBuilder:
+            (context, textController, focusNode, onFieldSubmitted) {
+              return TextFormField(
+                controller: textController,
+                focusNode: focusNode,
+                decoration: InputDecoration(
+                  labelText: field.label,
+                  suffixIcon: const Icon(Icons.search),
+                  errorText:
+                      _relationError != null &&
+                          _relationValues[field.key] == null
+                      ? _relationError
+                      : null,
+                ),
+              );
+            },
       ),
     );
   }
@@ -206,7 +213,9 @@ class _AdminFormDialogState extends State<AdminFormDialog> {
         onTap: isDate ? () => _pickDate(field) : null,
         keyboardType: switch (field.type) {
           AdminFieldType.number => TextInputType.number,
-          AdminFieldType.decimal => const TextInputType.numberWithOptions(decimal: true),
+          AdminFieldType.decimal => const TextInputType.numberWithOptions(
+            decimal: true,
+          ),
           _ => TextInputType.text,
         },
         maxLines: field.type == AdminFieldType.multilineText ? 3 : 1,

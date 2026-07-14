@@ -1,16 +1,16 @@
 # Graph Report - hr-leave-management-flutter  (2026-07-14)
 
 ## Corpus Check
-- 122 files · ~40,131 words
+- 130 files · ~43,630 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1364 nodes · 1805 edges · 111 communities (95 shown, 16 thin omitted)
+- 1419 nodes · 1916 edges · 112 communities (103 shown, 9 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 14 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5be435af`
+- Built from commit: `b3744e4e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -85,10 +85,10 @@
 - admin_field_spec.dart
 - Phase 4 — Leave Requests (owner lifecycle)
 - policies_admin_controller.dart
-- env.dart
+- leaves_tab_view.dart
 - AuthController
 - splash_view.dart
-- local_cache_service.dart
+- main_shell_binding.dart
 - dashboard_binding.dart
 - List
 - users_repository.dart
@@ -98,7 +98,7 @@
 - Phase 11 — Backend API Enhancements (proposed, tracked here; implemented in `../hr-leave-management`)
 - pubspec.yaml — Package Manifest
 - Phase 1 — Auth & Session
-- GetxController
+- leave_types_admin_controller.dart
 - Phase 4 — Leave Requests (owner lifecycle)
 - Phase 5 — Leave Plan Requests (multi-date lifecycle)
 - Phase 6 — AI Recommendation Flow (headline feature)
@@ -106,100 +106,101 @@
 - Phase 0 — Environment & Scaffolding
 - Phase 2 — App Shell, Role-Adaptive Navigation, Dashboard
 - Phase 9 — Hardening & Report-Readiness
-- StatelessWidget
+- local_cache_service.dart
 - pending_approvals_count_model.dart
-- ../controllers/public_holidays_controller.dart
-- AuthController
-- placeholder_screen.dart
+- State
+- StatelessWidget
+- ../app/theme/app_theme.dart
 - package:hr_leave_management/data/models/public_holiday_model.dart
-- package:hr_leave_management/features/public_holidays/controllers/public_holidays_controller.dart
-- package:table_calendar/table_calendar.dart
-- PublicHolidayModel
-- PublicHolidaysRepository
-- Bindings
-- ../../features/public_holidays/bindings/public_holidays_binding.dart
-- ../../features/public_holidays/views/public_holidays_view.dart
 - LeavePlanRequestsController
+- package:table_calendar/table_calendar.dart
+- package:flutter/material.dart
+- app_drawer.dart
+- Bindings
+- ../../features/dashboard/bindings/dashboard_binding.dart
+- ../../features/leave_plan_requests/bindings/leave_plan_requests_binding.dart
+- ../../features/leave_requests/bindings/leave_requests_binding.dart
 - RegisterPlugins
 - List
 - env.dart
+- RegisterPlugins
 
 ## God Nodes (most connected - your core abstractions)
 1. `HR Leave Management — Flutter Client — Implementation Plan` - 21 edges
 2. `Win32Window` - 19 edges
-3. `HR Leave Management — Flutter Client — Task Checklist` - 14 edges
-4. `MessageHandler` - 12 edges
-5. `HR Leave Management — Flutter Client — SPEC` - 11 edges
-6. `FlutterWindow` - 10 edges
-7. `Create` - 10 edges
-8. `WndProc` - 10 edges
-9. `AuthController` - 9 edges
-10. `HR Leave Management — Flutter Client` - 8 edges
+3. `AuthController` - 15 edges
+4. `HR Leave Management — Flutter Client — Task Checklist` - 14 edges
+5. `MessageHandler` - 12 edges
+6. `HR Leave Management — Flutter Client — SPEC` - 11 edges
+7. `FlutterWindow` - 10 edges
+8. `Create` - 10 edges
+9. `WndProc` - 10 edges
+10. `AdminCrudController` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `_FakeTokenStorage` --implements--> `TokenStorage`  [EXTRACTED]
   test/unit/dio_client_unauthorized_test.dart → lib/core/storage/token_storage.dart
+- `OnCreate` --calls--> `RegisterPlugins()`  [INFERRED]
+  windows/runner/flutter_window.h → windows/flutter/generated_plugin_registrant.cc
 - `wWinMain()` --calls--> `CreateAndAttachConsole()`  [INFERRED]
   windows/runner/main.cpp → windows/runner/utils.cpp
 - `Win32Window::Win32Window()` --calls--> `Destroy`  [INFERRED]
   windows/runner/win32_window.cpp → windows/runner/win32_window.h
-- `PoliciesAdminController` --inherits--> `AdminCrudController`  [EXTRACTED]
-  lib/features/admin/controllers/policies_admin_controller.dart → lib/features/admin/controllers/admin_crud_controller.dart
-- `PublicHolidaysAdminController` --inherits--> `AdminCrudController`  [EXTRACTED]
-  lib/features/admin/controllers/public_holidays_admin_controller.dart → lib/features/admin/controllers/admin_crud_controller.dart
+- `LeaveBalancesAdminController` --inherits--> `AdminCrudController`  [EXTRACTED]
+  lib/features/admin/controllers/leave_balances_admin_controller.dart → lib/features/admin/controllers/admin_crud_controller.dart
 
 ## Import Cycles
 - None detected.
 
-## Communities (111 total, 16 thin omitted)
+## Communities (112 total, 9 thin omitted)
 
 ### Community 0 - "App Architecture & Design Rationale"
-Cohesion: 0.14
-Nodes (13): ApprovalsRepository, LeaveBalancesRepository, approvalsRepository, balances, balancesError, fetchBalances, fetchPendingApprovalsCount, isLoadingBalances (+5 more)
+Cohesion: 0.12
+Nodes (16): ../app/routes/app_routes.dart, ../controllers/auth_controller.dart, FormState, build, build, controller, createState, _FieldLabel (+8 more)
 
 ### Community 1 - "Windows Runner: Flutter/Win32 Embedding"
-Cohesion: 0.06
-Nodes (54): FlutterViewController, PluginRegistry, Point, RECT, Size, unique_ptr, RegisterPlugins(), DartProject (+46 more)
+Cohesion: 0.12
+Nodes (16): FlutterViewController, unique_ptr, DartProject, HWND, LPARAM, LRESULT, UINT, WPARAM (+8 more)
 
 ### Community 2 - "GetX Routes, Pages & Middleware Registry"
-Cohesion: 0.05
-Nodes (43): app_routes.dart, auth_middleware.dart, ../../features/admin/bindings/leave_balances_admin_binding.dart, ../../features/admin/bindings/leave_types_admin_binding.dart, ../../features/admin/bindings/policies_admin_binding.dart, ../../features/admin/bindings/public_holidays_admin_binding.dart, ../../features/admin/bindings/teams_admin_binding.dart, ../../features/admin/bindings/users_admin_binding.dart (+35 more)
+Cohesion: 0.06
+Nodes (36): app_routes.dart, auth_middleware.dart, ../../features/admin/bindings/leave_balances_admin_binding.dart, ../../features/admin/bindings/leave_types_admin_binding.dart, ../../features/admin/bindings/policies_admin_binding.dart, ../../features/admin/bindings/public_holidays_admin_binding.dart, ../../features/admin/bindings/teams_admin_binding.dart, ../../features/admin/bindings/users_admin_binding.dart (+28 more)
 
 ### Community 3 - "Route Names & Token Storage"
-Cohesion: 0.04
-Nodes (42): ../constants/env.dart, FlutterSecureStorage, adminLeaveBalances, adminLeaveTypes, adminPolicies, adminPublicHolidays, adminTeams, adminUsers (+34 more)
+Cohesion: 0.05
+Nodes (37): ../constants/env.dart, FlutterSecureStorage, adminLeaveBalances, adminLeaveTypes, adminPolicies, adminPublicHolidays, adminTeams, adminUsers (+29 more)
 
 ### Community 4 - "AuthController & DI Bindings"
-Cohesion: 0.06
-Nodes (41): ../app/routes/app_routes.dart, ../controllers/auth_controller.dart, ../controllers/dashboard_controller.dart, FormState, GetView, AuthController, _authRepository, bootstrap (+33 more)
+Cohesion: 0.09
+Nodes (21): _authRepository, bootstrap, currentUser, errorMessage, forceLogout, isApprover, _isHandlingUnauthorized, isLoading (+13 more)
 
 ### Community 5 - "Dio Client Auth Test Suite"
 Cohesion: 0.05
-Nodes (39): dart:typed_data, DioException, HttpClientAdapter, package:flutter_test/flutter_test.dart, package:hr_leave_management/core/errors/api_exception.dart, package:hr_leave_management/core/network/dio_client.dart, package:hr_leave_management/core/storage/secure_storage_service.dart, package:hr_leave_management/core/storage/token_storage.dart (+31 more)
+Nodes (34): dart:typed_data, DioException, HttpClientAdapter, package:flutter_test/flutter_test.dart, package:hr_leave_management/core/network/dio_client.dart, package:hr_leave_management/core/storage/secure_storage_service.dart, package:hr_leave_management/core/storage/token_storage.dart, package:hr_leave_management/data/models/leave_balance_model.dart (+26 more)
 
 ### Community 6 - "Leave Requests Controller"
-Cohesion: 0.07
-Nodes (27): LeaveRequestModel, LeaveRequestsRepository, _authController, createRequest, currentRequest, deleteRequest, detailErrorMessage, errorMessage (+19 more)
+Cohesion: 0.08
+Nodes (25): _authController, createRequest, currentRequest, deleteRequest, detailErrorMessage, errorMessage, fetchLeaveRequests, fetchLeaveTypes (+17 more)
 
 ### Community 7 - "Leave Recommendation Model & App Shell"
 Cohesion: 0.11
 Nodes (17): approveLeavePlanRequest, approveLeaveRequest, _authController, errorMessage, _fetchAllLeavePlanRequests, _fetchAllLeaveRequests, fetchApprovals, isLoading (+9 more)
 
 ### Community 8 - "App Theme & Design Tokens"
-Cohesion: 0.09
-Nodes (22): AppColors, AppShapes, AppTheme, _build, buttonRadius, cardRadius, danger, dark (+14 more)
+Cohesion: 0.06
+Nodes (33): AppColors, AppShapes, AppSpacing, AppTheme, _build, buttonRadius, cardRadius, danger (+25 more)
 
 ### Community 9 - "Leave Plan Requests Controller"
 Cohesion: 0.07
-Nodes (29): LeavePlanRequestModel, LeavePlanRequestsRepository, _authController, createAndSubmitRequest, createRequest, currentRequest, deleteRequest, detailErrorMessage (+21 more)
+Nodes (27): _authController, createAndSubmitRequest, createRequest, currentRequest, deleteRequest, detailErrorMessage, errorMessage, fetchLeavePlanRequests (+19 more)
 
 ### Community 10 - "Leave Plan Request Model"
 Cohesion: 0.09
 Nodes (22): amount, approvalAt, approver, approverId, description, details, fromJson, id (+14 more)
 
 ### Community 11 - "Dashboard View"
-Cohesion: 0.10
-Nodes (20): LeaveBalanceModel, _availableDaysSummary, balance, balances, build, data, error, _formatDays (+12 more)
+Cohesion: 0.09
+Nodes (26): ../controllers/dashboard_controller.dart, ../../leave_requests/views/leave_request_form_view.dart, MainShellView, _NavItem, _availableDaysSummary, balance, balances, build (+18 more)
 
 ### Community 12 - "Leave Request Model"
 Cohesion: 0.09
@@ -214,8 +215,8 @@ Cohesion: 0.10
 Nodes (20): LeavePlanRequestModel, _addPlannedDate, build, controller, createState, _descriptionController, dispose, _formatDate (+12 more)
 
 ### Community 15 - "Balances/Recommends/Teams Repositories"
-Cohesion: 0.33
-Nodes (5): Dio, ApprovalsRepository, _dio, fetchPendingCount, ../models/pending_approvals_count_model.dart
+Cohesion: 0.18
+Nodes (10): ../../../core/errors/api_exception.dart, Dio, ApprovalsRepository, _dio, fetchPendingCount, _dio, fetchSchedule, ScheduleRepository (+2 more)
 
 ### Community 16 - "Leave Plan Request Detail View"
 Cohesion: 0.15
@@ -226,16 +227,16 @@ Cohesion: 0.18
 Nodes (9): Architecture, Backend contract quirks that shape the code (verified against backend source, not just docs — see `tasks/plan.md` "Verified Backend Ground Truth"), Boundaries, Commands, Design tokens, graphify, Running the backend for manual verification, Testing strategy (+1 more)
 
 ### Community 18 - "Leave Plan Requests List View"
-Cohesion: 0.17
-Nodes (11): leave_plan_request_detail_view.dart, build, _buildPlanCard, controller, createState, dispose, _formatDate, _getStatusColor (+3 more)
+Cohesion: 0.15
+Nodes (12): ../../../data/models/leave_plan_request_model.dart, leave_plan_request_detail_view.dart, build, _buildPlanCard, controller, createState, dispose, _formatDate (+4 more)
 
 ### Community 19 - "Leave Requests List View"
-Cohesion: 0.06
-Nodes (31): AdminFieldSpec, AdminFieldType, AdminPickerOption, id, key, label, obscureText, options (+23 more)
+Cohesion: 0.10
+Nodes (21): AdminFormDialog, _AdminFormDialogState, _boolValues, build, _buildField, _buildRelationField, createState, dispose (+13 more)
 
 ### Community 20 - "Leave Request Detail View"
 Cohesion: 0.05
-Nodes (38): ../controllers/notifications_controller.dart, dart:async, ../../../data/models/notification_model.dart, GetxController, DashboardController, _authController, errorMessage, fetchNotifications (+30 more)
+Nodes (43): ../controllers/notifications_controller.dart, dart:async, ../../../data/models/notification_model.dart, GetxController, ../../leave_plan_requests/views/leave_plan_request_detail_view.dart, ../../leave_requests/views/leave_request_detail_view.dart, changeTab, MainShellController (+35 more)
 
 ### Community 21 - "Leave Requests Repository"
 Cohesion: 0.17
@@ -262,56 +263,56 @@ Cohesion: 0.13
 Nodes (14): HR Leave Management — Flutter Client — Task Checklist, Phase 0 — Environment & Scaffolding, Phase 10 — Post-Launch Enhancements, Phase 11 — Backend API Enhancements + Flutter Integration (backend in `../hr-leave-management`, deployed on Render), Phase 12 — In-App Notifications (backend written by user, not yet deployed), Phase 1 — Auth & Session, Phase 2 — App Shell, Role-Adaptive Navigation, Dashboard, Phase 3 — Leave Balances (+6 more)
 
 ### Community 27 - "Leave Type Model"
-Cohesion: 0.12
-Nodes (16): LeaveTypesRepository, createItem, deleteItem, fetchPage, idOf, leaveTypeOptions, leaveTypesRepository, _loadLeaveTypeOptions (+8 more)
+Cohesion: 0.05
+Nodes (37): ../controllers/leave_balances_admin_controller.dart, ../../../data/models/leave_balance_model.dart, ../../../data/repositories/approvals_repository.dart, ../../../data/repositories/leave_balances_repository.dart, LeaveBalanceModel, dependencies, LeaveBalancesAdminBinding, createItem (+29 more)
 
 ### Community 28 - "Auth Views (Login/Forgot/Reset)"
 Cohesion: 0.14
 Nodes (14): leave_request_detail_view.dart, build, _buildRequestCard, controller, createState, dispose, _formatDate, _getStatusColor (+6 more)
 
 ### Community 29 - "GetX Feature Bindings"
-Cohesion: 0.17
-Nodes (11): ../../core/network/dio_client.dart, ../../core/storage/local_cache_service.dart, ../../core/storage/secure_storage_service.dart, ../../data/repositories/approvals_repository.dart, ../../data/repositories/auth_repository.dart, ../../data/repositories/leave_balances_repository.dart, ../../data/repositories/leave_plan_requests_repository.dart, ../../data/repositories/leave_requests_repository.dart (+3 more)
+Cohesion: 0.14
+Nodes (12): build, ErrorStateView, message, onRetry, acceptLabel, build, isLoading, onAccept (+4 more)
 
 ### Community 30 - "User Model"
-Cohesion: 0.20
-Nodes (10): ../controllers/teams_admin_controller.dart, ../../../data/models/team_model.dart, TeamModel, dependencies, TeamsAdminBinding, TeamsAdminController, AdminTeamsView, build (+2 more)
-
-### Community 31 - "Leave View State Classes"
-Cohesion: 0.23
-Nodes (12): LeavePlanRequestDetailView, _LeavePlanRequestDetailViewState, LeavePlanRequestFormView, _LeavePlanRequestFormViewState, LeavePlanRequestsView, _LeavePlanRequestsViewState, LeaveRequestFormView, _LeaveRequestFormViewState (+4 more)
-
-### Community 32 - "Dashboard Controller"
 Cohesion: 0.09
 Nodes (21): create, createItem, delete, deleteItem, edit, errorMessage, fetchItems, fetchPage (+13 more)
 
+### Community 31 - "Leave View State Classes"
+Cohesion: 0.18
+Nodes (14): Point, Size, wchar_t, Scale(), Create, Destroy, UpdateTheme, Win32Window::Win32Window() (+6 more)
+
+### Community 32 - "Dashboard Controller"
+Cohesion: 0.14
+Nodes (14): leave_request_form_view.dart, build, _buildDetailRow, _buildTimelineRow, _confirmDelete, controller, createState, _formatDate (+6 more)
+
 ### Community 33 - "App Drawer Widget"
-Cohesion: 0.12
-Nodes (15): leave_balance_model.dart, LeaveTypeSummary, endDate, fromJson, id, leaveType, month, owner (+7 more)
+Cohesion: 0.13
+Nodes (14): leave_balance_model.dart, endDate, fromJson, id, leaveType, month, owner, publicHolidays (+6 more)
 
 ### Community 34 - "Auth Repository"
 Cohesion: 0.22
 Nodes (8): AuthRepository, _dio, fetchMe, login, recoverPassword, resetPassword, testToken, ../models/user_model.dart
 
 ### Community 35 - "admin_form_dialog.dart"
-Cohesion: 0.11
-Nodes (17): admin_field_spec.dart, admin_form_dialog.dart, ../../features/admin/controllers/admin_crud_controller.dart, build, _confirmDelete, controller, createState, dispose (+9 more)
+Cohesion: 0.10
+Nodes (20): admin_field_spec.dart, admin_form_dialog.dart, app_shell_scaffold.dart, ../../features/admin/controllers/admin_crud_controller.dart, AdminCrudView, _AdminCrudViewState, build, _confirmDelete (+12 more)
 
 ### Community 36 - "Dio Client"
 Cohesion: 0.15
-Nodes (12): ../../data/repositories/users_repository.dart, createItem, deleteItem, fetchPage, idOf, _loadTeamOptions, matchesSearch, onInit (+4 more)
+Nodes (12): ../../../data/repositories/users_repository.dart, createItem, deleteItem, fetchPage, idOf, _loadTeamOptions, matchesSearch, onInit (+4 more)
 
 ### Community 37 - "leave_types_view.dart"
-Cohesion: 0.33
-Nodes (5): _dio, fetchRecommendations, RecommendsRepository, ../models/leave_recommendation_model.dart, package:dio/dio.dart
+Cohesion: 0.14
+Nodes (13): ../../../data/models/schedule_model.dart, ../../../data/repositories/schedule_repository.dart, ScheduleModel, changeMonth, errorMessage, fetchSchedule, focusedMonth, groupHolidaysByDay (+5 more)
 
 ### Community 38 - "API Exception Handling"
 Cohesion: 0.25
 Nodes (7): createPolicy, deletePolicy, _dio, fetchPolicies, PoliciesRepository, updatePolicy, ../models/policy_model.dart
 
 ### Community 39 - "Profile View"
-Cohesion: 0.29
-Nodes (6): ../../auth/controllers/auth_controller.dart, build, _InfoRow, label, value, ../../../widgets/app_shell_scaffold.dart
+Cohesion: 0.20
+Nodes (9): ../../auth/controllers/auth_controller.dart, _AdminTile, build, icon, _InfoRow, _initials, label, route (+1 more)
 
 ### Community 40 - "leave_request_detail_view.dart"
 Cohesion: 0.22
@@ -322,12 +323,12 @@ Cohesion: 0.13
 Nodes (14): Context, Critical Files, HR Leave Management — Flutter Client — Implementation Plan, Overall Verification, Phase 12 — In-App Notifications (backend written, not yet deployed at time of Flutter integration), Phase 3 — Leave Balances, Phase 7 — Approvals Queue (team-owner role), Reference Patterns from the Existing React Frontend (architectural parity, not literal translation) (+6 more)
 
 ### Community 42 - "Splash View"
-Cohesion: 0.14
-Nodes (14): leave_request_form_view.dart, build, _buildDetailRow, _buildTimelineRow, _confirmDelete, controller, createState, _formatDate (+6 more)
+Cohesion: 0.20
+Nodes (10): ../controllers/teams_admin_controller.dart, ../../../data/models/team_model.dart, TeamModel, dependencies, TeamsAdminBinding, TeamsAdminController, AdminTeamsView, build (+2 more)
 
 ### Community 43 - "leave_recommendation_model.dart"
-Cohesion: 0.05
-Nodes (39): ../controllers/public_holidays_admin_controller.dart, ../../../data/models/paginated_result.dart, ../../../data/models/public_holiday_model.dart, ../../../data/models/schedule_model.dart, ../../data/repositories/public_holidays_repository.dart, ../../data/repositories/schedule_repository.dart, date, description (+31 more)
+Cohesion: 0.13
+Nodes (14): ../../../data/models/public_holiday_model.dart, date, description, fromJson, id, name, PublicHolidayModel, toJson (+6 more)
 
 ### Community 44 - "Android Plugin Registrant"
 Cohesion: 0.60
@@ -345,73 +346,81 @@ Nodes (11): description, email, fromJson, fullName, id, isActive, name, teamMemb
 Cohesion: 0.22
 Nodes (8): createLeaveType, deleteLeaveType, _dio, fetchLeaveTypes, fetchLeaveTypesPage, LeaveTypesRepository, updateLeaveType, ../models/leave_type_model.dart
 
+### Community 48 - "leave_types_admin_controller.dart"
+Cohesion: 0.18
+Nodes (10): AdminFieldSpec, AdminFieldType, AdminPickerOption, id, key, label, obscureText, options (+2 more)
+
 ### Community 49 - "leave_balance_model.dart"
-Cohesion: 0.13
-Nodes (14): availableBalance, balance, code, fromJson, id, leaveType, LeaveTypeSummary, name (+6 more)
+Cohesion: 0.14
+Nodes (13): availableBalance, balance, code, fromJson, id, leaveType, LeaveTypeSummary, name (+5 more)
 
 ### Community 51 - "Admin Teams View"
 Cohesion: 0.22
 Nodes (8): createBalance, deleteBalance, _dio, fetchBalancesPage, fetchMyBalances, LeaveBalancesRepository, updateBalance, ../models/leave_balance_model.dart
 
 ### Community 52 - "../../app/theme/app_theme.dart"
-Cohesion: 0.22
-Nodes (8): app/bindings/initial_binding.dart, app/routes/app_pages.dart, ../app/theme/app_theme.dart, build, HrLeaveManagementApp, init, load, main
+Cohesion: 0.10
+Nodes (19): app/bindings/initial_binding.dart, app/routes/app_pages.dart, GetStorage, _dartDefineApiBaseUrl, _defaultApiBaseUrl, Env, _box, LocalCacheService (+11 more)
 
 ### Community 53 - "admin_users_view.dart"
 Cohesion: 0.12
-Nodes (16): actor, copyWith, count, createdAt, data, entityId, entityType, eventType (+8 more)
+Nodes (15): actor, copyWith, count, createdAt, data, entityId, entityType, eventType (+7 more)
 
 ### Community 54 - "Windows CMake Build Config"
 Cohesion: 1.00
 Nodes (3): windows/CMakeLists.txt — Windows Project Config, windows/flutter/CMakeLists.txt — Flutter Build Rules, windows/runner/CMakeLists.txt — Runner Executable Target
 
 ### Community 55 - "local_cache_service.dart"
-Cohesion: 0.20
-Nodes (9): AuthController, IconData, AppDrawer, build, icon, _initials, label, _NavTile (+1 more)
+Cohesion: 0.12
+Nodes (15): ../../features/dashboard/views/dashboard_view.dart, ../../features/leave_plan_requests/views/leave_plan_request_form_view.dart, ../../features/leave_requests/views/leave_request_form_view.dart, ../../features/profile/views/profile_view.dart, ../../features/schedule/views/schedule_view.dart, leaves_tab_view.dart, activeIcon, build (+7 more)
 
 ### Community 64 - "initial_binding.dart"
 Cohesion: 0.18
 Nodes (10): email, fromJson, fullName, id, isActive, isSuperuser, name, team (+2 more)
 
 ### Community 66 - "user_model.dart"
-Cohesion: 0.20
-Nodes (9): code, description, entitlement, fromJson, id, isActive, isAllowPlan, name (+1 more)
+Cohesion: 0.22
+Nodes (8): IconData, actionLabel, build, EmptyStateView, icon, onAction, subtitle, title
 
 ### Community 67 - "api_exception.dart"
 Cohesion: 0.20
 Nodes (9): Exception, int?, ApiException, _extractMessage, fromDioException, message, _networkErrorMessage, statusCode (+1 more)
 
 ### Community 68 - "public_holidays_admin_controller.dart"
-Cohesion: 0.22
-Nodes (8): ../../data/repositories/leave_types_repository.dart, createItem, deleteItem, fetchPage, idOf, matchesSearch, repository, updateItem
+Cohesion: 0.20
+Nodes (9): code, description, entitlement, fromJson, id, isActive, isAllowPlan, name (+1 more)
 
 ### Community 69 - "user_summary.dart"
 Cohesion: 0.29
 Nodes (6): email, fromJson, fullName, id, toJson, UserSummary
 
+### Community 70 - "admin_field_spec.dart"
+Cohesion: 0.25
+Nodes (7): Color, build, color, label, onTap, StatCard, value
+
 ### Community 71 - "Phase 4 — Leave Requests (owner lifecycle)"
 Cohesion: 0.06
-Nodes (31): admin_crud_controller.dart, ../controllers/policies_admin_controller.dart, ../../../data/models/policy_model.dart, ../../data/repositories/policies_repository.dart, double?, code, description, fromJson (+23 more)
+Nodes (31): admin_crud_controller.dart, ../controllers/policies_admin_controller.dart, ../../../data/models/policy_model.dart, ../../../data/repositories/policies_repository.dart, double?, code, description, fromJson (+23 more)
 
 ### Community 72 - "policies_admin_controller.dart"
-Cohesion: 0.18
-Nodes (10): app_drawer.dart, ../features/notifications/controllers/notifications_controller.dart, actions, AppShellScaffold, body, build, floatingActionButton, _NotificationsBellButton (+2 more)
+Cohesion: 0.20
+Nodes (9): ../features/notifications/controllers/notifications_controller.dart, actions, AppShellScaffold, body, build, floatingActionButton, NotificationsBellButton, title (+1 more)
 
-### Community 73 - "env.dart"
-Cohesion: 0.18
-Nodes (11): AdminCrudController, ../controllers/leave_balances_admin_controller.dart, ../../../data/models/leave_balance_model.dart, LeaveBalanceModel, dependencies, LeaveBalancesAdminBinding, LeaveBalancesAdminController, AdminLeaveBalancesView (+3 more)
+### Community 73 - "leaves_tab_view.dart"
+Cohesion: 0.20
+Nodes (10): ../../features/leave_plan_requests/views/leave_plan_requests_view.dart, ../../features/leave_requests/views/leave_requests_view.dart, build, createState, dispose, LeavesTabView, _LeavesTabViewState, _tabController (+2 more)
 
 ### Community 74 - "AuthController"
 Cohesion: 0.15
-Nodes (12): ../../data/repositories/teams_repository.dart, createItem, deleteItem, fetchPage, idOf, _loadUserOptions, matchesSearch, onInit (+4 more)
+Nodes (12): ../../../data/repositories/teams_repository.dart, createItem, deleteItem, fetchPage, idOf, _loadUserOptions, matchesSearch, onInit (+4 more)
 
 ### Community 75 - "splash_view.dart"
 Cohesion: 0.17
 Nodes (11): 10. Boundaries, 1. Objective, 2. Tech Stack (per course guideline), 3. Commands, 4. Project Structure, 5. Code Style, 6. Testing Strategy, 7. Known Gaps vs. Guideline (decided, documented — not open questions) (+3 more)
 
-### Community 76 - "local_cache_service.dart"
+### Community 76 - "main_shell_binding.dart"
 Cohesion: 0.29
-Nodes (7): GetStorage, _box, LocalCacheService, remove, write, package:get_storage/get_storage.dart, T
+Nodes (6): ../../features/dashboard/controllers/dashboard_controller.dart, ../../features/leave_plan_requests/controllers/leave_plan_requests_controller.dart, ../../features/leave_requests/controllers/leave_requests_controller.dart, ../../features/schedule/controllers/schedule_controller.dart, dependencies, main_shell_controller.dart
 
 ### Community 77 - "dashboard_binding.dart"
 Cohesion: 0.25
@@ -426,8 +435,8 @@ Cohesion: 0.25
 Nodes (7): createUser, deleteUser, _dio, fetchUsersPage, updateUser, UsersRepository, ../models/paginated_result.dart
 
 ### Community 80 - "AdminCrudController"
-Cohesion: 0.16
-Nodes (12): ../controllers/leave_types_admin_controller.dart, ../../../data/models/leave_type_model.dart, LeaveTypeModel, dependencies, LeaveTypesAdminBinding, AdminCrudController, LeaveTypesAdminController, build (+4 more)
+Cohesion: 0.22
+Nodes (9): ../../../data/models/leave_type_model.dart, LeaveTypeModel, AdminCrudController, LeaveTypesAdminController, build, _emptyValues, _fields, LeaveTypesView (+1 more)
 
 ### Community 81 - "Phase 10 — Post-Launch Enhancements (after Checkpoint 9)"
 Cohesion: 0.40
@@ -445,9 +454,9 @@ Nodes (5): Phase 11 — Backend API Enhancements + Flutter Integration, Task 11.
 Cohesion: 0.50
 Nodes (4): Phase 1 — Auth & Session, Task 1.1 — Login + token storage + current-user fetch + minimal authenticated screen, Task 1.2 — Session bootstrap + global 401/403 handling, Task 1.3 — Forgot password + reset password
 
-### Community 86 - "GetxController"
-Cohesion: 0.40
-Nodes (4): ../controllers/leave_requests_controller.dart, dependencies, LeaveRequestsBinding, LeaveRequestsController
+### Community 86 - "leave_types_admin_controller.dart"
+Cohesion: 0.20
+Nodes (9): ../../../data/models/paginated_result.dart, ../../../data/repositories/leave_types_repository.dart, createItem, deleteItem, fetchPage, idOf, matchesSearch, repository (+1 more)
 
 ### Community 87 - "Phase 4 — Leave Requests (owner lifecycle)"
 Cohesion: 0.50
@@ -477,37 +486,61 @@ Nodes (3): Phase 2 — App Shell, Role-Adaptive Navigation, Dashboard, Task 2.1 
 Cohesion: 0.67
 Nodes (3): Phase 9 — Hardening & Report-Readiness, Task 9.1 — Targeted unit tests (per SPEC §6, not broad coverage), Task 9.2 — Analyze-clean pass + empty/error/loading state audit + feature checklist walkthrough
 
-### Community 94 - "StatelessWidget"
-Cohesion: 0.18
-Nodes (10): ../../../data/models/leave_plan_request_model.dart, ../../../data/models/leave_request_model.dart, ApprovalsView, build, _buildLeavePlanRequestCard, _buildLeavePlanRequestsTab, _buildLeaveRequestCard, _buildLeaveRequestsTab (+2 more)
+### Community 94 - "local_cache_service.dart"
+Cohesion: 0.17
+Nodes (10): _dio, fetchRecommendations, RecommendsRepository, ../models/leave_recommendation_model.dart, package:dio/dio.dart, package:hr_leave_management/core/errors/api_exception.dart, _dioExceptionWith, main (+2 more)
 
 ### Community 95 - "pending_approvals_count_model.dart"
 Cohesion: 0.33
 Nodes (5): fromJson, leavePlanRequests, leaveRequests, PendingApprovalsCountModel, total
 
-### Community 97 - "AuthController"
-Cohesion: 0.22
-Nodes (9): DashboardView, _LeaveBalancesSection, _LeaveBalanceTile, _NavGridTile, _PlaceholderStatCard, _ProfileCard, _LegendDot, ScheduleView (+1 more)
+### Community 96 - "State"
+Cohesion: 0.20
+Nodes (14): _PasswordField, _PasswordFieldState, SplashView, _SplashViewState, LeavePlanRequestDetailView, _LeavePlanRequestDetailViewState, LeavePlanRequestFormView, _LeavePlanRequestFormViewState (+6 more)
 
-### Community 98 - "placeholder_screen.dart"
-Cohesion: 0.33
-Nodes (5): app_shell_scaffold.dart, build, PlaceholderScreen, title, package:flutter/material.dart
+### Community 97 - "StatelessWidget"
+Cohesion: 0.21
+Nodes (12): RECT, OnCreate, HWND, Win32Window, child_content_, GetClientArea, OnCreate, quit_on_close_ (+4 more)
+
+### Community 98 - "../app/theme/app_theme.dart"
+Cohesion: 0.20
+Nodes (8): ../app/theme/app_theme.dart, build, createState, initState, build, colorFor, status, StatusBadge
 
 ### Community 99 - "package:hr_leave_management/data/models/public_holiday_model.dart"
-Cohesion: 0.33
-Nodes (5): ../../../core/errors/api_exception.dart, _dio, fetchSchedule, ScheduleRepository, ../models/schedule_model.dart
+Cohesion: 0.18
+Nodes (10): ../../../data/models/leave_request_model.dart, ApprovalsView, build, _buildLeavePlanRequestCard, _buildLeavePlanRequestsTab, _buildLeaveRequestCard, _buildLeaveRequestsTab, _confirmReject (+2 more)
+
+### Community 100 - "LeavePlanRequestsController"
+Cohesion: 0.40
+Nodes (4): ../controllers/leave_plan_requests_controller.dart, dependencies, LeavePlanRequestsBinding, LeavePlanRequestsController
 
 ### Community 101 - "package:table_calendar/table_calendar.dart"
 Cohesion: 0.12
-Nodes (16): Color, ../controllers/schedule_controller.dart, dependencies, ScheduleBinding, ScheduleController, build, _buildHolidayCard, _buildTeamLeaveCard (+8 more)
+Nodes (16): ../controllers/schedule_controller.dart, dependencies, ScheduleController, build, _buildHolidayCard, _buildTeamLeaveCard, color, _formatDate (+8 more)
+
+### Community 102 - "package:flutter/material.dart"
+Cohesion: 0.20
+Nodes (9): class, ../../../data/repositories/public_holidays_repository.dart, createItem, deleteItem, fetchPage, idOf, matchesSearch, repository (+1 more)
+
+### Community 103 - "app_drawer.dart"
+Cohesion: 0.20
+Nodes (9): ../../core/network/dio_client.dart, ../../core/storage/local_cache_service.dart, ../../../core/storage/secure_storage_service.dart, ../../../data/repositories/auth_repository.dart, ../../../data/repositories/leave_plan_requests_repository.dart, ../../../data/repositories/leave_requests_repository.dart, ../../../data/repositories/notifications_repository.dart, ../../../data/repositories/recommends_repository.dart (+1 more)
 
 ### Community 104 - "Bindings"
-Cohesion: 0.25
-Nodes (7): Bindings, ../controllers/approvals_controller.dart, InitialBinding, ApprovalsBinding, dependencies, ApprovalsController, DashboardBinding
+Cohesion: 0.14
+Nodes (13): Bindings, ../controllers/leave_types_admin_controller.dart, ../controllers/public_holidays_admin_controller.dart, InitialBinding, MainShellBinding, dependencies, LeaveTypesAdminBinding, dependencies (+5 more)
 
-### Community 107 - "LeavePlanRequestsController"
+### Community 105 - "../../features/dashboard/bindings/dashboard_binding.dart"
+Cohesion: 0.36
+Nodes (10): HWND, LPARAM, LRESULT, UINT, WPARAM, EnableFullDpiSupportIfAvailable(), GetHandle, GetThisFromHandle (+2 more)
+
+### Community 106 - "../../features/leave_plan_requests/bindings/leave_plan_requests_binding.dart"
+Cohesion: 0.53
+Nodes (6): GetView, AuthController, ForgotPasswordView, LoginView, ResetPasswordView, ProfileView
+
+### Community 107 - "../../features/leave_requests/bindings/leave_requests_binding.dart"
 Cohesion: 0.40
-Nodes (4): ../controllers/leave_plan_requests_controller.dart, dependencies, LeavePlanRequestsBinding, LeavePlanRequestsController
+Nodes (4): ../controllers/approvals_controller.dart, ApprovalsBinding, dependencies, ApprovalsController
 
 ### Community 108 - "RegisterPlugins"
 Cohesion: 0.25
@@ -515,31 +548,31 @@ Nodes (7): _dio, fetchNotifications, fetchUnreadCount, markAllRead, markRead, No
 
 ### Community 109 - "List"
 Cohesion: 0.40
-Nodes (4): count, data, PaginatedResult, List
+Nodes (4): ../controllers/leave_requests_controller.dart, dependencies, LeaveRequestsBinding, LeaveRequestsController
 
 ### Community 110 - "env.dart"
-Cohesion: 0.33
-Nodes (5): _dartDefineApiBaseUrl, _defaultApiBaseUrl, Env, package:flutter_dotenv/flutter_dotenv.dart, static const String
+Cohesion: 0.40
+Nodes (4): count, data, PaginatedResult, List
 
 ## Knowledge Gaps
-- **839 isolated node(s):** `1. Objective`, `2. Tech Stack (per course guideline)`, `3. Commands`, `4. Project Structure`, `5. Code Style` (+834 more)
+- **883 isolated node(s):** `dependencies`, `AppPages`, `pages`, `Routes`, `splash` (+878 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `LeaveTypeModel` connect `AdminCrudController` to `user_model.dart`?**
-  _High betweenness centrality (0.014) - this node is a cross-community bridge._
-- **What connects `1. Objective`, `2. Tech Stack (per course guideline)`, `3. Commands` to the rest of the system?**
-  _839 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `UserModel` connect `leave_request_detail_view.dart` to `initial_binding.dart`, `Dashboard View`?**
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+- **Why does `UserSummary` connect `user_summary.dart` to `App Drawer Widget`, `Leave Plan Request Model`, `Leave Request Model`, `leave_balance_model.dart`, `admin_users_view.dart`?**
+  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **What connects `dependencies`, `AppPages`, `pages` to the rest of the system?**
+  _883 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `App Architecture & Design Rationale` be split into smaller, more focused modules?**
-  _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12105263157894737 - nodes in this community are weakly interconnected._
 - **Should `Windows Runner: Flutter/Win32 Embedding` be split into smaller, more focused modules?**
-  _Cohesion score 0.05683563748079877 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11695906432748537 - nodes in this community are weakly interconnected._
 - **Should `GetX Routes, Pages & Middleware Registry` be split into smaller, more focused modules?**
-  _Cohesion score 0.0463768115942029 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0553306342780027 - nodes in this community are weakly interconnected._
 - **Should `Route Names & Token Storage` be split into smaller, more focused modules?**
-  _Cohesion score 0.043478260869565216 - nodes in this community are weakly interconnected._
-- **Should `AuthController & DI Bindings` be split into smaller, more focused modules?**
-  _Cohesion score 0.05550416281221091 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04878048780487805 - nodes in this community are weakly interconnected._

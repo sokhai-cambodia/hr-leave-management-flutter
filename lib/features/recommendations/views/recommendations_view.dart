@@ -13,9 +13,7 @@ class RecommendationsView extends StatelessWidget {
   const RecommendationsView({super.key});
 
   String _formatDate(DateTime date) {
-    const weekdays = [
-      'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-    ];
+    const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return '${weekdays[date.weekday - 1]}, ${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
@@ -139,7 +137,10 @@ class RecommendationsView extends StatelessWidget {
                         ),
                         const Text(
                           'Select all',
-                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
                         ),
                       ],
                     ),
@@ -193,7 +194,8 @@ class RecommendationsView extends StatelessWidget {
               children: [
                 Checkbox(
                   value: selected,
-                  onChanged: (_) => controller.toggleDateSelection(item.leaveDate),
+                  onChanged: (_) =>
+                      controller.toggleDateSelection(item.leaveDate),
                 ),
                 Expanded(
                   child: Column(
@@ -225,7 +227,8 @@ class RecommendationsView extends StatelessWidget {
                           spacing: 8,
                           runSpacing: 8,
                           children: [
-                            if (item.bridgeHoliday) _buildBadge('Bridge holiday', AppColors.success),
+                            if (item.bridgeHoliday)
+                              _buildBadge('Bridge holiday', AppColors.success),
                             if (item.teamWorkload > 0)
                               _buildBadge(
                                 'Team workload: ${item.teamWorkload}',
@@ -255,7 +258,11 @@ class RecommendationsView extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          color: color,
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

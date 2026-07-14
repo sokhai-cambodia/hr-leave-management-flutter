@@ -1,7 +1,11 @@
 /// Minimal shape for a team_owner/team_members entry - enough for display,
 /// not the full UserModel.
 class TeamMemberSummary {
-  const TeamMemberSummary({required this.id, this.fullName, required this.email});
+  const TeamMemberSummary({
+    required this.id,
+    this.fullName,
+    required this.email,
+  });
 
   final String id;
   final String? fullName;
@@ -47,7 +51,9 @@ class TeamModel {
       teamOwnerId: json['team_owner_id'] as String,
       description: json['description'] as String?,
       isActive: json['is_active'] as bool? ?? true,
-      teamOwner: ownerJson != null ? TeamMemberSummary.fromJson(ownerJson) : null,
+      teamOwner: ownerJson != null
+          ? TeamMemberSummary.fromJson(ownerJson)
+          : null,
       teamMembers: membersJson
           .map((e) => TeamMemberSummary.fromJson(e as Map<String, dynamic>))
           .toList(),

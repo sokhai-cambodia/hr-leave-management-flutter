@@ -3,23 +3,27 @@ import 'package:google_fonts/google_fonts.dart';
 
 /// Shared brand design tokens for HR Leave Management.
 ///
-/// Direction (redesign, see `feature/ui-redesign`): teal/mint, pastel-card,
-/// pill-shaped HR-attendance style, inspired by a reviewed Dribbble
-/// reference (dribbble.com/shots/23355998 "HR Attendance App Design").
+/// Direction (redesign batch 3, see `feature/ui-redesign`): clean white
+/// canvas + a single confident red/coral brand accent, rounded cards and
+/// pill buttons, bottom-tab-bar shell — inspired by a reference ERP mobile
+/// app mockup (`ui.webp` at repo root: splash/login/home screens). Adapted,
+/// not cloned — this app keeps its own name/branding, only the visual
+/// language (color, shape, layout rhythm) is borrowed.
 /// Flutter-app-only for now — NOT currently mirrored in the sibling
-/// Jetpack Compose Android app's theme (unlike the previous brick-red
-/// direction, which was shared); revisit syncing them if this direction
-/// is validated.
+/// Jetpack Compose Android app's theme; revisit syncing them if this
+/// direction is validated.
 abstract class AppColors {
-  static const Color primary = Color(0xFF2FAF9B); // Teal/mint
+  static const Color primary = Color(0xFFE23744); // Confident red/coral
+  static const Color primaryDark = Color(0xFFC01F2B); // Pressed/gradient end
   static const Color darkBackground = Color(0xFF121212);
   static const Color darkSurface = Color(0xFF1E1E1E);
-  static const Color lightBackground = Color(0xFFF5FAF9);
+  static const Color lightBackground = Color(0xFFFFFFFF);
   static const Color lightSurface = Color(0xFFFFFFFF);
-  static const Color lightBorder = Color(0xFFE1E1E4);
-  static const Color danger = Color(0xFFF2635B); // Soft coral
-  static const Color warning = Color(0xFFFFA94D); // Soft amber
-  static const Color success = Color(0xFF4CAF77); // Soft green
+  static const Color lightFieldFill = Color(0xFFF7F7F9);
+  static const Color lightBorder = Color(0xFFEAEAEE);
+  static const Color danger = Color(0xFFEF4444); // True red - errors/rejected
+  static const Color warning = Color(0xFFF5A623); // Amber
+  static const Color success = Color(0xFF22A659); // Green
   static const Color info = Color(0xFF4C8DFF); // Soft blue - stat-card accent
 
   /// Light tint + matching saturated foreground for a stat-card/badge
@@ -34,8 +38,8 @@ abstract class AppColors {
 }
 
 abstract class AppShapes {
-  static const double buttonRadius = 12;
-  static const double cardRadius = 14;
+  static const double buttonRadius = 14;
+  static const double cardRadius = 18;
   static const double fieldRadius = 12;
   static const double pillRadius = 999;
 }
@@ -104,7 +108,7 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: surface,
+        fillColor: isDark ? surface : AppColors.lightFieldFill,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppShapes.fieldRadius),
           borderSide: BorderSide(color: border),
@@ -117,6 +121,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(AppShapes.fieldRadius),
           borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
+        hintStyle: TextStyle(color: onSurface.withValues(alpha: 0.35)),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
@@ -126,7 +131,7 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
-          minimumSize: const Size.fromHeight(52),
+          minimumSize: const Size.fromHeight(54),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppShapes.buttonRadius),

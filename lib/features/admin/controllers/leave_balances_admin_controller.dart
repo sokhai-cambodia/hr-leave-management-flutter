@@ -9,7 +9,8 @@ import '../../../data/repositories/users_repository.dart';
 import '../../../widgets/admin/admin_field_spec.dart';
 import 'admin_crud_controller.dart';
 
-class LeaveBalancesAdminController extends AdminCrudController<LeaveBalanceModel> {
+class LeaveBalancesAdminController
+    extends AdminCrudController<LeaveBalanceModel> {
   LeaveBalancesAdminController({
     required this.repository,
     required this.usersRepository,
@@ -49,7 +50,9 @@ class LeaveBalancesAdminController extends AdminCrudController<LeaveBalanceModel
     try {
       final types = await leaveTypesRepository.fetchLeaveTypes();
       leaveTypeOptions.value = types
-          .map((t) => AdminPickerOption(id: t.id, label: '${t.code} — ${t.name}'))
+          .map(
+            (t) => AdminPickerOption(id: t.id, label: '${t.code} — ${t.name}'),
+          )
           .toList();
     } on ApiException {
       // Non-critical: the leave-type picker just shows no options.

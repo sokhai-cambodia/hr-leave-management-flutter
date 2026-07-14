@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../app/routes/app_routes.dart';
+import '../../../app/theme/app_theme.dart';
 import '../../auth/controllers/auth_controller.dart';
 
 class ProfileView extends GetView<AuthController> {
@@ -24,23 +25,41 @@ class ProfileView extends GetView<AuthController> {
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    user?.fullName ?? 'Unnamed user',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  CircleAvatar(
+                    radius: 28,
+                    backgroundColor: AppColors.pastel(
+                      AppColors.primary,
+                    ).background,
+                    foregroundColor: AppColors.primary,
+                    child: Text(
+                      _initials(user?.fullName ?? user?.email),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(user?.email ?? ''),
-                  const SizedBox(height: 16),
-                  _InfoRow(
-                    label: 'Team',
-                    value: user?.team?.name ?? 'No team assigned',
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user?.fullName ?? 'Unnamed user',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(user?.email ?? ''),
+                        const SizedBox(height: 16),
+                        _InfoRow(
+                          label: 'Team',
+                          value: user?.team?.name ?? 'No team assigned',
+                        ),
+                        _InfoRow(label: 'Role', value: role),
+                      ],
+                    ),
                   ),
-                  _InfoRow(label: 'Role', value: role),
                 ],
               ),
             ),
@@ -96,14 +115,27 @@ class ProfileView extends GetView<AuthController> {
             ),
           ],
           const SizedBox(height: 16),
-          ElevatedButton.icon(
+          OutlinedButton.icon(
             onPressed: controller.logout,
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.danger,
+              side: const BorderSide(color: AppColors.danger),
+              minimumSize: const Size.fromHeight(54),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppShapes.buttonRadius),
+              ),
+            ),
             icon: const Icon(Icons.logout),
             label: const Text('Log out'),
           ),
         ],
       );
     });
+  }
+
+  static String _initials(String? value) {
+    final trimmed = value?.trim() ?? '';
+    return trimmed.isEmpty ? '?' : trimmed[0].toUpperCase();
   }
 }
 

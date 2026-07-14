@@ -19,11 +19,13 @@ class LeavePlanRequestFormView extends StatefulWidget {
   final String? initialLeaveTypeId;
 
   @override
-  State<LeavePlanRequestFormView> createState() => _LeavePlanRequestFormViewState();
+  State<LeavePlanRequestFormView> createState() =>
+      _LeavePlanRequestFormViewState();
 }
 
 class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
-  final LeavePlanRequestsController controller = Get.find<LeavePlanRequestsController>();
+  final LeavePlanRequestsController controller =
+      Get.find<LeavePlanRequestsController>();
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
 
@@ -177,164 +179,178 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
       // Scaffold.body isn't safe-area-wrapped by default.
       body: SafeArea(
         child: Obx(() {
-        if (controller.isLoadingLeaveTypes.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
+          if (controller.isLoadingLeaveTypes.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-        return Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(16.0),
-            children: [
-              // Error block
-              if (controller.formErrorMessage.value != null)
+          return Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                // Error block
+                if (controller.formErrorMessage.value != null)
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.danger.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: AppColors.danger.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.error_outline, color: AppColors.danger),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            controller.formErrorMessage.value!,
+                            style: TextStyle(
+                              color: AppColors.danger,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                // Leave Type selection
+                const Text(
+                  'Leave Type',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<String>(
+                  initialValue: _selectedLeaveTypeId,
+                  decoration: const InputDecoration(
+                    hintText: 'Select a leave type',
+                  ),
+                  items: controller.leaveTypes.map((type) {
+                    return DropdownMenuItem<String>(
+                      value: type.id,
+                      child: Text(type.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedLeaveTypeId = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please select a leave type';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+
+                // Planned Dates section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Planned Dates',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    TextButton.icon(
+                      onPressed: () => _addPlannedDate(context),
+                      icon: const Icon(Icons.add),
+                      label: const Text('Add Date'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 16),
+                  constraints: const BoxConstraints(minHeight: 80),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.danger.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.danger.withValues(alpha: 0.3)),
+                    color: Theme.of(context).cardColor,
+                    border: Border.all(color: AppColors.lightBorder),
+                    borderRadius: BorderRadius.circular(AppShapes.fieldRadius),
                   ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.error_outline, color: AppColors.danger),
-                      const SizedBox(width: 12),
-                      Expanded(
+                  child: Obx(() {
+                    if (_selectedDates.isEmpty) {
+                      return Center(
                         child: Text(
-                          controller.formErrorMessage.value!,
-                          style: TextStyle(color: AppColors.danger, fontSize: 14),
+                          'No dates added yet. Tap "Add Date" above.',
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 13,
+                          ),
                         ),
-                      ),
-                    ],
+                      );
+                    }
+
+                    return Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _selectedDates.map((date) {
+                        return InputChip(
+                          label: Text(_formatDate(date)),
+                          onDeleted: () {
+                            _selectedDates.remove(date);
+                          },
+                          avatar: const Icon(
+                            Icons.calendar_today_outlined,
+                            size: 14,
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  }),
+                ),
+                const SizedBox(height: 24),
+
+                // Description
+                const Text(
+                  'Description / Reason',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _descriptionController,
+                  maxLines: 4,
+                  decoration: const InputDecoration(
+                    hintText: 'Enter reason or notes...',
                   ),
                 ),
+                const SizedBox(height: 36),
 
-              // Leave Type selection
-              const Text(
-                'Leave Type',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-              ),
-              const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                initialValue: _selectedLeaveTypeId,
-                decoration: const InputDecoration(
-                  hintText: 'Select a leave type',
-                ),
-                items: controller.leaveTypes.map((type) {
-                  return DropdownMenuItem<String>(
-                    value: type.id,
-                    child: Text(type.name),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedLeaveTypeId = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select a leave type';
+                // Action button(s)
+                Obx(() {
+                  if (controller.isSubmitting.value) {
+                    return const Center(child: CircularProgressIndicator());
                   }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 24),
-
-              // Planned Dates section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Planned Dates',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  ),
-                  TextButton.icon(
-                    onPressed: () => _addPlannedDate(context),
-                    icon: const Icon(Icons.add),
-                    label: const Text('Add Date'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Container(
-                constraints: const BoxConstraints(minHeight: 80),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  border: Border.all(color: AppColors.lightBorder),
-                  borderRadius: BorderRadius.circular(AppShapes.fieldRadius),
-                ),
-                child: Obx(() {
-                  if (_selectedDates.isEmpty) {
-                    return Center(
-                      child: Text(
-                        'No dates added yet. Tap "Add Date" above.',
-                        style: TextStyle(color: Colors.grey[500], fontSize: 13),
-                      ),
+                  if (_isFromRecommendation) {
+                    return Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: _saveAndSubmit,
+                          child: const Text('Submit Now'),
+                        ),
+                        const SizedBox(height: 12),
+                        OutlinedButton(
+                          onPressed: _save,
+                          child: const Text('Save as Draft'),
+                        ),
+                      ],
                     );
                   }
-
-                  return Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: _selectedDates.map((date) {
-                      return InputChip(
-                        label: Text(_formatDate(date)),
-                        onDeleted: () {
-                          _selectedDates.remove(date);
-                        },
-                        avatar: const Icon(Icons.calendar_today_outlined, size: 14),
-                      );
-                    }).toList(),
+                  return ElevatedButton(
+                    onPressed: _save,
+                    child: Text(_isEdit ? 'Update Plan' : 'Save as Draft'),
                   );
                 }),
-              ),
-              const SizedBox(height: 24),
-
-              // Description
-              const Text(
-                'Description / Reason',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-              ),
-              const SizedBox(height: 8),
-              TextFormField(
-                controller: _descriptionController,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  hintText: 'Enter reason or notes...',
-                ),
-              ),
-              const SizedBox(height: 36),
-
-              // Action button(s)
-              Obx(() {
-                if (controller.isSubmitting.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (_isFromRecommendation) {
-                  return Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: _saveAndSubmit,
-                        child: const Text('Submit Now'),
-                      ),
-                      const SizedBox(height: 12),
-                      OutlinedButton(
-                        onPressed: _save,
-                        child: const Text('Save as Draft'),
-                      ),
-                    ],
-                  );
-                }
-                return ElevatedButton(
-                  onPressed: _save,
-                  child: Text(_isEdit ? 'Update Plan' : 'Save as Draft'),
-                );
-              }),
-            ],
-          ),
-        );
+              ],
+            ),
+          );
         }),
       ),
     );

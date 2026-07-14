@@ -24,11 +24,6 @@ class PublicHolidayModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'date': date,
-      'name': name,
-      'description': description,
-    };
+    return {'id': id, 'date': date, 'name': name, 'description': description};
   }
 }

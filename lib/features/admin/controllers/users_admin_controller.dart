@@ -9,7 +9,10 @@ import '../../../widgets/admin/admin_field_spec.dart';
 import 'admin_crud_controller.dart';
 
 class UsersAdminController extends AdminCrudController<UserModel> {
-  UsersAdminController({required this.repository, required this.teamsRepository});
+  UsersAdminController({
+    required this.repository,
+    required this.teamsRepository,
+  });
 
   final UsersRepository repository;
   final TeamsRepository teamsRepository;
@@ -26,7 +29,9 @@ class UsersAdminController extends AdminCrudController<UserModel> {
   Future<void> _loadTeamOptions() async {
     try {
       final teams = await teamsRepository.fetchTeams();
-      teamOptions.value = teams.map((t) => AdminPickerOption(id: t.id, label: t.name)).toList();
+      teamOptions.value = teams
+          .map((t) => AdminPickerOption(id: t.id, label: t.name))
+          .toList();
     } on ApiException {
       // Non-critical: the team picker just shows no options.
     }

@@ -65,7 +65,8 @@ class AdminLeaveBalancesView extends StatelessWidget {
         'year': '',
         'balance': null,
       },
-      itemTitle: (item) => item.owner?.fullName ?? item.owner?.email ?? 'Unknown employee',
+      itemTitle: (item) =>
+          item.owner?.fullName ?? item.owner?.email ?? 'Unknown employee',
       itemSubtitle: (item) =>
           '${item.leaveType.name} · ${item.year} · ${item.availableBalance}/${item.balance} available',
       searchHint: 'Search by employee, leave type, or year...',

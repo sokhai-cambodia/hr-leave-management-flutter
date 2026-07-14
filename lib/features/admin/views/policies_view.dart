@@ -10,13 +10,40 @@ class PoliciesView extends StatelessWidget {
   const PoliciesView({super.key});
 
   static const _fields = [
-    AdminFieldSpec(key: 'code', label: 'Code', type: AdminFieldType.text, required: true),
-    AdminFieldSpec(key: 'name', label: 'Name', type: AdminFieldType.text, required: true),
-    AdminFieldSpec(key: 'operation', label: 'Operation', type: AdminFieldType.text),
-    AdminFieldSpec(key: 'value', label: 'Value', type: AdminFieldType.text, required: true),
+    AdminFieldSpec(
+      key: 'code',
+      label: 'Code',
+      type: AdminFieldType.text,
+      required: true,
+    ),
+    AdminFieldSpec(
+      key: 'name',
+      label: 'Name',
+      type: AdminFieldType.text,
+      required: true,
+    ),
+    AdminFieldSpec(
+      key: 'operation',
+      label: 'Operation',
+      type: AdminFieldType.text,
+    ),
+    AdminFieldSpec(
+      key: 'value',
+      label: 'Value',
+      type: AdminFieldType.text,
+      required: true,
+    ),
     AdminFieldSpec(key: 'score', label: 'Score', type: AdminFieldType.decimal),
-    AdminFieldSpec(key: 'description', label: 'Description', type: AdminFieldType.multilineText),
-    AdminFieldSpec(key: 'is_active', label: 'Active', type: AdminFieldType.boolean),
+    AdminFieldSpec(
+      key: 'description',
+      label: 'Description',
+      type: AdminFieldType.multilineText,
+    ),
+    AdminFieldSpec(
+      key: 'is_active',
+      label: 'Active',
+      type: AdminFieldType.boolean,
+    ),
   ];
 
   static const _emptyValues = {

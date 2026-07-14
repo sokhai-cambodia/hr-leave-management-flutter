@@ -86,7 +86,8 @@ class _AdminCrudViewState<T> extends State<AdminCrudView<T>> {
         title: 'Edit ${widget.title}',
         fields: widget.fields(true),
         initialValues: widget.toFormValues(item),
-        onSubmit: (values) => widget.controller.edit(widget.controller.idOf(item), values),
+        onSubmit: (values) =>
+            widget.controller.edit(widget.controller.idOf(item), values),
       ),
     );
   }
@@ -150,7 +151,11 @@ class _AdminCrudViewState<T> extends State<AdminCrudView<T>> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.error_outline, size: 64, color: AppColors.danger),
+                        Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: AppColors.danger,
+                        ),
                         const SizedBox(height: 16),
                         Text(
                           controller.errorMessage.value!,
@@ -159,7 +164,8 @@ class _AdminCrudViewState<T> extends State<AdminCrudView<T>> {
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
-                          onPressed: () => controller.fetchItems(isRefresh: true),
+                          onPressed: () =>
+                              controller.fetchItems(isRefresh: true),
                           child: const Text('Retry'),
                         ),
                       ],
@@ -170,7 +176,9 @@ class _AdminCrudViewState<T> extends State<AdminCrudView<T>> {
 
               final items = controller.filteredItems;
               if (items.isEmpty) {
-                return Center(child: Text('No ${widget.title.toLowerCase()} found.'));
+                return Center(
+                  child: Text('No ${widget.title.toLowerCase()} found.'),
+                );
               }
 
               return RefreshIndicator(
@@ -195,7 +203,9 @@ class _AdminCrudViewState<T> extends State<AdminCrudView<T>> {
                     }
 
                     final item = items[index];
-                    final isProcessing = controller.processingIds.contains(controller.idOf(item));
+                    final isProcessing = controller.processingIds.contains(
+                      controller.idOf(item),
+                    );
 
                     return Card(
                       margin: const EdgeInsets.only(bottom: 8),
@@ -206,7 +216,9 @@ class _AdminCrudViewState<T> extends State<AdminCrudView<T>> {
                             ? const SizedBox(
                                 width: 20,
                                 height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               )
                             : Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -216,7 +228,10 @@ class _AdminCrudViewState<T> extends State<AdminCrudView<T>> {
                                     onPressed: () => _openEditDialog(item),
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.delete_outline, color: AppColors.danger),
+                                    icon: Icon(
+                                      Icons.delete_outline,
+                                      color: AppColors.danger,
+                                    ),
                                     onPressed: () => _confirmDelete(item),
                                   ),
                                 ],

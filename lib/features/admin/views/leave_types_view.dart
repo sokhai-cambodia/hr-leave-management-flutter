@@ -10,17 +10,39 @@ class LeaveTypesView extends StatelessWidget {
   const LeaveTypesView({super.key});
 
   static const _fields = [
-    AdminFieldSpec(key: 'code', label: 'Code', type: AdminFieldType.text, required: true),
-    AdminFieldSpec(key: 'name', label: 'Name', type: AdminFieldType.text, required: true),
+    AdminFieldSpec(
+      key: 'code',
+      label: 'Code',
+      type: AdminFieldType.text,
+      required: true,
+    ),
+    AdminFieldSpec(
+      key: 'name',
+      label: 'Name',
+      type: AdminFieldType.text,
+      required: true,
+    ),
     AdminFieldSpec(
       key: 'entitlement',
       label: 'Entitlement (days)',
       type: AdminFieldType.number,
       required: true,
     ),
-    AdminFieldSpec(key: 'description', label: 'Description', type: AdminFieldType.multilineText),
-    AdminFieldSpec(key: 'is_allow_plan', label: 'Allow planning', type: AdminFieldType.boolean),
-    AdminFieldSpec(key: 'is_active', label: 'Active', type: AdminFieldType.boolean),
+    AdminFieldSpec(
+      key: 'description',
+      label: 'Description',
+      type: AdminFieldType.multilineText,
+    ),
+    AdminFieldSpec(
+      key: 'is_allow_plan',
+      label: 'Allow planning',
+      type: AdminFieldType.boolean,
+    ),
+    AdminFieldSpec(
+      key: 'is_active',
+      label: 'Active',
+      type: AdminFieldType.boolean,
+    ),
   ];
 
   static const _emptyValues = {

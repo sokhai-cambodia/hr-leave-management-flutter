@@ -3,7 +3,8 @@ import '../../../data/models/public_holiday_model.dart';
 import '../../../data/repositories/public_holidays_repository.dart';
 import 'admin_crud_controller.dart';
 
-class PublicHolidaysAdminController extends AdminCrudController<PublicHolidayModel> {
+class PublicHolidaysAdminController
+    extends AdminCrudController<PublicHolidayModel> {
   PublicHolidaysAdminController({required this.repository});
 
   final PublicHolidaysRepository repository;
@@ -33,7 +34,10 @@ class PublicHolidaysAdminController extends AdminCrudController<PublicHolidayMod
   }
 
   @override
-  Future<PublicHolidayModel> updateItem(String id, Map<String, dynamic> values) {
+  Future<PublicHolidayModel> updateItem(
+    String id,
+    Map<String, dynamic> values,
+  ) {
     return repository.updatePublicHoliday(
       id,
       date: values['date'] as String,

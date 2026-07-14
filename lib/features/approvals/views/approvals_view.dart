@@ -22,10 +22,7 @@ class ApprovalsView extends StatelessWidget {
           'Are you sure you want to reject this request? This action cannot be undone.',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           TextButton(
             onPressed: () {
               Get.back();
@@ -68,7 +65,11 @@ class ApprovalsView extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.error_outline, size: 64, color: AppColors.danger),
+                          Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: AppColors.danger,
+                          ),
                           const SizedBox(height: 16),
                           Text(
                             controller.errorMessage.value!,
@@ -113,7 +114,8 @@ class ApprovalsView extends StatelessWidget {
         child: ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: items.length,
-          itemBuilder: (context, index) => _buildLeaveRequestCard(controller, items[index]),
+          itemBuilder: (context, index) =>
+              _buildLeaveRequestCard(controller, items[index]),
         ),
       );
     });
@@ -132,13 +134,17 @@ class ApprovalsView extends StatelessWidget {
         child: ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: items.length,
-          itemBuilder: (context, index) => _buildLeavePlanRequestCard(controller, items[index]),
+          itemBuilder: (context, index) =>
+              _buildLeavePlanRequestCard(controller, items[index]),
         ),
       );
     });
   }
 
-  Widget _buildLeaveRequestCard(ApprovalsController controller, LeaveRequestModel request) {
+  Widget _buildLeaveRequestCard(
+    ApprovalsController controller,
+    LeaveRequestModel request,
+  ) {
     return Obx(() {
       final isProcessing = controller.processingIds.contains(request.id);
       return Card(
@@ -150,17 +156,28 @@ class ApprovalsView extends StatelessWidget {
             children: [
               Text(
                 request.owner.fullName ?? request.owner.email,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
                 request.leaveType.name,
-                style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600, fontSize: 13),
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
               ),
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Icon(Icons.date_range_outlined, size: 16, color: Colors.grey[600]),
+                  Icon(
+                    Icons.date_range_outlined,
+                    size: 16,
+                    color: Colors.grey[600],
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     '${_formatDate(request.startDate)} to ${_formatDate(request.endDate)} '
@@ -169,11 +186,16 @@ class ApprovalsView extends StatelessWidget {
                   ),
                 ],
               ),
-              if (request.description != null && request.description!.isNotEmpty) ...[
+              if (request.description != null &&
+                  request.description!.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Text(
                   request.description!,
-                  style: TextStyle(color: Colors.grey[700], fontSize: 13, fontStyle: FontStyle.italic),
+                  style: TextStyle(
+                    color: Colors.grey[700],
+                    fontSize: 13,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ],
               const SizedBox(height: 12),
@@ -187,15 +209,20 @@ class ApprovalsView extends StatelessWidget {
                         onPressed: () => _confirmReject(
                           () => controller.rejectLeaveRequest(request.id),
                         ),
-                        style: OutlinedButton.styleFrom(foregroundColor: AppColors.danger),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.danger,
+                        ),
                         child: const Text('Reject'),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () => controller.approveLeaveRequest(request.id),
-                        style: ElevatedButton.styleFrom(backgroundColor: AppColors.success),
+                        onPressed: () =>
+                            controller.approveLeaveRequest(request.id),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.success,
+                        ),
                         child: const Text('Approve'),
                       ),
                     ),
@@ -208,12 +235,17 @@ class ApprovalsView extends StatelessWidget {
     });
   }
 
-  Widget _buildLeavePlanRequestCard(ApprovalsController controller, LeavePlanRequestModel request) {
+  Widget _buildLeavePlanRequestCard(
+    ApprovalsController controller,
+    LeavePlanRequestModel request,
+  ) {
     return Obx(() {
       final isProcessing = controller.processingIds.contains(request.id);
       final sortedDetails = List<LeavePlanDetailModel>.from(request.details)
         ..sort((a, b) => a.leaveDate.compareTo(b.leaveDate));
-      final datesPreview = sortedDetails.map((d) => _formatDate(d.leaveDate)).join(', ');
+      final datesPreview = sortedDetails
+          .map((d) => _formatDate(d.leaveDate))
+          .join(', ');
 
       return Card(
         margin: const EdgeInsets.only(bottom: 12),
@@ -224,18 +256,29 @@ class ApprovalsView extends StatelessWidget {
             children: [
               Text(
                 request.owner.fullName ?? request.owner.email,
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
                 request.leaveType.name,
-                style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600, fontSize: 13),
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
               ),
               const SizedBox(height: 8),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey[600]),
+                  Icon(
+                    Icons.calendar_today_outlined,
+                    size: 16,
+                    color: Colors.grey[600],
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -245,11 +288,16 @@ class ApprovalsView extends StatelessWidget {
                   ),
                 ],
               ),
-              if (request.description != null && request.description!.isNotEmpty) ...[
+              if (request.description != null &&
+                  request.description!.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Text(
                   request.description!,
-                  style: TextStyle(color: Colors.grey[700], fontSize: 13, fontStyle: FontStyle.italic),
+                  style: TextStyle(
+                    color: Colors.grey[700],
+                    fontSize: 13,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
               ],
               const SizedBox(height: 12),
@@ -263,15 +311,20 @@ class ApprovalsView extends StatelessWidget {
                         onPressed: () => _confirmReject(
                           () => controller.rejectLeavePlanRequest(request.id),
                         ),
-                        style: OutlinedButton.styleFrom(foregroundColor: AppColors.danger),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.danger,
+                        ),
                         child: const Text('Reject'),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () => controller.approveLeavePlanRequest(request.id),
-                        style: ElevatedButton.styleFrom(backgroundColor: AppColors.success),
+                        onPressed: () =>
+                            controller.approveLeavePlanRequest(request.id),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.success,
+                        ),
                         child: const Text('Approve'),
                       ),
                     ),

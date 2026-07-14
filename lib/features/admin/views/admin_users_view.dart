@@ -26,25 +26,44 @@ class AdminUsersView extends StatelessWidget {
       title: 'Users',
       controller: controller,
       fields: (isEdit) => [
-        const AdminFieldSpec(key: 'email', label: 'Email', type: AdminFieldType.text, required: true),
+        const AdminFieldSpec(
+          key: 'email',
+          label: 'Email',
+          type: AdminFieldType.text,
+          required: true,
+        ),
         AdminFieldSpec(
           key: 'password',
-          label: isEdit ? 'New Password (leave blank to keep current)' : 'Password',
+          label: isEdit
+              ? 'New Password (leave blank to keep current)'
+              : 'Password',
           type: AdminFieldType.text,
           required: !isEdit,
           obscureText: true,
           validator: (value) =>
               (value?.length ?? 0) < 8 ? 'Must be at least 8 characters' : null,
         ),
-        const AdminFieldSpec(key: 'full_name', label: 'Full Name', type: AdminFieldType.text),
+        const AdminFieldSpec(
+          key: 'full_name',
+          label: 'Full Name',
+          type: AdminFieldType.text,
+        ),
         AdminFieldSpec(
           key: 'team_id',
           label: 'Team',
           type: AdminFieldType.relation,
           options: controller.teamOptions,
         ),
-        const AdminFieldSpec(key: 'is_active', label: 'Active', type: AdminFieldType.boolean),
-        const AdminFieldSpec(key: 'is_superuser', label: 'Superuser', type: AdminFieldType.boolean),
+        const AdminFieldSpec(
+          key: 'is_active',
+          label: 'Active',
+          type: AdminFieldType.boolean,
+        ),
+        const AdminFieldSpec(
+          key: 'is_superuser',
+          label: 'Superuser',
+          type: AdminFieldType.boolean,
+        ),
       ],
       toFormValues: _toFormValues,
       emptyFormValues: const {

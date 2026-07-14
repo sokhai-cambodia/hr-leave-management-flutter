@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../data/models/notification_model.dart';
 import '../../../widgets/app_shell_scaffold.dart';
+import '../../leave_plan_requests/views/leave_plan_request_detail_view.dart';
+import '../../leave_requests/views/leave_request_detail_view.dart';
 import '../controllers/notifications_controller.dart';
 
 class NotificationsView extends StatefulWidget {
@@ -46,9 +47,9 @@ class _NotificationsViewState extends State<NotificationsView> {
   void _onTapNotification(NotificationModel notification) {
     controller.markAsRead(notification);
     if (notification.entityType == 'leave_request') {
-      Get.toNamed(Routes.leaveRequests);
+      Get.to(() => LeaveRequestDetailView(requestId: notification.entityId));
     } else if (notification.entityType == 'leave_plan_request') {
-      Get.toNamed(Routes.leavePlanRequests);
+      Get.to(() => LeavePlanRequestDetailView(requestId: notification.entityId));
     }
   }
 

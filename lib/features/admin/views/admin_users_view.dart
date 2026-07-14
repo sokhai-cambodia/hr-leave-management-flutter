@@ -13,6 +13,8 @@ class AdminUsersView extends StatelessWidget {
     'email': item.email,
     'password': null,
     'full_name': item.fullName,
+    'username': item.username,
+    'phone_number': item.phoneNumber,
     'team_id': item.teamId,
     'is_active': item.isActive,
     'is_superuser': item.isSuperuser,
@@ -48,6 +50,16 @@ class AdminUsersView extends StatelessWidget {
           label: 'Full Name',
           type: AdminFieldType.text,
         ),
+        const AdminFieldSpec(
+          key: 'username',
+          label: 'Username',
+          type: AdminFieldType.text,
+        ),
+        const AdminFieldSpec(
+          key: 'phone_number',
+          label: 'Phone Number',
+          type: AdminFieldType.text,
+        ),
         AdminFieldSpec(
           key: 'team_id',
           label: 'Team',
@@ -70,6 +82,8 @@ class AdminUsersView extends StatelessWidget {
         'email': '',
         'password': '',
         'full_name': null,
+        'username': null,
+        'phone_number': null,
         'team_id': null,
         'is_active': true,
         'is_superuser': false,
@@ -82,9 +96,12 @@ class AdminUsersView extends StatelessWidget {
           if (item.isSuperuser) 'Superuser',
         ];
         final suffix = flags.isEmpty ? '' : ' · ${flags.join(' · ')}';
-        return '${item.email} · $team$suffix';
+        final usernameSuffix = item.username != null
+            ? ' · @${item.username}'
+            : '';
+        return '${item.email}$usernameSuffix · $team$suffix';
       },
-      searchHint: 'Search by name or email...',
+      searchHint: 'Search by name, email, or username...',
     );
   }
 }

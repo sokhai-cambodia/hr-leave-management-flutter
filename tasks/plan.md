@@ -325,6 +325,67 @@ Backend (`../hr-leave-management`) already has `Notification` model, `Notificati
 
 ---
 
+## Phase 13 — Account & Identity Enhancements (DONE — backend landed in `../hr-leave-management`, then this Flutter side)
+
+Backend repo for all cross-repo references below: `https://github.com/sokhai-cambodia/hr-leave-management` (local checkout `../hr-leave-management`). Originally planned as "don't touch the backend repo from here," but the user separately asked for the backend work too (implemented and deployed in that repo, not this one — see its own `tasks/plan.md`/`tasks/todo.md` for that side's detail) before this Flutter side was built.
+
+Backend ground truth for this phase (from a dedicated research pass against `backend/app/`, not assumed):
+- Change-password endpoint already exists: `PATCH /api/v1/users/me/password` (`app/api/routes/users.py:100-117`), body `UpdatePassword {current_password, new_password}` (`app/models.py:52-54`, both `min_length=8, max_length=128`), requires bearer auth, rejects `new_password == current_password`, 400s on wrong `current_password`. Nothing to add server-side.
+- `User`/`UserBase` (`app/models.py:20-27,58-107`) has no `phone_number` and no `username` field today — identity is email-only. Self-editable fields today are limited to `full_name`/`email` via `UserUpdateMe` (`models.py:47-49`, route `users.py:78-97`); everything else (including `team_id`) is admin-only via `UserUpdate`.
+- Login (`POST /login/access-token`, `app/api/routes/login.py:24-43`) is a pure email lookup today: `crud.authenticate(session, email=form_data.username, password=...)` → `crud.get_user_by_email()` (`app/crud.py:34-46`). The OAuth2 form field is literally named `username` but its value is treated as an email — there is no username concept anywhere in the schema to reuse.
+- Password-reset email (`utils.py:send_email/generate_reset_password_email`, routes in `login.py:54-98`) requires `SMTP_HOST` + `EMAILS_FROM_EMAIL` to be set (`emails_enabled` in `app/core/config.py:88-91`) or `send_email()`'s assertion fails. Local dev points at the Mailcatcher container (`.env`: `SMTP_HOST=mailcatcher`, port 1025, no auth) — a local trap, not real delivery. **`render.yaml`'s `hr-leave-backend` service currently sets zero SMTP env vars** — production forgot-password will 500 until this is fixed.
+
+### Task 13.1 — Change Password screen (Flutter only, backend already supports it)
+- **Depends on:** Auth (session lifecycle), Profile screen
+- Flutter: new "Change Password" entry in `ProfileView` (near Log out). New form screen — current password, new password, confirm new password (obscured, matching the login screen's show/hide pattern), client-side validation (confirm matches, min length 8) before calling the API. New `AuthRepository.changePassword({currentPassword, newPassword})` → `PATCH /users/me/password`, following the existing `try { ... } on DioException catch (e) { throw ApiException.fromDioException(e); }` pattern used by every other repository method. Wrong current-password (backend 400) surfaces as an inline form error via the existing `ApiException` message, same as the login screen's error handling.
+- On success: snackbar + navigate back to Profile. No forced re-login — the backend has no session-invalidation list (JWTs are self-contained, no refresh-token endpoint per the "Verified Backend Ground Truth" section above), so the current token stays valid after a password change; this is a pre-existing backend characteristic, not something this task changes.
+- **Acceptance:** user can change their password entirely from the Flutter app; wrong current-password shows a clear inline error; `flutter analyze` clean, `flutter test` green (only the pre-existing `dio_client_unauthorized_test.dart` failures remain).
+- **Verify:** manual — change password, log out, confirm login succeeds with the new password and fails with the old one.
+
+### Task 13.2 — QR Business Card (Telegram deep link) — DONE
+- **Backend:** `phone_number` added to `UserBase`/`UserUpdateMe` in `../hr-leave-management`, deployed live on Render.
+- **Flutter:** `AuthRepository.updateProfile({phoneNumber})` (`PATCH /users/me`, only `phone_number` in the body per the exclude-unset footgun). Rather than a separate "Edit Profile" screen, `ProfileView` got a lightweight edit-icon-next-to-the-Phone-row that opens an `AlertDialog` to update just the phone number (`_showEditPhoneDialog`) — simpler than a full edit-mode screen for a single field. New `BusinessCardView` (`lib/features/profile/views/business_card_view.dart`) shows avatar/name/team + a `qr_flutter`-rendered QR encoding `https://t.me/+<digits-only phone>` (`_normalizePhone` strips everything but digits), or an "add your phone number first" prompt if unset. Reachable from a QR icon in `MainShellView`'s top bar (Home tab only, next to the bell) and from a "My Business Card" tile in `ProfileView`.
+- **Acceptance met:** `flutter analyze`/`flutter test` clean (11/11 non-env-dependent tests). Not manually scanned against a real Telegram client from this session — do that pass before considering the feature fully verified.
+
+### Task 13.3 — Username Login (admin-set usernames) — DONE
+- **Backend:** `username` (unique, admin-only) added to `UserBase` in `../hr-leave-management`; login now tries username-or-email via `crud.authenticate_by_identifier`; deployed live on Render.
+- **Flutter:** `UserModel` gained `username`/`phoneNumber`; `UsersRepository.createUser`/`updateUser` pass both through; `admin_users_view.dart` gained Username + Phone Number `AdminFieldSpec` fields (search now also matches username); `ProfileView` shows username read-only. Login screen's field relabeled "Email or Username" (`login_view.dart`), `keyboardType` changed from `emailAddress` to `text` since a username won't have `@`.
+- **Acceptance met:** `flutter analyze` clean.
+- **Verify:** manual — as superuser, set a username on a test account via the admin Users screen; log out; log back in using only the username; confirm success; confirm email login still also works for the same account. Not yet done from this session.
+
+### Task 13.4 — Real SMTP for Password Reset Emails — DONE (sandbox mode)
+- `render.yaml` has Resend's SMTP env vars; user signed up at resend.com and set `SMTP_PASSWORD` in Render's dashboard. **Decision:** staying on the sandbox address (`onboarding@resend.dev`) rather than verifying a custom domain, since `hr-leave-frontend.onrender.com`/`hr-leave-backend.onrender.com` are Render-owned subdomains the user doesn't control DNS for — Resend can't verify those. Sandbox mode only delivers to the Resend account owner's own email, not teammates'/other real users' addresses. Revisit by buying an actual domain (~$10/yr) if that becomes a real blocker.
+- **Acceptance:** a forgot-password request against the deployed (Render) backend delivers a real, working reset-link email.
+- **Verify:** manual — trigger forgot-password with a real email address against the deployed backend, confirm the email arrives and the reset link works end-to-end.
+
+---
+
+## Phase 14 — Post-13 UI Polish & App Identity (DONE)
+
+Follow-up refinements requested right after Phase 13 landed and got a first on-device look.
+
+### Task 14.1 — Simplify the shell top bar
+- The Phase 13 top bar (avatar + "Hi, {name}" on Home, plain title elsewhere) still looked out of place once seen live — the QR icon action sat oddly next to the bell on every tab. Removed the avatar/greeting from `MainShellView` entirely (all four tabs now just show a plain bold title) and moved the QR icon onto the Dashboard's own profile card instead (top-right corner via `Stack`+`Positioned`), next to the identity info it's actually about.
+
+### Task 14.2 — Restyle Change Password
+- Task 13.1's `ChangePasswordView` used a centered/max-width-360 layout (mirroring the login screen). Restyled to match `LeaveRequestFormView`'s pattern instead — top-aligned `ListView`, close (✕) icon in the app bar — since that's the form style used everywhere else that isn't the login/splash screens.
+
+### Task 14.3 — Business Card: clean redesign + Save/Share
+- Redesigned `_CardFace` as an actual shareable-card look: gradient (`AppColors.primary` → `AppColors.primaryDark`) header with avatar/name/team, white body with the QR code and a caption, drop shadow, rounded corners — wrapped in a `RepaintBoundary` so it can be captured as an image.
+- New dependencies: `gal` (save to gallery) and `share_plus` (OS share sheet). "Save" button captures the card to PNG bytes and calls `Gal.putImageBytes`; "Share" button shares the same PNG alongside a text summary (name/team/Telegram link) via `SharePlus.instance.share(ShareParams(...))`.
+- Android manifest gained `WRITE_EXTERNAL_STORAGE` (maxSdkVersion 29) + `android:requestLegacyExternalStorage="true"` per `gal`'s setup docs (both no-ops on modern scoped-storage Android, needed for API ≤29).
+- **Windows-build gotcha found:** `share_plus`'s Kotlin compile step failed with "this and base files have different roots" — Kotlin's incremental-compilation cache can't relativize a path between the pub-cache (`C:`) and this project (`D:`) on Windows. Fixed by adding `kotlin.incremental=false` to `android/gradle.properties` (see comment there). Not a code bug, purely a Windows multi-drive dev-environment quirk — flagging in case it resurfaces for another plugin.
+
+### Task 14.4 — App icon and display name
+- No source logo existed in the project, so generated one: a 1024×1024 crimson (`AppColors.primary` #E23744) square with a white bold "HR" monogram (`assets/icon/icon.png`), plus a transparent-background version scaled to Android's adaptive-icon safe zone (`assets/icon/icon_foreground.png`). Wired through `flutter_launcher_icons` (new dev dependency + `flutter_launcher_icons:` config block in `pubspec.yaml`, Android-only — this project doesn't build iOS/web) to generate all `mipmap-*` legacy + adaptive-icon resources.
+- Android app label changed from the default `hr_leave_management` to "HR Leave" in `AndroidManifest.xml`, matching the wordmark already used on the splash/login screens. Windows desktop's window title/executable metadata was left untouched (out of scope — dev-loop-only target, not the demo target).
+
+### Checkpoint 14
+- **Acceptance:** `flutter analyze` clean; `flutter test` green (only the pre-existing unrelated `dio_client_unauthorized_test.dart` failures remain); installed and launched on a real device after each change with no crashes (checked via `adb logcat` for exceptions/FATAL).
+- **Verify:** manual — confirm the new icon/name show correctly in the launcher; confirm Save/Share both work on a real device (gallery permission prompt + OS share sheet).
+
+---
+
 ## Sequencing
 
 ```
@@ -341,6 +402,8 @@ Phase 0 (scaffold+infra)
                   → Phase 10 (post-launch enhancements, found/requested after Checkpoint 9)
                     → Phase 11 (backend API enhancements + Flutter integration)
                       → Phase 12 (in-app notifications)
+                        → Phase 13 (account & identity enhancements — done, backend work landed in ../hr-leave-management first)
+                          → Phase 14 (post-13 UI polish + app icon/name — done)
 ```
 
 ## Critical Files

@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../auth/controllers/auth_controller.dart';
+import 'business_card_view.dart';
+import 'change_password_view.dart';
 
 class ProfileView extends GetView<AuthController> {
   const ProfileView({super.key});
@@ -53,6 +55,32 @@ class ProfileView extends GetView<AuthController> {
                         Text(user?.email ?? ''),
                         const SizedBox(height: 16),
                         _InfoRow(
+                          label: 'Username',
+                          value: user?.username ?? 'Not set',
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: _InfoRow(
+                                label: 'Phone',
+                                value: user?.phoneNumber ?? 'Not set',
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () => _showEditPhoneDialog(
+                                context,
+                                controller,
+                                user?.phoneNumber,
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(4),
+                                child: Icon(Icons.edit_outlined, size: 18),
+                              ),
+                            ),
+                          ],
+                        ),
+                        _InfoRow(
                           label: 'Team',
                           value: user?.team?.name ?? 'No team assigned',
                         ),
@@ -62,6 +90,27 @@ class ProfileView extends GetView<AuthController> {
                   ),
                 ],
               ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.qr_code_outlined),
+                  title: const Text('My Business Card'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Get.to(() => const BusinessCardView()),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.lock_outline),
+                  title: const Text('Change Password'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Get.to(() => const ChangePasswordView()),
+                ),
+              ],
             ),
           ),
           if (isSuperuser) ...[
@@ -136,6 +185,59 @@ class ProfileView extends GetView<AuthController> {
   static String _initials(String? value) {
     final trimmed = value?.trim() ?? '';
     return trimmed.isEmpty ? '?' : trimmed[0].toUpperCase();
+  }
+
+  static void _showEditPhoneDialog(
+    BuildContext context,
+    AuthController controller,
+    String? currentPhone,
+  ) {
+    final phoneController = TextEditingController(text: currentPhone ?? '');
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Phone Number'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                hintText: '+1234567890',
+                helperText: 'Include your country code',
+              ),
+            ),
+            Obx(() {
+              final message = controller.updateProfileError.value;
+              if (message == null) return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  message,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              );
+            }),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
+          Obx(
+            () => TextButton(
+              onPressed: controller.isUpdatingProfile.value
+                  ? null
+                  : () async {
+                      final success = await controller.updatePhoneNumber(
+                        phoneController.text.trim(),
+                      );
+                      if (success) Get.back();
+                    },
+              child: const Text('Save'),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

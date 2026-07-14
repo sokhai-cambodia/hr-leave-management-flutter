@@ -69,3 +69,19 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 
 ## Phase 12 — In-App Notifications (backend written by user, not yet deployed)
 - [x] 12.1 Notifications data layer, global unread badge (every screen via `AppShellScaffold`), and list screen with mark-read/mark-all-read
+
+## Phase 13 — Account & Identity Enhancements
+- [x] 13.1 Change Password screen (backend endpoint already existed, Flutter-only work)
+- [x] 13.2-backend Add `phone_number` to User (self-editable) — done in `../hr-leave-management`, live on Render
+- [x] 13.2 QR Business Card: home top-bar QR icon → Telegram deep-link QR + profile phone-number edit
+- [x] 13.3-backend Add `username` to User (admin-only) + login-by-username support — done in `../hr-leave-management`, live on Render
+- [x] 13.3 Username login: admin Users form + login screen relabel
+- [x] 13.4 Real SMTP for password-reset emails (Render env vars; Resend, sandbox address for now per user decision) — infra, done
+- [x] **Checkpoint 13** — `flutter analyze` clean, `flutter test` green (only the pre-existing unrelated `dio_client_unauthorized_test.dart` failures remain)
+
+## Phase 14 — Post-13 UI Polish & App Identity
+- [x] 14.1 Drop the top-bar avatar/"Hi, {name}" entirely (was cluttering non-Home tabs even after being scoped to Home-only); move the QR icon onto the Dashboard's profile card (top-right, via `Stack`+`Positioned`) instead of the shell app bar
+- [x] 14.2 Restyle Change Password to match the Leave Request form pattern (top-aligned `ListView`, close icon in the app bar) instead of a centered/max-width layout
+- [x] 14.3 Redesign Business Card: gradient header card (avatar/name/team) + QR below, captured via `RepaintBoundary`; added Save (→ gallery, via `gal`) and Share (→ OS share sheet with image + Telegram-link text, via `share_plus`) buttons
+- [x] 14.4 App icon (brand-crimson background, white "HR" monogram, generated via `flutter_launcher_icons` from `assets/icon/icon.png` + `icon_foreground.png`) and Android app display name (`hr_leave_management` → "HR Leave")
+- [x] **Checkpoint 14** — `flutter analyze` clean, `flutter test` green, installed/launched on a real device with no crashes after each change; `android/gradle.properties` gained `kotlin.incremental=false` (Windows cross-drive Kotlin incremental-cache bug hit by `share_plus`, see comment in that file)

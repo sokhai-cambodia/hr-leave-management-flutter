@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../app/theme/app_theme.dart';
-import '../../features/auth/controllers/auth_controller.dart';
 import '../../features/dashboard/views/dashboard_view.dart';
 import '../../features/leave_plan_requests/views/leave_plan_request_form_view.dart';
 import '../../features/leave_requests/views/leave_request_form_view.dart';
@@ -25,12 +24,9 @@ class MainShellView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<MainShellController>();
-    final authController = Get.find<AuthController>();
 
     return Obx(() {
       final index = controller.selectedIndex.value;
-      final user = authController.currentUser.value;
-      final initials = _initials(user?.fullName ?? user?.email);
 
       return Scaffold(
         backgroundColor: AppColors.lightBackground,
@@ -38,38 +34,11 @@ class MainShellView extends StatelessWidget {
           backgroundColor: AppColors.lightBackground,
           automaticallyImplyLeading: false,
           titleSpacing: AppSpacing.lg,
-          title: Row(
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: AppColors.pastel(AppColors.primary).background,
-                foregroundColor: AppColors.primary,
-                child: Text(
-                  initials,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      index == 0
-                          ? 'Hi, ${user?.fullName?.split(' ').first ?? 'there'}'
-                          : _titles[index],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          title: Text(
+            _titles[index],
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           actions: [
             Padding(
@@ -146,11 +115,6 @@ class MainShellView extends StatelessWidget {
         ),
       );
     });
-  }
-
-  static String _initials(String? value) {
-    final trimmed = value?.trim() ?? '';
-    return trimmed.isEmpty ? '?' : trimmed[0].toUpperCase();
   }
 
   void _showQuickActionSheet(BuildContext context) {

@@ -6,7 +6,10 @@ class UsersAdminBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<UsersAdminController>(
-      () => UsersAdminController(repository: Get.find(), teamsRepository: Get.find()),
+      () => UsersAdminController(
+        repository: Get.find(),
+        teamsRepository: Get.find(),
+      ),
     );
   }
 }

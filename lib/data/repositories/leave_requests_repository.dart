@@ -9,15 +9,27 @@ class LeaveRequestsRepository {
 
   final Dio _dio;
 
-  /// Lists leave requests with pagination.
+  /// Lists leave requests with pagination. [status]/[ownerId]/[approverId]
+  /// narrow the backend's base visibility scope (own + approver rows for
+  /// non-superusers) further - e.g. `status: 'pending', ownerId: me` for
+  /// "my own pending submissions", or `status: 'pending', approverId: me`
+  /// for "items awaiting my approval".
   Future<PaginatedResult<LeaveRequestModel>> fetchLeaveRequests({
     int skip = 0,
     int limit = 20,
+    String? status,
+    String? ownerId,
+    String? approverId,
   }) async {
     try {
+      final queryParameters = <String, dynamic>{'skip': skip, 'limit': limit};
+      if (status != null) queryParameters['status'] = status;
+      if (ownerId != null) queryParameters['owner_id'] = ownerId;
+      if (approverId != null) queryParameters['approver_id'] = approverId;
+
       final response = await _dio.get<Map<String, dynamic>>(
         '/leave-requests/',
-        queryParameters: {'skip': skip, 'limit': limit},
+        queryParameters: queryParameters,
       );
       final data = response.data!['data'] as List;
       final count = response.data!['count'] as int;

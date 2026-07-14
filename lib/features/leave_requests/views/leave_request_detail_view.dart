@@ -15,7 +15,8 @@ class LeaveRequestDetailView extends StatefulWidget {
 }
 
 class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
-  final LeaveRequestsController controller = Get.find<LeaveRequestsController>();
+  final LeaveRequestsController controller =
+      Get.find<LeaveRequestsController>();
 
   @override
   void initState() {
@@ -33,7 +34,8 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
   String _formatDateTime(DateTime? date) {
     if (date == null) return '-';
     final dateStr = _formatDate(date);
-    final timeStr = '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+    final timeStr =
+        '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
     return '$dateStr $timeStr';
   }
 
@@ -59,10 +61,7 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
           'Are you sure you want to delete this draft leave request? This action cannot be undone.',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           TextButton(
             onPressed: () async {
               Get.back(); // close dialog
@@ -115,7 +114,8 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => controller.fetchRequestDetail(widget.requestId),
+                    onPressed: () =>
+                        controller.fetchRequestDetail(widget.requestId),
                     child: const Text('Retry'),
                   ),
                 ],
@@ -200,7 +200,8 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
                   const SizedBox(height: 16),
 
                   // Description Card
-                  if (request.description != null && request.description!.isNotEmpty) ...[
+                  if (request.description != null &&
+                      request.description!.isNotEmpty) ...[
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -208,7 +209,7 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Description / Reason',
+                              'Description',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -264,12 +265,17 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
                           ),
                           _buildTimelineRow(
                             'Line approver',
-                            request.approver?.fullName ?? request.approver?.email ?? 'None assigned',
+                            request.approver?.fullName ??
+                                request.approver?.email ??
+                                'None assigned',
                             request.approver != null,
                           ),
-                          if (request.status == 'approved' || request.status == 'rejected')
+                          if (request.status == 'approved' ||
+                              request.status == 'rejected')
                             _buildTimelineRow(
-                              request.status == 'approved' ? 'Approved at' : 'Rejected at',
+                              request.status == 'approved'
+                                  ? 'Approved at'
+                                  : 'Rejected at',
                               _formatDateTime(request.approvalAt),
                               true,
                             ),
@@ -299,24 +305,29 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Obx(() => controller.isSubmitting.value
-                          ? const Center(child: CircularProgressIndicator())
-                          : Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () => controller.submitRequest(request.id),
-                                    child: const Text('Submit Request'),
+                      Obx(
+                        () => controller.isSubmitting.value
+                            ? const Center(child: CircularProgressIndicator())
+                            : Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () =>
+                                          controller.submitRequest(request.id),
+                                      child: const Text('Submit Request'),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              ),
+                      ),
                       const SizedBox(height: 12),
                       Row(
                         children: [
                           Expanded(
                             child: OutlinedButton.icon(
-                              onPressed: () => Get.to(() => LeaveRequestFormView(request: request)),
+                              onPressed: () => Get.to(
+                                () => LeaveRequestFormView(request: request),
+                              ),
                               icon: const Icon(Icons.edit_outlined),
                               label: const Text('Edit Draft'),
                             ),
@@ -324,12 +335,17 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: OutlinedButton.icon(
-                              onPressed: () => _confirmDelete(context, request.id),
+                              onPressed: () =>
+                                  _confirmDelete(context, request.id),
                               icon: const Icon(Icons.delete_outline),
                               label: const Text('Delete'),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: AppColors.danger,
-                                side: BorderSide(color: AppColors.danger.withValues(alpha: 0.5)),
+                                side: BorderSide(
+                                  color: AppColors.danger.withValues(
+                                    alpha: 0.5,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -365,10 +381,7 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
             const SizedBox(height: 2),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -398,10 +411,7 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
               children: [
                 Text(
                   label,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
                 ),
                 Text(
                   value,

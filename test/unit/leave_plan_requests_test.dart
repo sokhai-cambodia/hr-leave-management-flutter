@@ -4,18 +4,21 @@ import 'package:hr_leave_management/features/leave_plan_requests/controllers/lea
 void main() {
   group('LeavePlanRequestsController.isDuplicateDate', () {
     test('detects duplicate dates correctly regardless of time of day', () {
-      final dates = [
-        DateTime(2026, 7, 12),
-        DateTime(2026, 7, 15),
-      ];
+      final dates = [DateTime(2026, 7, 12), DateTime(2026, 7, 15)];
 
       // Exact match
       expect(
-        LeavePlanRequestsController.isDuplicateDate(dates, DateTime(2026, 7, 12)),
+        LeavePlanRequestsController.isDuplicateDate(
+          dates,
+          DateTime(2026, 7, 12),
+        ),
         isTrue,
       );
       expect(
-        LeavePlanRequestsController.isDuplicateDate(dates, DateTime(2026, 7, 15)),
+        LeavePlanRequestsController.isDuplicateDate(
+          dates,
+          DateTime(2026, 7, 15),
+        ),
         isTrue,
       );
 
@@ -30,11 +33,17 @@ void main() {
 
       // Distinct dates (no match)
       expect(
-        LeavePlanRequestsController.isDuplicateDate(dates, DateTime(2026, 7, 13)),
+        LeavePlanRequestsController.isDuplicateDate(
+          dates,
+          DateTime(2026, 7, 13),
+        ),
         isFalse,
       );
       expect(
-        LeavePlanRequestsController.isDuplicateDate(dates, DateTime(2025, 7, 12)),
+        LeavePlanRequestsController.isDuplicateDate(
+          dates,
+          DateTime(2025, 7, 12),
+        ),
         isFalse,
       );
     });

@@ -7,12 +7,9 @@ abstract class Routes {
   static const resetPassword = '/reset-password';
 
   static const dashboard = '/dashboard';
-  static const publicHolidays = '/public-holidays';
-  static const leavePlanRequests = '/leave-plan-requests';
-  static const leaveRequests = '/leave-requests';
   static const recommendations = '/recommendations';
   static const approvals = '/approvals';
-  static const profile = '/profile';
+  static const notifications = '/notifications';
 
   static const adminPolicies = '/admin/policies';
   static const adminPublicHolidays = '/admin/public-holidays';

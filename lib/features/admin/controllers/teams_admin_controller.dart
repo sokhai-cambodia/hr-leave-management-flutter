@@ -9,7 +9,10 @@ import '../../../widgets/admin/admin_field_spec.dart';
 import 'admin_crud_controller.dart';
 
 class TeamsAdminController extends AdminCrudController<TeamModel> {
-  TeamsAdminController({required this.repository, required this.usersRepository});
+  TeamsAdminController({
+    required this.repository,
+    required this.usersRepository,
+  });
 
   final TeamsRepository repository;
   final UsersRepository usersRepository;

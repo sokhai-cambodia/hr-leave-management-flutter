@@ -10,9 +10,23 @@ class AdminPublicHolidaysView extends StatelessWidget {
   const AdminPublicHolidaysView({super.key});
 
   static const _fields = [
-    AdminFieldSpec(key: 'date', label: 'Date', type: AdminFieldType.date, required: true),
-    AdminFieldSpec(key: 'name', label: 'Name', type: AdminFieldType.text, required: true),
-    AdminFieldSpec(key: 'description', label: 'Description', type: AdminFieldType.multilineText),
+    AdminFieldSpec(
+      key: 'date',
+      label: 'Date',
+      type: AdminFieldType.date,
+      required: true,
+    ),
+    AdminFieldSpec(
+      key: 'name',
+      label: 'Name',
+      type: AdminFieldType.text,
+      required: true,
+    ),
+    AdminFieldSpec(
+      key: 'description',
+      label: 'Description',
+      type: AdminFieldType.multilineText,
+    ),
   ];
 
   static const _emptyValues = {'date': '', 'name': '', 'description': null};

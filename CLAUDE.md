@@ -10,10 +10,11 @@ Flutter mobile client for an HR Leave Management system (master's final-project 
 
 ## Commands
 
+- `cp .env.example .env` — one-time setup; `.env` is gitignored (not a secret, just so each dev/emulator can point at their own backend URL) and is a required asset (`pubspec.yaml`), so **the build fails if it's missing** — a fresh clone must do this before the first `flutter run`/`flutter build` of any kind
 - `flutter pub get` — install dependencies
 - `flutter run -d windows` — fast dev-loop iteration (against `http://localhost:8000/api/v1`)
 - `flutter run -d <android-device>` — Android is the primary/demo target (against `http://10.0.2.2:8000/api/v1`, the emulator's host-loopback address)
-- `flutter run --dart-define=API_BASE_URL=<url>` — override backend base URL (only injection point; never hardcode it elsewhere — see `lib/core/constants/env.dart`)
+- Backend base URL resolution order (see `lib/core/constants/env.dart`): `--dart-define=API_BASE_URL=<url>` (highest precedence, e.g. CI) → `.env`'s `API_BASE_URL` (local dev convenience, edit this instead of retyping dart-define) → hardcoded default. Never hardcode the URL anywhere else.
 - `flutter analyze` — static analysis; **must be clean before considering any task done**
 - `flutter test` — run all unit/widget tests
 - `flutter test test/unit/leave_balance_model_test.dart` — run a single test file
@@ -59,7 +60,7 @@ Per `SPEC.md` §6, testing is manual-first; automated coverage is deliberately n
 
 - **Always** run `flutter analyze` clean before marking a task done; keep models in sync with the documented API contract in `../hr-leave-management/PROJECT_FEATURES.md` (readable summary) and the backend's actual model files (tiebreaker if anything's ambiguous).
 - **Ask first** before pushing to `origin`; before modifying anything in the `../hr-leave-management` backend/frontend repo — this repo only *consumes* that API, it doesn't change it, unless a real backend gap is found and confirmed with the user.
-- **Never** commit secrets/`.env` files; never hardcode the backend base URL outside `lib/core/constants/env.dart`.
+- **Never** commit the `.env` file itself (gitignored; `.env.example` is the committed template) or other secrets; never hardcode the backend base URL outside `lib/core/constants/env.dart`.
 
 ## graphify
 

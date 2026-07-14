@@ -200,7 +200,7 @@ Kept separate from Phase 4 (not folded in) because the create/edit form is mater
 
 ## Phase 8 — Admin/Superuser Master Data CRUD
 
-Sliced as pattern-then-apply across 5 resources, not 5 near-duplicate tasks.
+Sliced as pattern-then-apply across 6 resources, not 6 near-duplicate tasks.
 
 ### Task 8.1 — Generic CRUD scaffold, proven on Leave Types
 - **Depends on:** 2.1
@@ -220,7 +220,15 @@ Sliced as pattern-then-apply across 5 resources, not 5 near-duplicate tasks.
 - **Acceptance:** team creation lets you pick an existing user as owner via search; user creation requires password, edit doesn't; assigning `team_id`/`team_owner_id` in-app is reflected on next login — **closes the loop**: an employee assigned as a team owner via this screen becomes eligible for the Phase 2.2 Approvals nav entry without touching `/docs`.
 - **Verify:** create a team in-app, assign an existing employee as owner; log in as that employee, confirm Approvals now appears (no Swagger UI needed).
 
-**Checkpoint 8** — all 5 admin resources CRUD-able in-app; team-owner assignment loop fully closed in-app.
+### Task 8.4 — Apply pattern: Leave Balances (admin) + fix missing Public Holidays nav entry
+- **Depends on:** 8.1
+- **Found gap (post-Checkpoint-8 manual test):** 2.1's nav plan always listed `Leave Balances(admin)` for superusers and the dashboard tile existed, but no 8.1-8.3 task actually implemented it — `AdminLeaveBalancesView` shipped as an unwired `PlaceholderScreen`, and `Routes.adminLeaveBalances` had no binding, so opening it would have crashed on `Get.find()`. Separately, `AdminPublicHolidaysView` from 8.2 was fully implemented and routed but had no dashboard nav entry pointing at it — only the (still-placeholder) employee-facing `PublicHolidaysView` tile existed, so a superuser had no in-app way to reach the admin CRUD screen at all.
+- Leave Balances CRUD: `owner_id` and `leave_type_id` both use the Task 8.3 relational-picker pattern (employee picker via `UsersRepository`, leave-type picker via `LeaveTypesRepository.fetchLeaveTypes()`); `year` is a plain 4-digit string field (matches the backend's `str`-typed column, not numeric); `balance` is decimal. `taken_balance`/`available_balance` are server-computed and not part of the create/update payload. Backend endpoints: `GET/POST /leave-balances/`, `PUT/DELETE /leave-balances/{id}` (list is not superuser-gated server-side, unusually — every other admin list is — the Flutter route still gates it client-side via `SuperuserMiddleware`, matching the pattern for the other 5 resources). `LeaveBalanceModel` extended with nullable `ownerId`/`owner` (a `UserSummary`) since the existing `/leave-balances/me` self-view path doesn't need them.
+- Public Holidays nav: added a superuser-only "Manage Public Holidays" dashboard tile pointing at the existing `Routes.adminPublicHolidays`, distinct from the general "Public Holidays" tile (still a placeholder for all roles — a separate, still-open gap, not part of this fix).
+- **Acceptance:** superuser full CRUD loop on Leave Balances entirely in-app (create/edit/delete a balance for any employee); "Manage Public Holidays" reachable from the dashboard and functional; non-superuser can't reach either route.
+- **Verify:** `flutter analyze` clean; `flutter test` green (pre-existing `dio_client_unauthorized_test.dart` DotEnv-init failures are unrelated/pre-existing, not caused by this task); manual CRUD loop as superuser on both screens.
+
+**Checkpoint 8** — all 6 admin resources CRUD-able in-app; team-owner assignment loop fully closed in-app.
 
 ---
 
@@ -240,6 +248,83 @@ Sliced as pattern-then-apply across 5 resources, not 5 near-duplicate tasks.
 
 ---
 
+## Phase 10 — Post-Launch Enhancements (after Checkpoint 9)
+
+### Task 10.1 — Employee Public Holidays month-calendar view
+- **Depends on:** 2.1 (route existed, unimplemented — `PublicHolidaysView` shipped in Phase 2 as a `PlaceholderScreen` and was never revisited in Phase 3-9's happy-path build-out)
+- Replaced the placeholder with a real month-view calendar using the `table_calendar` package (`^3.2.0`, added via `flutter pub add table_calendar`; pulls in `intl`/`simple_gesture_detector` transitively — no direct `intl` usage added elsewhere in the app, month/date headings are still formatted manually to match this codebase's existing convention). New files: `lib/features/public_holidays/controllers/public_holidays_controller.dart`, `lib/features/public_holidays/bindings/public_holidays_binding.dart`, rewritten `lib/features/public_holidays/views/public_holidays_view.dart`.
+- No server-side month/year filter exists on `GET /public-holidays/` (only `skip`/`limit`), so the controller fetches once with a generous `limit` (500) on `onInit` — same "small master-data table, fetch once" precedent as `TeamsAdminController._loadUserOptions`. Two pure/static functions do the client-side work, unit-tested directly (no GetX bootstrap needed), same spirit as `LeavePlanRequestsController.isDuplicateDate`: `PublicHolidaysController.groupByDay(List<PublicHolidayModel>) → Map<DateTime, List<PublicHolidayModel>>` (day-normalized, feeds the calendar's `eventLoader` for marker dots) and `PublicHolidaysController.holidaysInMonth(List<PublicHolidayModel>, DateTime) → List<PublicHolidayModel>` (feeds the list section below the calendar). `PublicHolidayModel.date` stays a `String` throughout — `DateTime.parse` is only used transiently for grouping/display, never round-tripped back to the wire.
+- UI: `TableCalendar<PublicHolidayModel>` themed with existing tokens (`AppColors.primary` for today, `AppColors.warning` for holiday marker dots, `formatButtonVisible: false`, centered header) inside a `Card`; below it, a heading for the visible month plus a `Column` of `Card`s (mirroring `LeaveRequestsView._buildRequestCard`'s inline shape) listing that month's holidays, or an empty-state message.
+- Route: `Routes.publicHolidays` in `lib/app/routes/app_pages.dart` gained a `binding: PublicHolidaysBinding()` (previously had none).
+- **For Android/Compose parity:** the two pure grouping/filtering functions above are the reusable "logic," independent of `table_calendar`'s specific widget API — any calendar/month-view component on the Android side needs equivalent day-grouping and month-filtering over the same `GET /public-holidays/` payload shape (`id`, `date` as `"YYYY-MM-DD"`, `name`, `description?`).
+- **Acceptance:** calendar renders holiday markers; month navigation (prev/next) works; list below matches the visible month; `flutter analyze` clean; `flutter test` green (new `test/unit/public_holidays_test.dart` covers both pure functions, including a Dec 31/Jan 1 year-boundary case).
+- **Verify:** manual — Dashboard → Public Holidays as a logged-in employee on the physical test device; confirm markers, navigation, and list all agree; admin's separate "Manage Public Holidays" CRUD screen (Task 8.4) spot-checked unaffected.
+
+### Task 10.2 — Remove redundant Profile tile from Dashboard Quick Actions
+- **Depends on:** 2.1
+- `Routes.profile` was reachable two ways: the Dashboard's Quick Actions grid tile and the drawer's "Settings / Profile" entry (`lib/widgets/app_drawer.dart`). Removed the Quick Actions duplicate (`lib/features/dashboard/views/dashboard_view.dart`) — Profile remains reachable via the drawer only.
+- **For Android/Compose parity:** if the Android dashboard mirrors this Quick Actions grid, don't include a Profile tile there either — keep account/profile access to a single nav surface (equivalent of the drawer) to avoid the same duplication.
+- **Acceptance:** Profile no longer appears in Quick Actions; still reachable from the drawer.
+- **Verify:** manual — confirm on the physical test device.
+
+### Task 10.3 — Remove "Recent Activity" placeholder stat card
+- **Depends on:** 2.1
+- `dashboard_view.dart`'s "Recent Activity" `_PlaceholderStatCard` was hardcoded to always show `'Nothing yet'`, never wired to any data (SPEC §8 listed it as an intended feature, but Phase 3-9 never implemented it). Removed the card rather than leave a permanently-fake stat on screen.
+- **Acceptance:** Dashboard no longer shows a "Recent Activity" card.
+- **Verify:** manual — confirm on the physical test device.
+
+### Task 10.4 — Wire "Pending Requests" dashboard stat to real data
+- **Depends on:** 2.1, 4.x, 5.x
+- The "Pending Requests" card was the other hardcoded placeholder (`value: '—'`) next to "Available Days". Wired it to a real count: the current employee's **own** submissions (`ownerId == currentUser.id`) across both `LeaveRequestModel`/`LeavePlanRequestModel` with `status == 'pending'` — distinct from the separate Approvals queue, which is items awaiting *their* approval as a team owner.
+- No backend filter/count endpoint exists for this (see Phase 11 below — this is exactly the gap Phase 11 proposes fixing), so `DashboardController.fetchPendingRequestsCount()` walks every page of `GET /leave-requests/` and `GET /leave-plan-requests/` and filters client-side, same pattern/rationale as `ApprovalsController.fetchApprovals()` (`_fetchAllLeaveRequests`/`_fetchAllLeavePlanRequests` page-walking helpers, duplicated here rather than shared since each controller's filter predicate differs — `ownerId` here vs. `approverId` in Approvals). `DashboardController` gained `leaveRequestsRepository`/`leavePlanRequestsRepository` constructor deps (already globally registered in `initial_binding.dart`, just newly injected here) and `_authController = Get.find<AuthController>()` for `currentUser.id`.
+- **Once Phase 11's `GET /leave-requests/?owner_id={me}&status=pending&limit=1` (+ leave-plan equivalent) lands:** replace the page-walking with two cheap `count`-only calls, dropping `_fetchAllLeaveRequests`/`_fetchAllLeavePlanRequests` from this controller entirely.
+- **Acceptance:** card shows a real number (own pending submissions only, not team/approver items); `flutter analyze` clean.
+- **Verify:** manual — confirm the count matches the employee's actual pending submissions on the physical test device.
+- **Superseded by Task 11.4:** the "Pending Requests" card was later removed outright in favor of "Pending Approvals" taking its place in the row — kept here for history, not reflecting final state.
+
+---
+
+## Phase 11 — Backend API Enhancements + Flutter Integration
+
+Per this repo's boundary (Flutter only *consumes* the backend API, doesn't change it, `CLAUDE.md`) backend work happens in the sibling `../hr-leave-management` repo — recorded here for tracking and as a reference for the parallel Android/Compose app's equivalent needs. **Backend implemented and deployed (Render); Flutter-side integration complete.**
+
+### Task 11.1 — Query-param filtering on `GET /leave-requests/` and `GET /leave-plan-requests/`
+- Backend: added three optional params to each: `status: str | None`, `owner_id: UUID | None`, `approver_id: UUID | None`. Additive/backward-compatible — AND onto the existing non-superuser visibility scope (`owner_id==me OR approver_id==me`), doesn't replace it; non-superusers passing an `owner_id`/`approver_id` other than their own `id` have it ignored (treated as unset), not an error. Implemented in `backend/app/api/routes/leave_requests.py` / `leave_plan_requests.py`.
+- Flutter: `LeaveRequestsRepository.fetchLeaveRequests`/`LeavePlanRequestsRepository.fetchLeavePlanRequests` gained optional `status`/`ownerId`/`approverId` params. `DashboardController.fetchPendingRequestsCount` (Task 10.4) now reads `.count` from two `limit: 1` calls (`?owner_id={me}&status=pending`) instead of walking every page — the page-walking helpers were dropped entirely. `ApprovalsController.fetchApprovals` now passes `approverId`/`status: 'pending'` server-side, dropping its client-side `.where()` filter (still walks pages in case the now-much-smaller result set exceeds one page).
+
+### Task 11.2 — New `GET /approvals/pending-count`
+- Backend: cheap combined count (no row hydration), `{"leave_requests": int, "leave_plan_requests": int, "total": int}`, counting rows where `approver_id == current_user.id AND status == 'pending'` per table. New `backend/app/api/routes/approvals.py`.
+- Flutter: new `PendingApprovalsCountModel`, `ApprovalsRepository.fetchPendingCount()`. `DashboardController.fetchPendingApprovalsCount()` drives a new tappable "Pending Approvals" card on the Dashboard (visible only when `AuthController.isApprover`, same gate as the Approvals nav tile), which navigates to `Routes.approvals` on tap — closing the loop SPEC §8's "approvals count badge for team owners" always intended but never built. `_PlaceholderStatCard` gained an optional `onTap` (renders a trailing chevron when present).
+
+### Task 11.3 — New `GET /schedule/?year=<int>&month=<int 1-12>`
+- Backend: combines public holidays + the caller's team's approved leave into one payload. `team_leave` unifies `LeaveRequest` (real date range) and `LeavePlanRequest` (one entry per `LeavePlanDetail`, `start_date == end_date`) into one flat shape: `{id, source: "leave_request"|"leave_plan_request", owner: UserPresentable, leave_type: LeaveTypePresentable, start_date, end_date}` — includes `leave_type` (not a generic "On Leave" marker), filtered to `status == 'approved'` and `team_id == current_user.team_id`; empty list (not an error) if the caller has no team. Entries whose range *overlaps* the queried month are included, not just ones starting inside it. New `backend/app/api/routes/schedule.py`.
+- Flutter: Task 10.1's Public Holidays-only calendar feature (`lib/features/public_holidays/`) was renamed/replaced by `lib/features/schedule/` (`ScheduleController`, `ScheduleBinding`, `ScheduleView`) — `Routes.publicHolidays` → `Routes.schedule` (`/public-holidays` → `/schedule`), Dashboard tile and drawer entry relabeled "Schedule". New `ScheduleModel`/`TeamLeaveEntryModel` (`lib/data/models/schedule_model.dart`), `ScheduleRepository`. Unlike Task 10.1's "fetch everything once" approach, `GET /schedule/` is month-scoped server-side, so `ScheduleController.changeMonth()` triggers a fresh network call on calendar page-change rather than a local re-filter. The `TableCalendar<Object>` mixes both `PublicHolidayModel` and `TeamLeaveEntryModel` in one `eventLoader`, with a custom `calendarBuilders.markerBuilder` rendering two distinct marker-dot colors (`AppColors.warning` for holidays, `AppColors.primary` for team leave) plus a legend; the list section below is split into "Holidays in `<Month>`" and "Team Leave in `<Month>`" subsections. Two pure/static functions (`groupHolidaysByDay`, `groupTeamLeaveByDay` — the latter expanding each entry's date range into one key per covered day) are unit-tested directly in `test/unit/schedule_test.dart` (replaces `test/unit/public_holidays_test.dart`). The admin "Manage Public Holidays" CRUD screen (Task 8.4) is unaffected — separate feature, separate route.
+### Task 11.4 — Remove "Pending Requests", keep only "Pending Approvals"; scope plain lists to owner_id
+- **Depends on:** 11.1, 11.2
+- **Found gap (manual test):** the plain "Leave Requests"/"Leave Plan Requests" screens (`LeaveRequestsController`/`LeavePlanRequestsController`) had zero client-side filtering — for a superuser this meant seeing every request in the entire system, and for a team-owner it meant their own submissions mixed in with their team's requests awaiting approval, with no visual distinction. Fixed by passing `ownerId: currentUser.id` on both screens' fetch calls (Task 11.1's param), so these are now genuinely "my requests only" — the Approvals screen remains the sole place to see items awaiting approval.
+- Separately, decided the Dashboard's "Pending Requests" card (own pending submissions, Task 10.4) was redundant with "Pending Approvals" (Task 11.2) and less useful (a personal pending-submission count has less actionable value than a tappable approval-queue count) — removed it outright rather than keep both. "Pending Approvals" now sits in "Pending Requests"'s former Row slot next to "Available Days", still conditional on `isApprover`; non-approvers just see "Available Days" alone in that row. `DashboardController` lost its `leaveRequestsRepository`/`leavePlanRequestsRepository` deps and `fetchPendingRequestsCount()` entirely (no longer needed for anything). `dashboard_view.dart`'s `_pendingRequestsSummary` helper renamed to `_pendingCountSummary` (now only formats the approvals count).
+- Also removed the Quick Actions grid's "Approvals" tile (`dashboard_view.dart`) — same "reachable elsewhere, drop the duplicate" reasoning as Task 10.2's Profile tile removal: the new "Pending Approvals" card is now the primary entry point, and the drawer's `isApprover`-gated "Approvals" entry (`app_drawer.dart`) remains as the secondary one. Approvals is still reachable two ways (card + drawer), never zero.
+- **Acceptance:** Leave Requests/Leave Plan Requests screens show only the current user's own records regardless of role; Dashboard shows "Available Days" + "Pending Approvals" (approvers) or "Available Days" alone (non-approvers) — no "Pending Requests" card anywhere; Quick Actions no longer lists "Approvals" (still in the drawer); `flutter analyze` clean, `flutter test` green (only the pre-existing unrelated `dio_client_unauthorized_test.dart` failures remain).
+- **Verify:** manual — as a superuser/team-owner test account, confirm Leave Requests/Leave Plan Requests no longer show other users' records; confirm the Dashboard row and tap-through to Approvals; confirm Approvals is still reachable via the drawer.
+
+---
+
+## Phase 12 — In-App Notifications (backend written, not yet deployed at time of Flutter integration)
+
+Backend (`../hr-leave-management`) already has `Notification` model, `NotificationService` (creates a row on leave/leave-plan submit → notifies approver; approve/reject → notifies owner, no self-notification on submit), and `GET/PUT /notifications/*` routes, fully documented in `PROJECT_FEATURES.md` §14 — written by the user directly in the backend repo, not yet committed/deployed as of this Flutter-side work. Flutter integration was written against that documented contract ahead of deployment; endpoints will 404 until deployed, which the app handles gracefully (silent badge-poll failures, a normal error+retry state on the notifications list).
+
+### Task 12.1 — Notifications data layer, global badge, and list screen
+- **Depends on:** 2.1 (AppShellScaffold), Auth (session lifecycle)
+- New `NotificationModel`/`NotificationsPage` (`lib/data/models/notification_model.dart`) and `NotificationsRepository` (`fetchNotifications({skip, limit, isRead})`, `fetchUnreadCount()`, `markRead(id)`, `markAllRead()`), registered globally in `initial_binding.dart`.
+- New `NotificationsController` (`lib/features/notifications/controllers/notifications_controller.dart`) — registered **globally/permanent** in `InitialBinding` (not per-route via a lazy binding), because the unread badge needs to stay live on every screen, not just while the Notifications screen itself is open. Uses `ever<UserModel?>(authController.currentUser, ...)` to start a 30-second `Timer.periodic` poll of `GET /notifications/unread-count` on login/session-bootstrap and stop it (clearing local state) on logout — reactive to auth state rather than `AuthController` needing to know about notifications. Badge-poll failures are silent (no error toast every 30s); the list screen's own fetch surfaces a normal error+retry state. `markAsRead`/`markAllAsRead` update local state optimistically before the API call resolves.
+- New `NotificationsView` (`lib/features/notifications/views/notifications_view.dart`) — standard list-screen pattern (loading/error/empty/infinite-scroll/pull-to-refresh, mirroring `LeaveRequestsView`), unread rows visually distinct (bold text + accent dot + tinted background), "Mark all read" AppBar action, tapping a row marks it read and navigates by `entityType` (`leave_request` → `Routes.leaveRequests`, `leave_plan_request` → `Routes.leavePlanRequests` — the list screen, not a deep link to the specific record; jumping straight to the exact record was deferred as a nice-to-have, not needed for a working first version).
+- `AppShellScaffold` (`lib/widgets/app_shell_scaffold.dart`) now bakes in a bell icon + unread-count badge as a trailing AppBar action on every authenticated screen (appended after any caller-supplied `actions`), rather than requiring each screen to opt in individually — tapping it opens `Routes.notifications`.
+- New route `Routes.notifications` = `/notifications`, no binding needed (controller is already global).
+- **Acceptance:** `flutter analyze` clean; `flutter test` green (only the pre-existing unrelated `dio_client_unauthorized_test.dart` failures remain); app builds/installs/launches without crashing even with the backend not yet deployed (bell badge just stays at 0, notifications list shows a normal error+retry state instead of a 404 crash).
+- **Verify (once the backend is deployed):** submit a leave request as one test account, confirm the assigned approver's badge count increments within ~30s (or on next app open); approve/reject it, confirm the submitter's badge increments; tap a notification, confirm it's marked read (badge decrements) and navigates to the right list; "Mark all read" zeroes the badge.
+
+---
+
 ## Sequencing
 
 ```
@@ -253,6 +338,9 @@ Phase 0 (scaffold+infra)
             → Phase 7 (approvals)             ← needs 2.2+4+5
               → Phase 8 (admin CRUD)          ← needs 2.1 only; kept last per user decision
                 → Phase 9 (hardening)
+                  → Phase 10 (post-launch enhancements, found/requested after Checkpoint 9)
+                    → Phase 11 (backend API enhancements + Flutter integration)
+                      → Phase 12 (in-app notifications)
 ```
 
 ## Critical Files

@@ -12,11 +12,14 @@ class LeavePlanRequestDetailView extends StatefulWidget {
   final String requestId;
 
   @override
-  State<LeavePlanRequestDetailView> createState() => _LeavePlanRequestDetailViewState();
+  State<LeavePlanRequestDetailView> createState() =>
+      _LeavePlanRequestDetailViewState();
 }
 
-class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView> {
-  final LeavePlanRequestsController controller = Get.find<LeavePlanRequestsController>();
+class _LeavePlanRequestDetailViewState
+    extends State<LeavePlanRequestDetailView> {
+  final LeavePlanRequestsController controller =
+      Get.find<LeavePlanRequestsController>();
 
   @override
   void initState() {
@@ -34,7 +37,8 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
   String _formatDateTime(DateTime? date) {
     if (date == null) return '-';
     final dateStr = _formatDate(date);
-    final timeStr = '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+    final timeStr =
+        '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
     return '$dateStr $timeStr';
   }
 
@@ -60,10 +64,7 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
           'Are you sure you want to delete this draft leave plan request? This action cannot be undone.',
         ),
         actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           TextButton(
             onPressed: () async {
               Get.back(); // close dialog
@@ -116,7 +117,8 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => controller.fetchRequestDetail(widget.requestId),
+                    onPressed: () =>
+                        controller.fetchRequestDetail(widget.requestId),
                     child: const Text('Retry'),
                   ),
                 ],
@@ -221,9 +223,14 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
                                 return Chip(
                                   label: Text(
                                     _formatDate(detail.leaveDate),
-                                    style: const TextStyle(fontWeight: FontWeight.w500),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                  avatar: const Icon(Icons.calendar_today_outlined, size: 14),
+                                  avatar: const Icon(
+                                    Icons.calendar_today_outlined,
+                                    size: 14,
+                                  ),
                                   backgroundColor: Theme.of(context).cardColor,
                                 );
                               }).toList(),
@@ -235,7 +242,8 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
                   const SizedBox(height: 16),
 
                   // Description Card
-                  if (request.description != null && request.description!.isNotEmpty) ...[
+                  if (request.description != null &&
+                      request.description!.isNotEmpty) ...[
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -243,7 +251,7 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Description / Reason',
+                              'Description',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -299,12 +307,17 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
                           ),
                           _buildTimelineRow(
                             'Line approver',
-                            request.approver?.fullName ?? request.approver?.email ?? 'None assigned',
+                            request.approver?.fullName ??
+                                request.approver?.email ??
+                                'None assigned',
                             request.approver != null,
                           ),
-                          if (request.status == 'approved' || request.status == 'rejected')
+                          if (request.status == 'approved' ||
+                              request.status == 'rejected')
                             _buildTimelineRow(
-                              request.status == 'approved' ? 'Approved at' : 'Rejected at',
+                              request.status == 'approved'
+                                  ? 'Approved at'
+                                  : 'Rejected at',
                               _formatDateTime(request.approvalAt),
                               true,
                             ),
@@ -334,24 +347,30 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Obx(() => controller.isSubmitting.value
-                          ? const Center(child: CircularProgressIndicator())
-                          : Row(
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    onPressed: () => controller.submitRequest(request.id),
-                                    child: const Text('Submit Request'),
+                      Obx(
+                        () => controller.isSubmitting.value
+                            ? const Center(child: CircularProgressIndicator())
+                            : Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                      onPressed: () =>
+                                          controller.submitRequest(request.id),
+                                      child: const Text('Submit Request'),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              ),
+                      ),
                       const SizedBox(height: 12),
                       Row(
                         children: [
                           Expanded(
                             child: OutlinedButton.icon(
-                              onPressed: () => Get.to(() => LeavePlanRequestFormView(request: request)),
+                              onPressed: () => Get.to(
+                                () =>
+                                    LeavePlanRequestFormView(request: request),
+                              ),
                               icon: const Icon(Icons.edit_outlined),
                               label: const Text('Edit Plan'),
                             ),
@@ -359,12 +378,17 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
                           const SizedBox(width: 12),
                           Expanded(
                             child: OutlinedButton.icon(
-                              onPressed: () => _confirmDelete(context, request.id),
+                              onPressed: () =>
+                                  _confirmDelete(context, request.id),
                               icon: const Icon(Icons.delete_outline),
                               label: const Text('Delete'),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: AppColors.danger,
-                                side: BorderSide(color: AppColors.danger.withValues(alpha: 0.5)),
+                                side: BorderSide(
+                                  color: AppColors.danger.withValues(
+                                    alpha: 0.5,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -400,10 +424,7 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
             const SizedBox(height: 2),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -433,10 +454,7 @@ class _LeavePlanRequestDetailViewState extends State<LeavePlanRequestDetailView>
               children: [
                 Text(
                   label,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
                 ),
                 Text(
                   value,

@@ -6,7 +6,10 @@ class TeamsAdminBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<TeamsAdminController>(
-      () => TeamsAdminController(repository: Get.find(), usersRepository: Get.find()),
+      () => TeamsAdminController(
+        repository: Get.find(),
+        usersRepository: Get.find(),
+      ),
     );
   }
 }

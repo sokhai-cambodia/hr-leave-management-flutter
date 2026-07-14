@@ -1,9 +1,5 @@
 class UserSummary {
-  const UserSummary({
-    required this.id,
-    required this.email,
-    this.fullName,
-  });
+  const UserSummary({required this.id, required this.email, this.fullName});
 
   final String id;
   final String email;
@@ -18,10 +14,6 @@ class UserSummary {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'email': email,
-      'full_name': fullName,
-    };
+    return {'id': id, 'email': email, 'full_name': fullName};
   }
 }

@@ -41,15 +41,10 @@ class ApprovalsController extends GetxController {
 
     try {
       final currentUserId = _authController.currentUser.value?.id;
-      final requests = await _fetchAllLeaveRequests();
-      final planRequests = await _fetchAllLeavePlanRequests();
-
-      pendingLeaveRequests.value = requests
-          .where((r) => r.isPending && r.approverId == currentUserId)
-          .toList();
-      pendingLeavePlanRequests.value = planRequests
-          .where((r) => r.isPending && r.approverId == currentUserId)
-          .toList();
+      pendingLeaveRequests.value = await _fetchAllLeaveRequests(currentUserId);
+      pendingLeavePlanRequests.value = await _fetchAllLeavePlanRequests(
+        currentUserId,
+      );
     } on ApiException catch (e) {
       errorMessage.value = e.message;
     } finally {
@@ -57,17 +52,20 @@ class ApprovalsController extends GetxController {
     }
   }
 
-  /// The backend has no "pending items awaiting my approval" endpoint, so
-  /// filtering happens client-side (documented in tasks/plan.md Task 7.1) -
-  /// which means every page must be walked, not just the first, or pending
-  /// items later in creation order would be silently missed.
-  Future<List<LeaveRequestModel>> _fetchAllLeaveRequests() async {
+  /// Backend-filtered to `approverId`/`status: pending` (Task 11.1), so the
+  /// result set is already just the queue - still walks every page in case
+  /// it exceeds one page, but no client-side filtering is needed anymore.
+  Future<List<LeaveRequestModel>> _fetchAllLeaveRequests(
+    String? approverId,
+  ) async {
     final all = <LeaveRequestModel>[];
     var skip = 0;
     while (true) {
       final page = await leaveRequestsRepository.fetchLeaveRequests(
         skip: skip,
         limit: _pageSize,
+        approverId: approverId,
+        status: 'pending',
       );
       all.addAll(page.data);
       skip += page.data.length;
@@ -76,13 +74,17 @@ class ApprovalsController extends GetxController {
     return all;
   }
 
-  Future<List<LeavePlanRequestModel>> _fetchAllLeavePlanRequests() async {
+  Future<List<LeavePlanRequestModel>> _fetchAllLeavePlanRequests(
+    String? approverId,
+  ) async {
     final all = <LeavePlanRequestModel>[];
     var skip = 0;
     while (true) {
       final page = await leavePlanRequestsRepository.fetchLeavePlanRequests(
         skip: skip,
         limit: _pageSize,
+        approverId: approverId,
+        status: 'pending',
       );
       all.addAll(page.data);
       skip += page.data.length;

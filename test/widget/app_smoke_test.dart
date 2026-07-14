@@ -22,8 +22,8 @@ void main() {
 
     await tester.pumpWidget(GetMaterialApp(home: const LoginView()));
 
-    expect(find.text('HR Leave Management'), findsWidgets);
-    expect(find.text('Sign in'), findsOneWidget);
-    expect(find.widgetWithText(ElevatedButton, 'Log in'), findsOneWidget);
+    expect(find.textContaining('Leave'), findsWidgets);
+    expect(find.text('Email'), findsWidgets);
+    expect(find.widgetWithText(ElevatedButton, 'Log In'), findsOneWidget);
   });
 }

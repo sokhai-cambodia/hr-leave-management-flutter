@@ -13,7 +13,8 @@ class PoliciesAdminController extends AdminCrudController<PolicyModel> {
 
   @override
   bool matchesSearch(PolicyModel item, String query) =>
-      item.name.toLowerCase().contains(query) || item.code.toLowerCase().contains(query);
+      item.name.toLowerCase().contains(query) ||
+      item.code.toLowerCase().contains(query);
 
   @override
   Future<PaginatedResult<PolicyModel>> fetchPage({

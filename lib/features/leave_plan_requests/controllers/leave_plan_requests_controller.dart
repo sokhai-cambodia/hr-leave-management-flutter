@@ -6,14 +6,14 @@ import '../../../data/models/leave_plan_request_model.dart';
 import '../../../data/models/leave_type_model.dart';
 import '../../../data/repositories/leave_plan_requests_repository.dart';
 import '../../../data/repositories/leave_types_repository.dart';
+import '../../auth/controllers/auth_controller.dart';
 
 class LeavePlanRequestsController extends GetxController {
-  LeavePlanRequestsController({
-    required this.leavePlanRequestsRepository,
-  });
+  LeavePlanRequestsController({required this.leavePlanRequestsRepository});
 
   final LeavePlanRequestsRepository leavePlanRequestsRepository;
   final _leaveTypesRepository = Get.find<LeaveTypesRepository>();
+  final _authController = Get.find<AuthController>();
 
   // List View State
   final leavePlanRequests = <LeavePlanRequestModel>[].obs;
@@ -43,13 +43,17 @@ class LeavePlanRequestsController extends GetxController {
 
   /// Pure, testable function to verify if a new date is already in the list
   static bool isDuplicateDate(List<DateTime> dates, DateTime newDate) {
-    return dates.any((d) =>
-        d.year == newDate.year &&
-        d.month == newDate.month &&
-        d.day == newDate.day);
+    return dates.any(
+      (d) =>
+          d.year == newDate.year &&
+          d.month == newDate.month &&
+          d.day == newDate.day,
+    );
   }
 
-  /// Fetches leave plan requests with pagination (infinite scroll)
+  /// Fetches leave plan requests with pagination (infinite scroll). Scoped
+  /// to the current user's own submissions (`owner_id`) - see
+  /// LeaveRequestsController.fetchLeaveRequests for why this is needed.
   Future<void> fetchLeavePlanRequests({bool isRefresh = false}) async {
     if (isRefresh) {
       _skip = 0;
@@ -66,12 +70,14 @@ class LeavePlanRequestsController extends GetxController {
       final result = await leavePlanRequestsRepository.fetchLeavePlanRequests(
         skip: _skip,
         limit: _limit,
+        ownerId: _authController.currentUser.value?.id,
       );
 
       leavePlanRequests.addAll(result.data);
       _skip += result.data.length;
 
-      if (result.data.length < _limit || leavePlanRequests.length >= result.count) {
+      if (result.data.length < _limit ||
+          leavePlanRequests.length >= result.count) {
         hasMore.value = false;
       }
     } on ApiException catch (e) {
@@ -97,7 +103,9 @@ class LeavePlanRequestsController extends GetxController {
     currentRequest.value = null;
 
     try {
-      final request = await leavePlanRequestsRepository.fetchLeavePlanRequest(id);
+      final request = await leavePlanRequestsRepository.fetchLeavePlanRequest(
+        id,
+      );
       currentRequest.value = request;
     } on ApiException catch (e) {
       detailErrorMessage.value = e.message;
@@ -133,11 +141,12 @@ class LeavePlanRequestsController extends GetxController {
     formErrorMessage.value = null;
 
     try {
-      final newRequest = await leavePlanRequestsRepository.createLeavePlanRequest(
-        description: description,
-        leaveTypeId: leaveTypeId,
-        dates: dates,
-      );
+      final newRequest = await leavePlanRequestsRepository
+          .createLeavePlanRequest(
+            description: description,
+            leaveTypeId: leaveTypeId,
+            dates: dates,
+          );
       leavePlanRequests.insert(0, newRequest);
       return true;
     } on ApiException catch (e) {
@@ -159,12 +168,13 @@ class LeavePlanRequestsController extends GetxController {
     formErrorMessage.value = null;
 
     try {
-      final updatedRequest = await leavePlanRequestsRepository.updateLeavePlanRequest(
-        id,
-        description: description,
-        leaveTypeId: leaveTypeId,
-        dates: dates,
-      );
+      final updatedRequest = await leavePlanRequestsRepository
+          .updateLeavePlanRequest(
+            id,
+            description: description,
+            leaveTypeId: leaveTypeId,
+            dates: dates,
+          );
 
       final index = leavePlanRequests.indexWhere((r) => r.id == id);
       if (index != -1) {
@@ -279,7 +289,8 @@ class LeavePlanRequestsController extends GetxController {
   Future<bool> submitRequest(String id) async {
     isSubmitting.value = true;
     try {
-      final updatedRequest = await leavePlanRequestsRepository.submitLeavePlanRequest(id);
+      final updatedRequest = await leavePlanRequestsRepository
+          .submitLeavePlanRequest(id);
 
       final index = leavePlanRequests.indexWhere((r) => r.id == id);
       if (index != -1) {

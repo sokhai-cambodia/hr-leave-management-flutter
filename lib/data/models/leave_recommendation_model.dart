@@ -43,7 +43,9 @@ class LeaveRecommendationsModel {
       leaveTypeId: json['leave_type_id'] as String,
       year: json['year'] as int,
       data: items
-          .map((e) => LeaveRecommendationItem.fromJson(e as Map<String, dynamic>))
+          .map(
+            (e) => LeaveRecommendationItem.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
     );
   }

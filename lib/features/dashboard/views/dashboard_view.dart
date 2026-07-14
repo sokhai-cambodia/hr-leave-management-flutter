@@ -5,8 +5,10 @@ import '../../../app/routes/app_routes.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../data/models/leave_balance_model.dart';
 import '../../../data/models/user_model.dart';
-import '../../../widgets/app_shell_scaffold.dart';
+import '../../../widgets/stat_card.dart';
 import '../../auth/controllers/auth_controller.dart';
+import '../../leave_plan_requests/views/leave_plan_request_form_view.dart';
+import '../../leave_requests/views/leave_request_form_view.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends StatelessWidget {
@@ -17,126 +19,108 @@ class DashboardView extends StatelessWidget {
     final authController = Get.find<AuthController>();
     final dashboardController = Get.find<DashboardController>();
 
-    return AppShellScaffold(
-      title: 'Dashboard',
-      body: Obx(() {
-        final user = authController.currentUser.value;
-        final isSuperuser = user?.isSuperuser ?? false;
-        final isApprover = authController.isApprover.value;
+    return Obx(() {
+      final user = authController.currentUser.value;
+      final isApprover = authController.isApprover.value;
 
-        final balances = dashboardController.balances;
-        final isLoadingBalances = dashboardController.isLoadingBalances.value;
-        final balancesError = dashboardController.balancesError.value;
+      final balances = dashboardController.balances;
+      final isLoadingBalances = dashboardController.isLoadingBalances.value;
+      final balancesError = dashboardController.balancesError.value;
 
-        final tiles = <_NavTileData>[
-          _NavTileData(
-            'Public Holidays',
-            Icons.beach_access_outlined,
-            Routes.publicHolidays,
-          ),
-          _NavTileData(
-            'Leave Plan Requests',
-            Icons.event_note_outlined,
-            Routes.leavePlanRequests,
-          ),
-          _NavTileData(
-            'Leave Requests',
-            Icons.request_page_outlined,
-            Routes.leaveRequests,
-          ),
-          _NavTileData(
-            'Recommendations',
-            Icons.auto_awesome_outlined,
-            Routes.recommendations,
-          ),
-          if (isApprover)
-            _NavTileData(
-              'Approvals',
-              Icons.fact_check_outlined,
-              Routes.approvals,
-            ),
-          _NavTileData('Profile', Icons.person_outline, Routes.profile),
-          if (isSuperuser) ...[
-            _NavTileData('Policies', Icons.rule_outlined, Routes.adminPolicies),
-            _NavTileData(
-              'Leave Types',
-              Icons.category_outlined,
-              Routes.adminLeaveTypes,
-            ),
-            _NavTileData(
-              'Teams',
-              Icons.groups_outlined,
-              Routes.adminTeams,
-            ),
-            _NavTileData(
-              'Leave Balances',
-              Icons.account_balance_wallet_outlined,
-              Routes.adminLeaveBalances,
-            ),
-            _NavTileData(
-              'Users',
-              Icons.admin_panel_settings_outlined,
-              Routes.adminUsers,
-            ),
-          ],
-        ];
+      final pendingApprovalsCount =
+          dashboardController.pendingApprovalsCount.value;
+      final isLoadingPendingApprovals =
+          dashboardController.isLoadingPendingApprovals.value;
+      final pendingApprovalsError =
+          dashboardController.pendingApprovalsError.value;
 
-        return ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _ProfileCard(user: user),
-            const SizedBox(height: 16),
-            Row(
+      return ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _ProfileCard(user: user),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _QuickActionButton(
+                  icon: Icons.edit_calendar_outlined,
+                  label: 'Request Leave',
+                  color: AppColors.primary,
+                  onTap: () => Get.to(() => const LeaveRequestFormView()),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _QuickActionButton(
+                  icon: Icons.event_note_outlined,
+                  label: 'Plan Leave',
+                  color: AppColors.warning,
+                  onTap: () => Get.to(() => const LeavePlanRequestFormView()),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: _PlaceholderStatCard(
+                  child: StatCard(
                     label: 'Available Days',
                     value: _availableDaysSummary(
                       balances: balances,
                       isLoading: isLoadingBalances,
                       hasError: balancesError != null,
                     ),
+                    color: AppColors.info,
                   ),
                 ),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: _PlaceholderStatCard(
-                    label: 'Pending Requests',
-                    value: '—',
+                if (isApprover) ...[
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: StatCard(
+                      label: 'Approvals',
+                      value: _pendingCountSummary(
+                        count: pendingApprovalsCount,
+                        isLoading: isLoadingPendingApprovals,
+                        hasError: pendingApprovalsError != null,
+                      ),
+                      color: AppColors.warning,
+                      onTap: () => Get.toNamed(Routes.approvals),
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
-            const SizedBox(height: 12),
-            const _PlaceholderStatCard(
-              label: 'Recent Activity',
-              value: 'Nothing yet',
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Leave Balances',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 12),
+          _LeaveBalancesSection(
+            isLoading: isLoadingBalances,
+            error: balancesError,
+            balances: balances,
+            onRetry: dashboardController.fetchBalances,
+          ),
+          const SizedBox(height: 20),
+          Text('Quick actions', style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 12),
+          Card(
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              leading: const Icon(Icons.auto_awesome_outlined),
+              title: const Text('Recommendations'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Get.toNamed(Routes.recommendations),
             ),
-            const SizedBox(height: 20),
-            Text('Leave Balances', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 12),
-            _LeaveBalancesSection(
-              isLoading: isLoadingBalances,
-              error: balancesError,
-              balances: balances,
-              onRetry: dashboardController.fetchBalances,
-            ),
-            const SizedBox(height: 20),
-            Text('Quick actions', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 12),
-            GridView.count(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.3,
-              children: [for (final tile in tiles) _NavGridTile(data: tile)],
-            ),
-          ],
-        );
-      }),
-    );
+          ),
+        ],
+      );
+    });
   }
 
   static String _availableDaysSummary({
@@ -153,10 +137,67 @@ class DashboardView extends StatelessWidget {
     return _formatDays(total);
   }
 
+  static String _pendingCountSummary({
+    required int count,
+    required bool isLoading,
+    required bool hasError,
+  }) {
+    if (isLoading) return '—';
+    if (hasError) return 'N/A';
+    return count.toString();
+  }
+
   static String _formatDays(double value) {
     return value == value.roundToDouble()
         ? value.toStringAsFixed(0)
         : value.toStringAsFixed(1);
+  }
+}
+
+/// Pastel rounded-rect action tile, mirrors the reference design's
+/// Check In/Check Out button row on the home screen.
+class _QuickActionButton extends StatelessWidget {
+  const _QuickActionButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final pastel = AppColors.pastel(color);
+    return Material(
+      color: pastel.background,
+      borderRadius: BorderRadius.circular(AppShapes.cardRadius),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppShapes.cardRadius),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+          child: Column(
+            children: [
+              Icon(icon, color: pastel.foreground),
+              const SizedBox(height: 8),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: pastel.foreground,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -174,7 +215,12 @@ class _ProfileCard extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 28,
-              child: Text(_initials(user?.fullName ?? user?.email)),
+              backgroundColor: AppColors.pastel(AppColors.primary).background,
+              foregroundColor: AppColors.primary,
+              child: Text(
+                _initials(user?.fullName ?? user?.email),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -205,30 +251,6 @@ class _ProfileCard extends StatelessWidget {
   static String _initials(String? value) {
     final trimmed = value?.trim() ?? '';
     return trimmed.isEmpty ? '?' : trimmed[0].toUpperCase();
-  }
-}
-
-class _PlaceholderStatCard extends StatelessWidget {
-  const _PlaceholderStatCard({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: Theme.of(context).textTheme.bodySmall),
-            const SizedBox(height: 4),
-            Text(value, style: Theme.of(context).textTheme.titleLarge),
-          ],
-        ),
-      ),
-    );
   }
 }
 
@@ -306,57 +328,12 @@ class _LeaveBalanceTile extends StatelessWidget {
           children: [
             Text(
               DashboardView._formatDays(balance.availableBalance),
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             Text('available', style: Theme.of(context).textTheme.bodySmall),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _NavTileData {
-  const _NavTileData(this.label, this.icon, this.route);
-
-  final String label;
-  final IconData icon;
-  final String route;
-}
-
-class _NavGridTile extends StatelessWidget {
-  const _NavGridTile({required this.data});
-
-  final _NavTileData data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppShapes.cardRadius),
-        // toNamed (not offAllNamed) - keeps Dashboard on the stack so back
-        // returns here instead of exiting the app.
-        onTap: () => Get.toNamed(data.route),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                data.icon,
-                size: 28,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                data.label,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
         ),
       ),
     );

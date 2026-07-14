@@ -3,16 +3,21 @@ import 'package:get/get.dart';
 import '../../core/network/dio_client.dart';
 import '../../core/storage/local_cache_service.dart';
 import '../../core/storage/secure_storage_service.dart';
+import '../../data/repositories/approvals_repository.dart';
 import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/leave_balances_repository.dart';
 import '../../data/repositories/leave_plan_requests_repository.dart';
 import '../../data/repositories/leave_requests_repository.dart';
 import '../../data/repositories/leave_types_repository.dart';
+import '../../data/repositories/notifications_repository.dart';
 import '../../data/repositories/policies_repository.dart';
 import '../../data/repositories/public_holidays_repository.dart';
 import '../../data/repositories/recommends_repository.dart';
+import '../../data/repositories/schedule_repository.dart';
 import '../../data/repositories/teams_repository.dart';
 import '../../data/repositories/users_repository.dart';
 import '../../features/auth/controllers/auth_controller.dart';
+import '../../features/notifications/controllers/notifications_controller.dart';
 
 class InitialBinding extends Bindings {
   @override
@@ -27,10 +32,14 @@ class InitialBinding extends Bindings {
     Get.put(LeaveRequestsRepository(dio: dioClient.dio));
     Get.put(LeavePlanRequestsRepository(dio: dioClient.dio));
     Get.put(LeaveTypesRepository(dio: dioClient.dio));
+    Get.put(LeaveBalancesRepository(dio: dioClient.dio));
     Get.put(PublicHolidaysRepository(dio: dioClient.dio));
     Get.put(PoliciesRepository(dio: dioClient.dio));
     Get.put(UsersRepository(dio: dioClient.dio));
     Get.put(RecommendsRepository(dio: dioClient.dio));
+    Get.put(ApprovalsRepository(dio: dioClient.dio));
+    Get.put(ScheduleRepository(dio: dioClient.dio));
+    Get.put(NotificationsRepository(dio: dioClient.dio));
     final authController = Get.put(
       AuthController(
         authRepository: Get.find(),
@@ -39,5 +48,6 @@ class InitialBinding extends Bindings {
       ),
     );
     dioClient.onUnauthorized = authController.forceLogout;
+    Get.put(NotificationsController(notificationsRepository: Get.find()));
   }
 }

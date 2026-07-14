@@ -2,10 +2,7 @@ import 'leave_balance_model.dart';
 import 'user_summary.dart';
 
 class LeavePlanDetailModel {
-  const LeavePlanDetailModel({
-    this.id,
-    required this.leaveDate,
-  });
+  const LeavePlanDetailModel({this.id, required this.leaveDate});
 
   final String? id;
   final DateTime leaveDate;

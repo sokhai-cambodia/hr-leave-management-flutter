@@ -24,7 +24,12 @@ class AdminTeamsView extends StatelessWidget {
       title: 'Teams',
       controller: controller,
       fields: (isEdit) => [
-        const AdminFieldSpec(key: 'name', label: 'Name', type: AdminFieldType.text, required: true),
+        const AdminFieldSpec(
+          key: 'name',
+          label: 'Name',
+          type: AdminFieldType.text,
+          required: true,
+        ),
         const AdminFieldSpec(
           key: 'description',
           label: 'Description',
@@ -37,7 +42,11 @@ class AdminTeamsView extends StatelessWidget {
           required: true,
           options: controller.userOptions,
         ),
-        const AdminFieldSpec(key: 'is_active', label: 'Active', type: AdminFieldType.boolean),
+        const AdminFieldSpec(
+          key: 'is_active',
+          label: 'Active',
+          type: AdminFieldType.boolean,
+        ),
       ],
       toFormValues: _toFormValues,
       emptyFormValues: const {
@@ -48,7 +57,8 @@ class AdminTeamsView extends StatelessWidget {
       },
       itemTitle: (item) => item.name,
       itemSubtitle: (item) {
-        final owner = item.teamOwner?.fullName ?? item.teamOwner?.email ?? 'Unassigned';
+        final owner =
+            item.teamOwner?.fullName ?? item.teamOwner?.email ?? 'Unassigned';
         final members = item.teamMembers.length;
         return 'Owner: $owner · $members member${members == 1 ? '' : 's'}'
             '${item.isActive ? '' : ' · Inactive'}';

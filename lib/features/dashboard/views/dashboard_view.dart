@@ -9,6 +9,7 @@ import '../../../widgets/stat_card.dart';
 import '../../auth/controllers/auth_controller.dart';
 import '../../leave_plan_requests/views/leave_plan_request_form_view.dart';
 import '../../leave_requests/views/leave_request_form_view.dart';
+import '../../profile/views/business_card_view.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends StatelessWidget {
@@ -209,41 +210,56 @@ class _ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 28,
-              backgroundColor: AppColors.pastel(AppColors.primary).background,
-              foregroundColor: AppColors.primary,
-              child: Text(
-                _initials(user?.fullName ?? user?.email),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user?.fullName ?? 'Unnamed user',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: AppColors.pastel(
+                    AppColors.primary,
+                  ).background,
+                  foregroundColor: AppColors.primary,
+                  child: Text(
+                    _initials(user?.fullName ?? user?.email),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(user?.email ?? ''),
-                  const SizedBox(height: 4),
-                  Text(
-                    user?.team?.name ?? 'No team assigned',
-                    style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user?.fullName ?? 'Unnamed user',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Text(user?.email ?? ''),
+                      const SizedBox(height: 4),
+                      Text(
+                        user?.team?.name ?? 'No team assigned',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Positioned(
+            top: 4,
+            right: 4,
+            child: IconButton(
+              icon: const Icon(Icons.qr_code_outlined),
+              color: AppColors.primary,
+              onPressed: () => Get.to(() => const BusinessCardView()),
+            ),
+          ),
+        ],
       ),
     );
   }

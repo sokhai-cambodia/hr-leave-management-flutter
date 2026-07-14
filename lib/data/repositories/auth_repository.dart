@@ -69,4 +69,40 @@ class AuthRepository {
       throw ApiException.fromDioException(e);
     }
   }
+
+  /// Self-service profile update (`PATCH /users/me`). The backend does a
+  /// partial update via Pydantic's `exclude_unset`, so only `phoneNumber`
+  /// is included in the body - omitting the other keys entirely (not even
+  /// as `null`) is what leaves them untouched (same footgun as the admin
+  /// update in `UsersRepository.updateUser`).
+  Future<UserModel> updateProfile({required String phoneNumber}) async {
+    try {
+      final response = await _dio.patch<Map<String, dynamic>>(
+        '/users/me',
+        data: {'phone_number': phoneNumber},
+      );
+      return UserModel.fromJson(response.data!);
+    } on DioException catch (e) {
+      throw ApiException.fromDioException(e);
+    }
+  }
+
+  /// Logged-in password change - distinct from the forgot/reset-password
+  /// flow above, which doesn't require an existing session.
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    try {
+      await _dio.patch<Map<String, dynamic>>(
+        '/users/me/password',
+        data: {
+          'current_password': currentPassword,
+          'new_password': newPassword,
+        },
+      );
+    } on DioException catch (e) {
+      throw ApiException.fromDioException(e);
+    }
+  }
 }

@@ -35,6 +35,12 @@ class AuthController extends GetxController {
   final resetError = RxnString();
   final resetSuccess = false.obs;
 
+  final isChangePasswordLoading = false.obs;
+  final changePasswordError = RxnString();
+
+  final isUpdatingProfile = false.obs;
+  final updateProfileError = RxnString();
+
   bool _isHandlingUnauthorized = false;
 
   /// Runs once on app start: a stored token is validated against the
@@ -121,6 +127,42 @@ class AuthController extends GetxController {
       resetError.value = e.message;
     } finally {
       isResetLoading.value = false;
+    }
+  }
+
+  Future<bool> updatePhoneNumber(String phoneNumber) async {
+    isUpdatingProfile.value = true;
+    updateProfileError.value = null;
+    try {
+      currentUser.value = await _authRepository.updateProfile(
+        phoneNumber: phoneNumber,
+      );
+      return true;
+    } on ApiException catch (e) {
+      updateProfileError.value = e.message;
+      return false;
+    } finally {
+      isUpdatingProfile.value = false;
+    }
+  }
+
+  Future<bool> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    isChangePasswordLoading.value = true;
+    changePasswordError.value = null;
+    try {
+      await _authRepository.changePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      );
+      return true;
+    } on ApiException catch (e) {
+      changePasswordError.value = e.message;
+      return false;
+    } finally {
+      isChangePasswordLoading.value = false;
     }
   }
 

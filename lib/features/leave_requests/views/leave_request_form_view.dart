@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../app/theme/app_theme.dart';
 import '../../../data/models/leave_request_model.dart';
 import '../controllers/leave_requests_controller.dart';
+import 'leave_request_detail_view.dart';
 
 class LeaveRequestFormView extends StatefulWidget {
   const LeaveRequestFormView({super.key, this.request});
@@ -84,15 +85,15 @@ class _LeaveRequestFormViewState extends State<LeaveRequestFormView> {
     return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
   }
 
-  Future<void> _save() async {
-    if (!_formKey.currentState!.validate()) return;
+  bool _validateForm() {
+    if (!_formKey.currentState!.validate()) return false;
     if (_startDate == null || _endDate == null) {
       Get.snackbar(
         'Validation Error',
         'Please select both start and end dates.',
         snackPosition: SnackPosition.BOTTOM,
       );
-      return;
+      return false;
     }
     if (_endDate!.isBefore(_startDate!)) {
       Get.snackbar(
@@ -100,8 +101,13 @@ class _LeaveRequestFormViewState extends State<LeaveRequestFormView> {
         'End date cannot be before start date.',
         snackPosition: SnackPosition.BOTTOM,
       );
-      return;
+      return false;
     }
+    return true;
+  }
+
+  Future<void> _save() async {
+    if (!_validateForm()) return;
 
     bool success;
     if (_isEdit) {
@@ -132,6 +138,25 @@ class _LeaveRequestFormViewState extends State<LeaveRequestFormView> {
         backgroundColor: Colors.green.withValues(alpha: 0.1),
         colorText: Colors.green[800],
       );
+    }
+  }
+
+  Future<void> _saveAndSubmit() async {
+    if (!_validateForm()) return;
+
+    final result = await controller.createAndSubmitRequest(
+      startDate: _startDate!,
+      endDate: _endDate!,
+      description: _descriptionController.text.trim(),
+      leaveTypeId: _selectedLeaveTypeId!,
+    );
+
+    // Non-null even on submit failure (draft was still created) - route to
+    // its detail either way so the draft is never silently lost; the detail
+    // view already offers a Submit action for a still-draft request.
+    if (result != null) {
+      Get.back();
+      Get.to(() => LeaveRequestDetailView(requestId: result.id));
     }
   }
 
@@ -331,7 +356,7 @@ class _LeaveRequestFormViewState extends State<LeaveRequestFormView> {
 
                 // Description field
                 const Text(
-                  'Description / Reason',
+                  'Description',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 const SizedBox(height: 8),
@@ -344,17 +369,40 @@ class _LeaveRequestFormViewState extends State<LeaveRequestFormView> {
                 ),
                 const SizedBox(height: 36),
 
-                // Save Button
-                Obx(
-                  () => controller.isSubmitting.value
-                      ? const Center(child: CircularProgressIndicator())
-                      : ElevatedButton(
-                          onPressed: _save,
-                          child: Text(
-                            _isEdit ? 'Update Request' : 'Save as Draft',
-                          ),
+                // Action button(s)
+                Obx(() {
+                  if (controller.isSubmitting.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (_isEdit) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _save,
+                        child: const Text('Update Request'),
+                      ),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _saveAndSubmit,
+                          child: const Text('Submit'),
                         ),
-                ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: _save,
+                          child: const Text('Save as Draft'),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               ],
             ),
           );

@@ -204,6 +204,82 @@ class LeaveRequestsController extends GetxController {
     }
   }
 
+  /// Creates a draft then immediately submits it (the form's "Submit"
+  /// action). Returns the resulting request whether submission succeeded
+  /// (status `pending`) or failed (stays `draft`, but the draft is still
+  /// created and reachable in the list/detail) so the caller can navigate
+  /// to it either way. Returns null only if creation itself failed.
+  Future<LeaveRequestModel?> createAndSubmitRequest({
+    required DateTime startDate,
+    required DateTime endDate,
+    String? description,
+    required String leaveTypeId,
+  }) async {
+    isSubmitting.value = true;
+    formErrorMessage.value = null;
+
+    LeaveRequestModel created;
+    try {
+      created = await leaveRequestsRepository.createLeaveRequest(
+        startDate: startDate,
+        endDate: endDate,
+        description: description,
+        leaveTypeId: leaveTypeId,
+      );
+      leaveRequests.insert(0, created);
+    } on ApiException catch (e) {
+      formErrorMessage.value = e.message;
+      isSubmitting.value = false;
+      return null;
+    }
+
+    try {
+      // Dio's own connect/receive timeouts don't cover this: on some devices
+      // the request never reaches the transport layer at all (observed hang
+      // in the token-read step of the auth interceptor, before dispatch), so
+      // this call needs its own hard ceiling or a stall here would spin the
+      // UI forever with no feedback - the created draft must stay reachable.
+      final submitted = await leaveRequestsRepository
+          .submitLeaveRequest(created.id)
+          .timeout(
+            const Duration(seconds: 20),
+            onTimeout: () => throw ApiException(
+              'The submit request timed out. Your draft was saved - open it '
+              'from the list to retry submitting.',
+            ),
+          );
+      final index = leaveRequests.indexWhere((r) => r.id == created.id);
+      if (index != -1) {
+        leaveRequests[index] = submitted;
+      }
+      Get.snackbar(
+        'Success',
+        'Leave request submitted successfully.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green.withValues(alpha: 0.1),
+        colorText: Colors.green[800],
+      );
+      return submitted;
+    } on ApiException catch (e) {
+      String userFriendlyMessage = e.message;
+      if (e.statusCode == 422 || e.message.contains('No approver found')) {
+        userFriendlyMessage =
+            "You don't have a line approver assigned yet, contact an admin";
+      }
+      Get.snackbar(
+        'Submission Failed',
+        userFriendlyMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.withValues(alpha: 0.1),
+        colorText: Colors.red[800],
+        duration: const Duration(seconds: 5),
+      );
+      return created;
+    } finally {
+      isSubmitting.value = false;
+    }
+  }
+
   /// Submits a draft leave request
   Future<bool> submitRequest(String id) async {
     isSubmitting.value = true;

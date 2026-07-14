@@ -166,7 +166,7 @@ class MainShellView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.request_page_outlined),
+              leading: const Icon(Icons.edit_calendar_outlined),
               title: const Text('Request Leave'),
               onTap: () {
                 Navigator.of(sheetContext).pop();

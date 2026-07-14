@@ -8,8 +8,11 @@ import '../features/notifications/controllers/notifications_controller.dart';
 /// Shared Scaffold wrapper for *pushed* secondary screens (detail views,
 /// approvals, recommendations, notifications, admin) - these live outside
 /// the bottom-nav shell ([MainShellView]) and get a back arrow from the
-/// navigator instead of a drawer. Also bakes in the notifications bell +
-/// unread badge (Task 12.1) so every screen gets it for free.
+/// navigator instead of a drawer. The notifications bell only lives on
+/// [MainShellView]'s top bar (the single global entry point) - repeating it
+/// on every pushed screen was redundant (and self-referential on the
+/// Notifications screen itself), so this scaffold keeps a lean
+/// back-arrow-plus-title app bar.
 class AppShellScaffold extends StatelessWidget {
   const AppShellScaffold({
     super.key,
@@ -27,10 +30,7 @@ class AppShellScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [...?actions, const NotificationsBellButton()],
-      ),
+      appBar: AppBar(title: Text(title), actions: actions),
       body: body,
       floatingActionButton: floatingActionButton,
     );

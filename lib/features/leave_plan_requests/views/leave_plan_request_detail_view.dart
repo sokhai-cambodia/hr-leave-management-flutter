@@ -251,7 +251,7 @@ class _LeavePlanRequestDetailViewState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Description / Reason',
+                              'Description',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,

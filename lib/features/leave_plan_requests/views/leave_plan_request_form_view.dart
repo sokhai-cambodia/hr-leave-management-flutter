@@ -34,13 +34,6 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
 
   bool get _isEdit => widget.request != null;
 
-  /// The recommendation flow ("6.2 Selection UI") is the only caller that
-  /// pre-populates dates on a *new* request, so its presence doubles as the
-  /// signal to offer the one-tap "Submit Now" action (6.3) alongside the
-  /// plain draft save.
-  bool get _isFromRecommendation =>
-      !_isEdit && (widget.initialDates?.isNotEmpty ?? false);
-
   @override
   void initState() {
     super.initState();
@@ -310,7 +303,7 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
 
                 // Description
                 const Text(
-                  'Description / Reason',
+                  'Description',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 const SizedBox(height: 8),
@@ -328,24 +321,33 @@ class _LeavePlanRequestFormViewState extends State<LeavePlanRequestFormView> {
                   if (controller.isSubmitting.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  if (_isFromRecommendation) {
-                    return Column(
-                      children: [
-                        ElevatedButton(
+                  if (_isEdit) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _save,
+                        child: const Text('Update Plan'),
+                      ),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
                           onPressed: _saveAndSubmit,
-                          child: const Text('Submit Now'),
+                          child: const Text('Submit'),
                         ),
-                        const SizedBox(height: 12),
-                        OutlinedButton(
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton(
                           onPressed: _save,
                           child: const Text('Save as Draft'),
                         ),
-                      ],
-                    );
-                  }
-                  return ElevatedButton(
-                    onPressed: _save,
-                    child: Text(_isEdit ? 'Update Plan' : 'Save as Draft'),
+                      ),
+                    ],
                   );
                 }),
               ],

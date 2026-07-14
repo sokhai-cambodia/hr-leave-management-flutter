@@ -141,6 +141,24 @@ class AppTheme {
           ),
         ),
       ),
+      // Same size/shape as the elevated button so a primary+secondary pair
+      // (e.g. "Submit" + "Save as Draft") reads as one consistent set
+      // instead of two differently-sized buttons stacked together. Screens
+      // that need a different accent (e.g. a danger-colored Reject button)
+      // only override foregroundColor/side, inheriting this shape/size.
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.primary,
+          side: const BorderSide(color: AppColors.primary),
+          minimumSize: const Size.fromHeight(54),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppShapes.buttonRadius),
+          ),
+          textStyle: textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       chipTheme: ChipThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppShapes.buttonRadius),

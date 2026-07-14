@@ -43,7 +43,7 @@ class DashboardView extends StatelessWidget {
             children: [
               Expanded(
                 child: _QuickActionButton(
-                  icon: Icons.request_page_outlined,
+                  icon: Icons.edit_calendar_outlined,
                   label: 'Request Leave',
                   color: AppColors.primary,
                   onTap: () => Get.to(() => const LeaveRequestFormView()),
@@ -80,7 +80,7 @@ class DashboardView extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: StatCard(
-                      label: 'Pending Approvals',
+                      label: 'Approvals',
                       value: _pendingCountSummary(
                         count: pendingApprovalsCount,
                         isLoading: isLoadingPendingApprovals,

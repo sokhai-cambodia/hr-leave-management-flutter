@@ -209,7 +209,7 @@ class _LeaveRequestDetailViewState extends State<LeaveRequestDetailView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Description / Reason',
+                              'Description',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,

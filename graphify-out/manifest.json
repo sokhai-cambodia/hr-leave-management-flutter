@@ -60,8 +60,8 @@
     "semantic_hash": "bcc4109bd8385051a24cd6e9d9e3c6d2"
   },
   "lib/app/theme/app_theme.dart": {
-    "mtime": 1784031249.9441676,
-    "ast_hash": "acb61060c6a20e7385d4ff11c0130780",
+    "mtime": 1784041940.8678503,
+    "ast_hash": "0bd7794db286ba5e1409f6aafe9b749c",
     "semantic_hash": ""
   },
   "lib/core/constants/env.dart": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "lib/features/dashboard/views/dashboard_view.dart": {
-    "mtime": 1784041489.8983338,
-    "ast_hash": "c067b90fa00087454ff6a8b4b3e025fe",
+    "mtime": 1784043089.8612032,
+    "ast_hash": "dd72c24e7c2d8d3a8a649ea97dc62355",
     "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/bindings/leave_plan_requests_binding.dart": {
@@ -255,13 +255,13 @@
     "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/views/leave_plan_request_detail_view.dart": {
-    "mtime": 1784031249.9565442,
-    "ast_hash": "0796f8ade748650033092d3c7c87e6e3",
+    "mtime": 1784042002.6062188,
+    "ast_hash": "53ac47f3076829afd4e1315be78516ef",
     "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/views/leave_plan_request_form_view.dart": {
-    "mtime": 1784031249.9565442,
-    "ast_hash": "b10574bcb5e038f63e92554d10311cf6",
+    "mtime": 1784041972.3045213,
+    "ast_hash": "33dc7c07b5f5591b632b66077071dc72",
     "semantic_hash": ""
   },
   "lib/features/leave_plan_requests/views/leave_plan_requests_view.dart": {
@@ -275,23 +275,23 @@
     "semantic_hash": ""
   },
   "lib/features/leave_requests/controllers/leave_requests_controller.dart": {
-    "mtime": 1784031249.9575443,
-    "ast_hash": "c6acf7d8933430733443222948f69b18",
+    "mtime": 1784042019.0836873,
+    "ast_hash": "0ce8e16e8a5525ededd38d802d9dd8c2",
     "semantic_hash": ""
   },
   "lib/features/leave_requests/views/leave_request_detail_view.dart": {
-    "mtime": 1784031249.958544,
-    "ast_hash": "74b7b02d7a8211e00c7a6cac0e4ef86c",
+    "mtime": 1784041996.5471,
+    "ast_hash": "375db45728b424b1b8939294d1869a56",
     "semantic_hash": ""
   },
   "lib/features/leave_requests/views/leave_request_form_view.dart": {
-    "mtime": 1784031249.958544,
-    "ast_hash": "093d92ba00e24d3e481ba61752c37d8d",
+    "mtime": 1784042073.7174878,
+    "ast_hash": "31aa6ad568cc273d4b5cbb099a7f380f",
     "semantic_hash": ""
   },
   "lib/features/leave_requests/views/leave_requests_view.dart": {
-    "mtime": 1784029838.2551272,
-    "ast_hash": "93bcb5e4a52aa2ed20d6c088a9b88f39",
+    "mtime": 1784042830.2860565,
+    "ast_hash": "94b64852fca2c338eef92bedf2d951d7",
     "semantic_hash": ""
   },
   "lib/features/profile/views/profile_view.dart": {
@@ -320,8 +320,8 @@
     "semantic_hash": ""
   },
   "lib/widgets/app_shell_scaffold.dart": {
-    "mtime": 1784029838.3411975,
-    "ast_hash": "5f9007bb18e9cbc5d8d063ae19904b35",
+    "mtime": 1784042515.7263098,
+    "ast_hash": "54083c5ba259dd16119c5715c350014a",
     "semantic_hash": ""
   },
   "lib/widgets/placeholder_screen.dart": {
@@ -675,8 +675,8 @@
     "semantic_hash": ""
   },
   "lib/widgets/stat_card.dart": {
-    "mtime": 1784029838.3467207,
-    "ast_hash": "80f4b062e467c19598ba0179b3b3fcf8",
+    "mtime": 1784042499.3484588,
+    "ast_hash": "a5b5ea72bd8a063023c790f0bb051288",
     "semantic_hash": ""
   },
   "lib/widgets/status_badge.dart": {
@@ -700,8 +700,8 @@
     "semantic_hash": ""
   },
   "lib/app/shell/main_shell_view.dart": {
-    "mtime": 1784031249.9436414,
-    "ast_hash": "50bc96984236bd2eeccd52a4732739f4",
+    "mtime": 1784042805.6951497,
+    "ast_hash": "850ba2a62e17ba72135dbd6e2a24cb18",
     "semantic_hash": ""
   },
   "ui.webp": {

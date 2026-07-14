@@ -39,6 +39,8 @@ class StatCard extends StatelessWidget {
                   children: [
                     Text(
                       label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: pastel.foreground.withValues(alpha: 0.85),
                         fontWeight: FontWeight.w600,

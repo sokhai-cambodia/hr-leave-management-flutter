@@ -97,7 +97,7 @@ class _LeaveRequestsViewState extends State<LeaveRequestsView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.request_page_outlined,
+                  Icons.edit_calendar_outlined,
                   size: 64,
                   color: Colors.grey[400],
                 ),

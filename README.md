@@ -104,6 +104,7 @@ This brings up Postgres, the FastAPI backend (`http://localhost:8000`, API prefi
 
 ## Project docs
 
+- `docs/ARCHITECTURE.md` — system architecture diagram and full tech stack (client, backend, infrastructure)
 - `SPEC.md` — authoritative spec: tech stack, project structure, design tokens, documented gaps vs. the course guideline
 - `tasks/plan.md` — phase-by-phase implementation plan with verified backend contract details
 - `tasks/todo.md` — current progress (checkbox state is the source of truth for what's built vs. pending)

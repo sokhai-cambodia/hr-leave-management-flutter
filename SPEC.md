@@ -103,19 +103,23 @@ Per guideline, testing is "recommended" (manual) with unit tests as bonus — **
 
 ## 9. Design Tokens (shared brand, mirrored in the Android/Compose app)
 
-Chosen for a minimal/clean, light-first look, adopted from reviewing a Figma Community HRMS reference (`figma.com/design/qaCZJAA9Uca4nGziJ5wx9m` — a Community file, published for reuse/inspiration; only the design direction was taken, not any copied assets). Implemented centrally in `lib/app/theme/app_theme.dart` so every screen inherits it automatically rather than being styled per-screen. Superseded an earlier dark/indigo/pill-button/filled-input direction (v1) after this reference was found to match what the user wanted better.
+Chosen for a minimal/clean, light-first look, adopted from reviewing a Figma Community HRMS reference (`figma.com/design/qaCZJAA9Uca4nGziJ5wx9m` — a Community file, published for reuse/inspiration; only the design direction was taken, not any copied assets). Implemented centrally in `lib/app/theme/app_theme.dart` so every screen inherits it automatically rather than being styled per-screen. Superseded an earlier dark/indigo/pill-button/filled-input direction (v1) after this reference was found to match what the user wanted better. Current values below are "redesign batch 3" (`feature/ui-redesign`) — a white-canvas + single red/coral accent direction inspired by a separate reference mockup; **Flutter-app-only as of this writing, not yet mirrored in the Android/Compose app** (see `STYLE_GUIDE.md` at repo root — a copy-pasteable version of this table for handing to the Android build).
 
 | Token | Value |
 |---|---|
-| Accent/primary | `#CA282C` (brick red) |
+| Accent/primary | `#E23744` (confident red/coral) |
+| Primary dark (pressed/gradient end) | `#C01F2B` |
 | Dark background / surface | `#121212` / `#1E1E1E` |
-| Light background / surface | `#F7F7F8` / `#FFFFFF` |
-| Light border | `#E1E1E4` |
-| Danger / warning / success | `#CA282C` / `#FB8C00` / `#2E7D32` |
+| Light background / surface | `#FFFFFF` / `#FFFFFF` |
+| Light field fill | `#F7F7F9` |
+| Light border | `#EAEAEE` |
+| Danger / warning / success / info | `#EF4444` / `#F5A623` / `#22A659` / `#4C8DFF` |
+| Status pastel formula | badge/stat-card background = status color blended at 14% alpha over white; foreground = full status color (one formula, not per-status hand-picked pairs) |
 | Font | Poppins (via `google_fonts`; Compose side should use the Poppins downloadable/bundled font for parity) |
-| Button shape | 12px corner radius (not a full pill), 52px min height |
-| Card shape | 14px corner radius, subtle elevation/shadow |
-| Text field shape | 12px corner radius, **outlined/bordered** (not filled-borderless), border color from `lightBorder`, primary-colored focus border |
+| Button shape | 14px corner radius, 54px min height, no elevation |
+| Card shape | 18px corner radius, elevation 1, shadow at black 8% alpha |
+| Text field shape | 12px corner radius, **outlined/bordered** (not filled-borderless), border color from `lightBorder`, 1.5px primary-colored focus border |
+| Pill/tab indicator | full pill radius (999px) |
 | Default theme mode | Light-first (dark mode available as a toggle) |
 | Icons | Material "outlined" icon variants (no third-party icon pack — `iconly` was tried and is incompatible with current Flutter's `IconData` being a `final class`; reverted) |
 | Dashboard navigation pattern | 2-column card grid of icon+label tiles (from the reference's Dashboard screen) rather than a plain list |

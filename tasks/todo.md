@@ -77,7 +77,7 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] 13.3-backend Add `username` to User (admin-only) + login-by-username support — done in `../hr-leave-management`, live on Render
 - [x] 13.3 Username login: admin Users form + login screen relabel
 - [x] 13.4 Real SMTP for password-reset emails (Render env vars; Resend, sandbox address for now per user decision) — infra, done
-- [x] **Checkpoint 13** — `flutter analyze` clean, `flutter test` green (only the pre-existing unrelated `dio_client_unauthorized_test.dart` failures remain)
+- [x] **Checkpoint 13** — `flutter analyze` clean, `flutter test` green (`dio_client_unauthorized_test.dart` failures fixed post-Checkpoint 14 by initializing `dotenv` in `setUpAll`)
 
 ## Phase 14 — Post-13 UI Polish & App Identity
 - [x] 14.1 Drop the top-bar avatar/"Hi, {name}" entirely (was cluttering non-Home tabs even after being scoped to Home-only); move the QR icon onto the Dashboard's profile card (top-right, via `Stack`+`Positioned`) instead of the shell app bar

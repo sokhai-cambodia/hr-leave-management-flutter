@@ -1,11 +1,18 @@
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hr_leave_management/core/network/dio_client.dart';
 import 'package:hr_leave_management/core/storage/token_storage.dart';
 
 void main() {
+  setUpAll(() {
+    dotenv.loadFromString(
+      envString: 'API_BASE_URL=http://localhost:8000/api/v1',
+    );
+  });
+
   group('DioClient session-invalidation handling', () {
     test('a 401 response triggers onUnauthorized', () async {
       final dioClient = DioClient(secureStorageService: _FakeTokenStorage());

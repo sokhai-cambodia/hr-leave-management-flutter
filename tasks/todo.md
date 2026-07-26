@@ -85,3 +85,9 @@ Full detail (acceptance criteria, verify steps) in `tasks/plan.md`.
 - [x] 14.3 Redesign Business Card: gradient header card (avatar/name/team) + QR below, captured via `RepaintBoundary`; added Save (→ gallery, via `gal`) and Share (→ OS share sheet with image + Telegram-link text, via `share_plus`) buttons
 - [x] 14.4 App icon (brand-crimson background, white "HR" monogram, generated via `flutter_launcher_icons` from `assets/icon/icon.png` + `icon_foreground.png`) and Android app display name (`hr_leave_management` → "HR Leave")
 - [x] **Checkpoint 14** — `flutter analyze` clean, `flutter test` green, installed/launched on a real device with no crashes after each change; `android/gradle.properties` gained `kotlin.incremental=false` (Windows cross-drive Kotlin incremental-cache bug hit by `share_plus`, see comment in that file)
+
+## Phase 15 — Audit Log (closes SPEC §7 gap) + ER Diagram
+- [x] 15.1 ER diagram generated from the backend's actual SQLModel schema (`docs/ER_DIAGRAM.md`)
+- [x] 15.2 Backend: `AuditLog` model + migration + `AuditService` instrumentation on admin CRUD and leave submit/approve/reject + `GET /audit-logs/` (`../hr-leave-management`)
+- [x] 15.3 Flutter: read-only Audit Log admin screen (model, repository, controller, view, route, nav tile)
+- [ ] 15.4 Manual on-device verification (superuser sees entries after an admin action; non-superuser blocked from the route) — not yet done this session

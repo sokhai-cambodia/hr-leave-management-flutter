@@ -386,6 +386,36 @@ Follow-up refinements requested right after Phase 13 landed and got a first on-d
 
 ---
 
+## Phase 15 — Audit Log (closing the SPEC §7 gap) + ER Diagram
+
+`SPEC.md` §7 had accepted "no audit trail" as an out-of-scope gap vs. the course guideline's Functional Requirements (which explicitly lists Audit Log). Revisited after a guideline-alignment review found it was one of the few genuinely graded items still missing, alongside a missing ER diagram (Database Design, 10% of the grade) — both addressed together in this phase.
+
+### Task 15.1 — ER Diagram
+- New `docs/ER_DIAGRAM.md`: a Mermaid `erDiagram` generated directly from the backend's actual SQLModel table definitions (`../hr-leave-management/backend/app/models.py` + `leave_models/*.py`), not hand-drawn — read every model file line-by-line rather than inferring from `PROJECT_FEATURES.md`. Excludes the FastAPI template's leftover `Item`/`User.items` table (confirmed unused: its router is commented out in `api/main.py`), documented as scaffolding, not domain.
+- **Acceptance:** every real domain table (User, Team, LeaveType, PublicHoliday, Policy, LeaveBalance, LeaveRequest, LeavePlanRequest, LeavePlanDetail, Notification, AuditLog) present with fields, PK/FK annotations, and relationship labels; read-only doc, no generation step wired into either repo's build (regenerate by re-reading models if the schema changes).
+
+### Task 15.2 — Backend: `AuditLog` model, migration, and instrumentation
+- **Depends on:** none (backend-only; this repo only consumes the API per `CLAUDE.md`'s boundary — user explicitly confirmed this backend change before any code was written)
+- New `backend/app/leave_models/audit_log_model.py`: `AuditLog` table (`id`, `actor_id` nullable FK to `user.id` with `ON DELETE SET NULL` — mirrors `Notification.actor_id`'s pattern so an entry survives even if the acting user is later deleted, `action`, `entity_type` indexed, `entity_id`, `summary`, `created_at` indexed), `AuditLogPublic`/`AuditLogsPublic`. Registered in `models.py`'s "Register Models" import block. New Alembic migration `c4f27ad19e3b` (down-revision `e91b6a2d5f3c`, the prior head) — verified with `alembic heads` (single head) and `alembic upgrade head` against a real local Postgres (`docker compose up -d db`).
+- New `backend/app/leave_services/audit_service.py`: `AuditService.record(actor, action, entity_type, entity_id, summary)` — one generic method (unlike `NotificationService`'s one-method-per-event shape, since audit actions vary too widely by entity type for that to make sense), mirrors its `session.add(...)`-without-commit convention so the caller's existing commit covers it.
+- Instrumented at the routes that represent real auditable actions — not blanket-instrumented everywhere: `leave_requests.py`/`leave_plan_requests.py`'s `submit`/`approve`/`reject` (not draft `create`/`update`/`delete`, which is low-stakes personal data entry); `users.py`/`teams.py`/`leave_types.py`/`public_holidays.py`/`policies.py`/`leave_balances.py`'s `create`/`update`/`delete`. `users.py`'s `create_user`/`update_user` needed a small signature change (bare `dependencies=[Depends(get_current_active_superuser)]` → `actor: User = Depends(get_current_active_superuser)`) to get the actor for logging: the guard behavior is identical, just now bound to a variable.
+- New `backend/app/api/routes/audit_logs.py`: `GET /audit-logs/` only (no create/update/delete — this is a write-once trail, entries come from `AuditService` as a side effect), superuser-gated router-level via `dependencies=[Depends(get_current_active_superuser)]`, paginated (`data`/`count`), optional `entity_type`/`action`/`actor_id` filters, newest-first. Registered in `api/main.py`.
+- **Acceptance:** `alembic heads` shows a single head; backend imports cleanly; full `pytest` suite green except the pre-existing/unrelated `test_items.py` failures (that router is commented out in `api/main.py`, not something this task touches); end-to-end smoke-tested via `TestClient` — logged in as the seeded superuser, created a `LeaveType`, confirmed a matching `create` entry appeared in `GET /audit-logs/?entity_type=leave_type` with the correct actor/summary, then confirmed a `delete` entry appeared after deleting it.
+- **Verify:** `cd ../hr-leave-management && docker compose up -d db && cd backend && uv run alembic upgrade head && uv run python -m app.initial_data` (seeds the demo superuser) then exercise `POST/PUT/DELETE` on any instrumented resource via Swagger UI and confirm `GET /audit-logs/` reflects it.
+
+### Task 15.3 — Flutter: read-only Audit Log screen
+- **Depends on:** 15.2
+- New `lib/data/models/audit_log_model.dart` (mirrors `AuditLogPublic`, same shape/style as `NotificationModel`), `lib/data/repositories/audit_logs_repository.dart` (`fetchAuditLogs({skip, limit, entityType, action})` → `PaginatedResult<AuditLogModel>`, registered globally in `initial_binding.dart` alongside the other repositories).
+- New `lib/features/admin/controllers/audit_logs_controller.dart` — a bespoke lightweight controller (infinite-scroll fetch/pagination, mirroring `LeaveRequestsController`'s list-fetch shape), not a subclass of `AdminCrudController` (Task 8.1's generic CRUD controller requires implementing `createItem`/`updateItem`/`deleteItem`, which don't apply to a write-once resource — forcing them would be a worse fit than a small bespoke controller). `entityTypeFilter` (nullable) drives a server-side `entity_type` query param, not client-side filtering.
+- New `lib/features/admin/views/audit_logs_view.dart` — `StatefulWidget` (not `GetView` built inline, so the `ScrollController` is created once in `initState`/disposed properly, matching `NotificationsView`'s pattern rather than a bug where a fresh controller gets created every rebuild) with an entity-type dropdown filter, infinite-scroll list reusing the shared `EmptyStateView`/`ErrorStateView` widgets (not `AdminCrudView`'s inline duplicated versions), and a colored action pill per row (create/submit = info, update = warning, approve = success, delete/reject = danger — mirrors `StatusBadge`'s color-mapping convention but for actions instead of leave-request statuses). Timestamps use the same manual `_formatTimestamp` string-interpolation style as `NotificationsView` rather than the `intl` package, since `intl` is only a transitive dependency (via `table_calendar`) not declared directly in `pubspec.yaml` — no other screen imports it directly, and this keeps that convention intact.
+- New route `Routes.adminAuditLogs` = `/admin/audit-logs`, `AuditLogsBinding()`, gated `[AuthMiddleware(), SuperuserMiddleware()]` like every other admin route. New "Audit Log" tile added to `ProfileView`'s superuser-only Admin card (`_AdminTile`), alongside Policies/Public Holidays/Leave Types/Teams/Leave Balances/Users.
+- **Acceptance:** `flutter analyze` clean; `flutter test` green (16/16, including the now-fixed `dio_client_unauthorized_test.dart`); non-superusers can't reach the route (same `SuperuserMiddleware` gate as every other admin screen).
+- **Verify:** manual — as superuser, open Profile → Admin → Audit Log; confirm entries appear after performing an instrumented action elsewhere in the app (e.g. editing a Leave Type); confirm the entity-type filter narrows the list; confirm a plain employee account can't reach `/admin/audit-logs`. Not yet done from this session — verify on a real device before considering this fully checked.
+
+**Checkpoint 15** — `flutter analyze` clean, `flutter test` green (16/16), backend `pytest` green except pre-existing/unrelated `test_items.py`, `alembic heads` single head, end-to-end audit-write-then-read smoke test passed via `TestClient`. `SPEC.md` §7's Audit Log row removed (no longer a gap); §8 updated with the new feature.
+
+---
+
 ## Sequencing
 
 ```
@@ -404,6 +434,7 @@ Phase 0 (scaffold+infra)
                       → Phase 12 (in-app notifications)
                         → Phase 13 (account & identity enhancements — done, backend work landed in ../hr-leave-management first)
                           → Phase 14 (post-13 UI polish + app icon/name — done)
+                            → Phase 15 (audit log + ER diagram — closes SPEC §7 gap, backend work landed in ../hr-leave-management first)
 ```
 
 ## Critical Files

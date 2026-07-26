@@ -4,6 +4,8 @@ import '../../features/admin/views/admin_leave_balances_view.dart';
 import '../../features/admin/views/admin_public_holidays_view.dart';
 import '../../features/admin/views/admin_teams_view.dart';
 import '../../features/admin/views/admin_users_view.dart';
+import '../../features/admin/views/audit_logs_view.dart';
+import '../../features/admin/bindings/audit_logs_binding.dart';
 import '../../features/admin/bindings/leave_balances_admin_binding.dart';
 import '../../features/admin/bindings/leave_types_admin_binding.dart';
 import '../../features/admin/bindings/policies_admin_binding.dart';
@@ -95,6 +97,12 @@ abstract class AppPages {
       name: Routes.adminUsers,
       page: () => const AdminUsersView(),
       binding: UsersAdminBinding(),
+      middlewares: [AuthMiddleware(), SuperuserMiddleware()],
+    ),
+    GetPage(
+      name: Routes.adminAuditLogs,
+      page: () => const AuditLogsView(),
+      binding: AuditLogsBinding(),
       middlewares: [AuthMiddleware(), SuperuserMiddleware()],
     ),
   ];

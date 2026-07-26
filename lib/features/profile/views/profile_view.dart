@@ -159,6 +159,11 @@ class ProfileView extends GetView<AuthController> {
                     label: 'Users',
                     route: Routes.adminUsers,
                   ),
+                  _AdminTile(
+                    icon: Icons.history_outlined,
+                    label: 'Audit Log',
+                    route: Routes.adminAuditLogs,
+                  ),
                 ],
               ),
             ),

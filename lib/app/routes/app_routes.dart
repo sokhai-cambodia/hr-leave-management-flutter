@@ -17,4 +17,5 @@ abstract class Routes {
   static const adminTeams = '/admin/teams';
   static const adminLeaveBalances = '/admin/leave-balances';
   static const adminUsers = '/admin/users';
+  static const adminAuditLogs = '/admin/audit-logs';
 }

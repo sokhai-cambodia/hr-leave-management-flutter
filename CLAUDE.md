@@ -62,6 +62,12 @@ Per `SPEC.md` §6, testing is manual-first; automated coverage is deliberately n
 - **Ask first** before pushing to `origin`; before modifying anything in the `../hr-leave-management` backend/frontend repo — this repo only *consumes* that API, it doesn't change it, unless a real backend gap is found and confirmed with the user.
 - **Never** commit the `.env` file itself (gitignored; `.env.example` is the committed template) or other secrets; never hardcode the backend base URL outside `lib/core/constants/env.dart`.
 
+## Git commits
+
+- This is a MIT master's final project submission — commits must look like normal solo authorship, not AI-assisted.
+- **Never** add `Co-Authored-By: Claude` (or any AI attribution) to commit messages.
+- **Never** mention Claude, Claude Code, or AI assistance in commit messages, PR descriptions, or code comments.
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.

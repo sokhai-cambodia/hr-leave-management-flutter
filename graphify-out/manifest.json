@@ -355,7 +355,7 @@
     "semantic_hash": ""
   },
   "windows/flutter/generated_plugin_registrant.cc": {
-    "mtime": 1784049297.9602442,
+    "mtime": 1784097970.4512622,
     "ast_hash": "cb70434e48785b950d809f058bd17b88",
     "semantic_hash": ""
   },
@@ -405,18 +405,18 @@
     "semantic_hash": "7569387d58711ab975940f4df3b4bcda"
   },
   "CLAUDE.md": {
-    "mtime": 1784043380.7474668,
-    "ast_hash": "b88df01954014cf5b88c156ca42b5f20",
+    "mtime": 1785032487.6954682,
+    "ast_hash": "b53b951a1a7d2a323d7a0dcee40772d1",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1784043380.7474668,
-    "ast_hash": "5b6bbecd5b3439b042a6b3d9bdaa525b",
+    "mtime": 1784098633.0976746,
+    "ast_hash": "cf7aa562a0f7a0f026535ecaa1c1aebb",
     "semantic_hash": ""
   },
   "SPEC.md": {
-    "mtime": 1784043380.7493167,
-    "ast_hash": "a54d4edc406c633e95dc04e8e36ba3e8",
+    "mtime": 1784125747.6845195,
+    "ast_hash": "4178aa8c878fa5df59159e3b8e1f2338",
     "semantic_hash": ""
   },
   "analysis_options.yaml": {
@@ -752,6 +752,16 @@
   "assets/icon/icon_foreground.png": {
     "mtime": 1784049266.0783985,
     "ast_hash": "cb6d967e784b812fcbf54eb2dee0803e",
+    "semantic_hash": ""
+  },
+  "docs/ARCHITECTURE.md": {
+    "mtime": 1784098633.0987165,
+    "ast_hash": "6a3cea531d35e7ab34780ca9efbd7d38",
+    "semantic_hash": ""
+  },
+  "STYLE_GUIDE.md": {
+    "mtime": 1784125704.3192494,
+    "ast_hash": "3874871a86010d11cebe471fc4778e01",
     "semantic_hash": ""
   }
 }

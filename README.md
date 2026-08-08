@@ -108,6 +108,7 @@ This brings up Postgres, the FastAPI backend (`http://localhost:8000`, API prefi
 - `docs/ARCHITECTURE.md` — system architecture diagram and full tech stack (client, backend, infrastructure)
 - `docs/ER_DIAGRAM.md` — entity-relationship diagram generated from the backend's actual SQLModel schema
 - `SPEC.md` — authoritative spec: tech stack, project structure, design tokens, documented gaps vs. the course guideline
+- `STYLE_GUIDE.md` — shared brand style guide (colors, shape, spacing, typography) for parity with the companion Android/Compose app
 - `tasks/plan.md` — phase-by-phase implementation plan with verified backend contract details
 - `tasks/todo.md` — current progress (checkbox state is the source of truth for what's built vs. pending)
 - `CLAUDE.md` — conventions and architecture notes for AI-assisted development on this repo

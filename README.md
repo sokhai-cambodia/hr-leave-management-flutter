@@ -1,6 +1,6 @@
 # HR Leave Management — Flutter Client
 
-Flutter mobile client for the HR Leave Management system (master's final-project coursework). It consumes the FastAPI backend from the sibling repo [`hr-leave-management`](https://github.com/sokhai-cambodia/hr-leave-management) — see `SPEC.md` for the full design contract and `tasks/plan.md` / `tasks/todo.md` for implementation progress.
+Flutter mobile client for the HR Leave Management system (master's final-project coursework). It consumes the FastAPI backend from the sibling repo [`hr-leave-management`](https://github.com/sokhai-cambodia/hr-leave-management) — see `SPEC.md` for the full design contract.
 
 ## Features
 
@@ -39,7 +39,7 @@ Flutter mobile client for the HR Leave Management system (master's final-project
 - Full CRUD (create/read/update/delete, with search + pagination) over Teams, Users, Leave Types, Public Holidays, Policies, and any employee's Leave Balances — no need to touch the backend's Swagger UI directly
 - Audit Log: read-only trail of who did what and when, filterable by entity type and action
 
-See `SPEC.md` §8 for the feature list mapped to exact backend endpoints, and `tasks/todo.md` for the phase-by-phase build history.
+See `SPEC.md` §8 for the feature list mapped to exact backend endpoints.
 
 ## Prerequisites
 
@@ -109,8 +109,6 @@ This brings up Postgres, the FastAPI backend (`http://localhost:8000`, API prefi
 - `docs/ER_DIAGRAM.md` — entity-relationship diagram generated from the backend's actual SQLModel schema
 - `SPEC.md` — authoritative spec: tech stack, project structure, design tokens, documented gaps vs. the course guideline
 - `STYLE_GUIDE.md` — shared brand style guide (colors, shape, spacing, typography) for parity with the companion Android/Compose app
-- `tasks/plan.md` — phase-by-phase implementation plan with verified backend contract details
-- `tasks/todo.md` — current progress (checkbox state is the source of truth for what's built vs. pending)
 - `CLAUDE.md` — conventions and architecture notes for AI-assisted development on this repo
 
 ## Getting started with Flutter

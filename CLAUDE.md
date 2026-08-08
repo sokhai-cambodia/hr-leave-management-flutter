@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Flutter mobile client for an HR Leave Management system (master's final-project "Full Stack Developer" course work). It consumes an already-built FastAPI backend at `../hr-leave-management/backend` rather than building a new one — a deliberate, documented substitution for the course's Spring Boot guideline (see `SPEC.md` §7).
 
-**Read `SPEC.md` first** — it is the authoritative spec (tech stack, project structure, design tokens, decided gaps vs. the course guideline). **Read `tasks/plan.md`** for the full phase-by-phase implementation plan with verified backend ground truth (exact field names, status literals, endpoint shapes) and `tasks/todo.md` for current progress (checkbox state is the source of truth for what's built vs. pending).
+**Read `SPEC.md` first** — it is the authoritative spec (tech stack, project structure, design tokens, decided gaps vs. the course guideline).
 
 ## Commands
 
@@ -39,7 +39,7 @@ Feature-first layout, standard GetX convention (state management, routing, DI). 
 - **`lib/data/repositories/teams_repository.dart`** — powers two different things: the team-owner detection heuristic in `AuthController` (see below) and the admin Teams CRUD screen.
 - **`lib/data/models/`** — immutable DTOs with `fromJson`/`toJson` that mirror backend field names exactly (snake_case wire format, e.g. `start_date`, `leave_type_id`). Don't rename fields for Dart convention — mismatches here are a direct source of silent bugs against the FastAPI backend.
 
-### Backend contract quirks that shape the code (verified against backend source, not just docs — see `tasks/plan.md` "Verified Backend Ground Truth")
+### Backend contract quirks that shape the code (verified against backend source, not just docs)
 
 - **No refresh token.** The access token from `POST /api/v1/login/access-token` is an 8-day session; any 401 means re-login, not silent refresh.
 - **List endpoints** return `{data: [...], count: N}` with `skip`/`limit` params — modeled by `lib/data/models/paginated_result.dart`. **Exception:** `GET /recommends/leave-plan` returns `{leave_type_id, year, data: [...]}` with no `count` and isn't paginated — don't reuse `PaginatedResult` there.
